@@ -47,10 +47,13 @@ you.** A new trace slides in at the top of the wall; the list isn't rebuilt,
 so a half-typed thought in the form, your scroll position, and whatever
 you're reading stay put. The wall stays plain reverse-chronological whether
 it was loaded or streamed, so a page that has been open all afternoon shows
-exactly what a fresh load would. A wall filtered to one as-if (only the
-dreams, say) takes new traces of that kind live and quietly ignores the rest;
-filtering narrows the list, never reorders it, and switching filters is an
-ordinary link, so it's a fresh load of that view.
+exactly what a fresh load would. The cost of inserting rather than
+rebuilding is that an arrival above whatever you're about to click nudges it
+down a line; I'd rather that than a wall that holds still by not being live.
+A wall filtered to one as-if (only the dreams, say) takes new traces of that
+kind live and quietly ignores the rest; filtering narrows the list, never
+reorders it, and switching filters is an ordinary link, so it's a fresh load
+of that view.
 
 **Answers arrive live too, into the thread they belong to.** An answer
 appears under its trace on every open page within about a second, at the
@@ -70,8 +73,8 @@ appears, the same way you find out about a new trace.
 **A dropped connection catches up rather than starting over.** Each page
 keeps one server-sent-events stream open. If it drops (a phone sleeping, a
 train tunnel, the app's machine restarting), the browser reconnects and the
-server sends what was missed since the last trace that page saw, in order,
-with nothing doubled. A page also asks for anything posted between its own
+server sends what was missed since the last trace and answer that page saw,
+traces first and then answers, in order, with nothing doubled. A page also asks for anything posted between its own
 render and its stream opening, so a trace never falls into that gap.
 
 **Coming back tomorrow shows the wall, not what's new.** There's no unread
@@ -147,9 +150,9 @@ need any of them, not that I've reasoned my way out of needing them forever.
 
 ## What I deliberately didn't build yet
 
-No visible distinction between visitors beyond
-"yours vs. everyone else's" (no names, colours, or avatars — deferred until
-there's an actual multi-user feature that needs it), no server-side logging
-beyond what Fly captures by default (crit 11), and no moderation. All three are
-real gaps, not oversights, and each has a crit on the course's own schedule
-that's the right place to close it.
+No visible distinction between visitors beyond "yours vs. everyone else's":
+no names, colours, or avatars. Answers made that a live question rather than a
+deferred one, and the answer is still no, for the reasons above. Also no
+server-side logging beyond what Fly captures by default (crit 11), and no
+moderation, which answers have made more pressing. Those two are real gaps,
+not oversights.
