@@ -6,6 +6,28 @@ C9 wants this app real-time. Everything below is in priority order: if the run
 runs out of road, land the earlier items properly rather than all of them
 badly. A half-finished feature is worse than one we didn't ask for.
 
+## Work on a branch per item, and merge only what works
+
+**Build each item on its own branch. Merge it to `main` only when it actually
+works, and push `main` immediately when you do.** Only code that builds reaches
+`main`.
+
+This matters because the run is unattended and can be cut short — the budget it
+runs on may be exhausted mid-task, and nobody is there to notice. Anything that
+exists only in your working tree at that moment is lost, and the next pod picks
+this repo up from wherever you left `main`. Three features merged and pushed
+beats five features in an abandoned working tree.
+
+- One branch per item. Get it working there, run `pnpm check`, and merge to
+  `main` only if it passes. CI deploys every push to `main`, so a broken merge
+  breaks the live app.
+- Push `main` straight after each merge. Don't batch them to the end.
+- If an item can't be made to work, leave its branch unmerged and move on.
+  Shipping four and abandoning one is a fine outcome; a broken `main` is not.
+- Keep `prompt.md` until the end. `CLAUDE.md` says it goes in your last commit,
+  so if the run stops early it should still be sitting there — that's how the
+  next pod sees what was asked for and how far it got.
+
 ### 1. Live updates — this one must land
 
 A trace one person leaves appears on every other open session in about a
@@ -60,8 +82,9 @@ somewhere — **but don't break the argument silently.** Extend `README.md` to
 say what changed and why it's still the same app. An app whose README describes
 a quieter thing than the one running is the failure to avoid.
 
-Still off the table: names, colours, avatars. Show presence if you need to, not
-people.
+Still off the table: names, colours, avatars — and note `CLAUDE.md` also rules
+out visible reader counts, so "three people are here" is not the answer. If
+co-presence needs to be felt at all, let the wall moving be the signal.
 
 ## What good looks like
 
