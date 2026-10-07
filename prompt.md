@@ -1,81 +1,91 @@
-# Next: make the wall real-time, and let passing be something people witness together
+# Next: make the wall live, and let people move through the six as-ifs together
 
 ## The goal
 
-C9 wants this app real-time: a trace one person leaves reaches every other open
-session in about a second, with no reload. Do that — the transport is yours,
-and SSE is probably enough for a one-way wall.
+C9 wants this app real-time. Everything below is in priority order: if the run
+runs out of road, land the earlier items properly rather than all of them
+badly. A half-finished feature is worse than one we didn't ask for.
 
-But real-time on its own would just be a faster guestbook, and this app is
-better than that. The wall is named 六如 and tagged with six similes for things
-that vanish — a bubble, dew, a flash of lightning — and right now **nothing on
-it passes.** The page says "it stays here, quietly, whether or not you come
-back", and the database agrees: every trace is permanent. The name promises
-impermanence and the behaviour delivers an archive.
+### 1. Live updates — this one must land
 
-Close that gap, and use co-presence to do it. That is the decision we want from
-this run.
+A trace one person leaves appears on every other open session in about a
+second, with no reload. Today the wall only updates on refresh, and the README
+already names this as the gap. Transport is yours; SSE is probably enough for a
+one-way wall.
 
-## The decision: passing is witnessed, not scheduled
+### 2. Say what the six as-ifs are
 
-Make a trace's passing something that happens **while people are there to see
-it**, not on a timer that runs in an empty room.
+A first-time visitor should understand 六如 — the six similes from the closing
+lines of the Diamond Sūtra — without leaving the page. Short and in the page's
+own voice, not a wall of explanation.
 
-Concretely: while more than one session is open, traces visibly age on the wall
-in real time — the newest are sharp, older ones recede, and the oldest reach a
-state where they have clearly passed. When nobody else is present the wall is
-still; a lone visitor reads an archive. Come back with someone else and the
-wall starts moving again.
+### 3. Filter the wall by as-if
 
-This is the Pico Park point the README already makes: the app should be better
-because other people are in it right now, not merely usable by more than one
-person at a time.
+Six ways in, one per simile. Someone who wants only the dreams should be able
+to get a wall of only dreams, and back again. Keep it reverse-chronological
+inside a filter; don't rank or curate.
 
-**Do not delete traces to achieve this.** Passing is how the wall *presents* a
-trace, not whether the row exists. Traces must still survive a restart and a
-redeploy, and `spec/trace.test.ts` must keep passing unchanged.
+### 4. Let people respond to a trace
 
-If you think a different single decision serves the six similes better, you may
-take it — but write down which one you took and why, and it must still be about
-how the app behaves with several people in it.
+Give visitors a way to react or reply to someone else's trace, so the wall can
+hold more than one voice per thought. Keep it as small as it can be and still
+be worth having.
+
+### 5. Sound, if there's time
+
+When someone picks an as-if, play a short sound that belongs to it — thunder
+for lightning, and so on. **Off by default, with a visible control to turn it
+on**, and silent for anyone with `prefers-reduced-motion` set. Never play audio
+without the visitor having acted first.
+
+## The C9 decision you must write down
+
+C9 asks for one decision about how the app behaves when several people are in
+it at once, recorded in the repo with the reasoning. Replies make that decision
+unavoidable, so make it deliberately and write it into `README.md`:
+
+- what arrives live and what waits for a reload — new traces? replies to a
+  trace someone is reading? a filtered view?
+- what two people replying to the same trace at the same moment see
+- what someone sees when they come back tomorrow
+
+Pick the answers, state them, say why.
+
+## Where this cuts against the README — handle it, don't ignore it
+
+The README's current definition of good is "small and quiet rather than
+sticky", with no message-board features and no identity. Replies and sound both
+push against that. That is allowed — this is a riff, and the app is meant to go
+somewhere — **but don't break the argument silently.** Extend `README.md` to
+say what changed and why it's still the same app. An app whose README describes
+a quieter thing than the one running is the failure to avoid.
+
+Still off the table: names, colours, avatars. Show presence if you need to, not
+people.
 
 ## What good looks like
 
-- Two browsers side by side: a trace left in one appears in the other within
-  about a second, neither reloaded.
-- With both open, the wall is visibly in motion — ageing is something you can
-  watch happen, not something you infer from timestamps.
-- With one browser open, the wall is still and quiet.
-- The decision and its reasoning are written into the repo, not just
-  implemented — `README.md` is where this app's argument lives, so extend it
-  there.
-- `pnpm check` is green and the app deploys. `spec/trace.test.ts` is unchanged.
-- Add at least one check of your own in `spec/` for the new behaviour, and make
-  sure you have seen it fail before you trust it.
-
-## Keep, and leave alone
-
-- **Keep the wall quiet.** The README's definition of good is "small and quiet
-  rather than sticky": no notifications, no growth loop, nothing that chases a
-  visitor back. Live updates must not become alerts. Nothing should jump,
-  flash, or steal focus while someone is reading.
-- **Keep the six similes doing real work.** They are the design constraint, not
-  a select box. If ageing is added, it should feel like the simile a trace was
-  tagged with — lightning and dew do not pass the same way.
-- **No names, no colours, no avatars.** The README defers visitor identity
-  deliberately. If you need to show that others are present, show presence —
-  not people. A count, or the wall simply moving, is enough.
-- **Don't redefine what this app is for.** Extend the README's argument; don't
-  replace it.
-- Reverse-chronological, nothing ranked or curated. Leave that alone.
-- Respect `prefers-reduced-motion`: if ageing is animated, it must have a still
-  equivalent.
+- Two browsers side by side: a trace in one appears in the other inside a
+  second, neither reloaded.
+- **Test it as a crowd, not a user.** Drive 3–4 independent sessions at once —
+  separate browsers or separate cookie jars, not four tabs sharing one — and
+  check that posting, filtering and replying all behave with all of them live.
+  Multi-user bugs do not show up with one session.
+- Each of the six filters shows only its own traces, and the counts add up to
+  the unfiltered wall.
+- Sound, if built, is silent until switched on.
+- `pnpm check` is green, `spec/trace.test.ts` is unchanged and still passing,
+  and the app deploys.
+- Add checks of your own in `spec/` for whatever you build, and **break each
+  one on purpose to watch it fail before trusting it.**
+- Traces still survive a restart and a redeploy. Don't delete rows to make
+  anything here work.
 
 ## Read first
 
-- `README.md` — the app's own definition of good, and the Pico Park paragraph
-  that names this exact gap as "next crit's job"
+- `README.md` — this app's definition of good, and the paragraph naming
+  real-time as next crit's job
 - `CLAUDE.md` — the rules this repo holds to
-- `src/db.ts` — `Trace`, the six `KINDS`, and how rows are stored
-- `src/server.ts` and `src/templates.ts` — routing and rendering
+- `src/db.ts` — `Trace`, the six `KINDS`, how rows are stored
+- `src/server.ts`, `src/templates.ts` — routing and rendering
 - `spec/trace.test.ts` — the four checks that must keep passing
