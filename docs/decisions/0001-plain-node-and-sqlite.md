@@ -1,6 +1,7 @@
 # 0001: plain Node and SQLite, no framework
 
-Status: accepted (crit 8). Revisit at crit 9, when the real-time layer lands.
+Status: accepted (crit 8). Held at crit 9: the real-time layer is server-sent
+events from the same `node:http` server, so it needed no framework either.
 
 ## Context
 

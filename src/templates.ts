@@ -84,6 +84,9 @@ const shell = (title: string, body: string): string => `<!doctype html>
         opacity: 0.92;
       }
       li.trace.mine { background: #8883; opacity: 1; }
+      li.trace.arrived { animation: arrive 1.2s ease-out; }
+      @keyframes arrive { from { opacity: 0; transform: translateY(-0.3rem); } }
+      @media (prefers-reduced-motion: reduce) { li.trace.arrived { animation: none; } }
       li.trace .glyph { font-size: 1.1rem; text-align: center; }
       li.trace .text { overflow-wrap: anywhere; min-width: 0; }
       li.trace .when { font-size: 0.75rem; color: light-dark(#595959, #999); white-space: nowrap; }
@@ -107,25 +110,26 @@ const shell = (title: string, body: string): string => `<!doctype html>
   </body>
 </html>`;
 
-export function renderWall(traces: Trace[], visitorId: string): string {
-  const options = Object.entries(KIND_META)
-    .map(([value, m]) => `<option value="${value}">${m.hanzi} ${escapeHtml(m.label)}</option>`)
-    .join("");
-
-  const items = traces.length
-    ? traces
-        .map((t) => {
-          const meta = KIND_META[t.kind];
-          const isMine = t.visitorId === visitorId;
-          const mineLabel = isMine ? `<span class="visually-hidden">yours: </span>` : "";
-          return `<li class="trace kind-${t.kind}${isMine ? " mine" : ""}">
+export function renderTrace(t: Trace, visitorId: string): string {
+  const meta = KIND_META[t.kind];
+  const isMine = t.visitorId === visitorId;
+  const mineLabel = isMine ? `<span class="visually-hidden">yours: </span>` : "";
+  return `<li class="trace kind-${t.kind}${isMine ? " mine" : ""}" id="trace-${t.id}" data-kind="${t.kind}">
             <span class="glyph" aria-hidden="true" title="${meta.hanzi} ${escapeHtml(meta.label)}">${meta.glyph}</span>
             <span class="visually-hidden">tagged as ${escapeHtml(meta.label)}: </span>
             <span class="text">${mineLabel}${escapeHtml(t.text)}</span>
             <span class="when">${relativeTime(t.createdAt)}</span>
           </li>`;
-        })
-        .join("\n")
+}
+
+export function renderWall(traces: Trace[], visitorId: string): string {
+  const newest = traces.reduce((max, t) => Math.max(max, t.id), 0);
+  const options = Object.entries(KIND_META)
+    .map(([value, m]) => `<option value="${value}">${m.hanzi} ${escapeHtml(m.label)}</option>`)
+    .join("");
+
+  const items = traces.length
+    ? traces.map((t) => renderTrace(t, visitorId)).join("\n")
     : `<li class="empty">nothing has passed through yet</li>`;
 
   const body = `
@@ -144,10 +148,12 @@ export function renderWall(traces: Trace[], visitorId: string): string {
         </label>
         <button type="submit">let it go</button>
       </form>
-      <ul class="wall">
+      <p class="visually-hidden" role="status" aria-live="polite" id="live-status"></p>
+      <ul class="wall" data-since="${newest}">
         ${items}
       </ul>
     </main>
+    <script src="/client.js" defer></script>
   `;
   return shell("六如 — a wall for passing things", body);
 }

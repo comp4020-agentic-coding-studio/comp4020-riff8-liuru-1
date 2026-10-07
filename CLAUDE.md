@@ -65,7 +65,8 @@ not to build a profile of them.
 ## Enforced vs. judged
 
 `spec/*.test.ts` is the enforced list: valid kind, non-empty text, a 240
-character cap, and the two course-wide checks (`/` answers, `/readme/`
+character cap, live delivery over `/events` (`spec/live.test.ts`), and the
+two course-wide checks (`/` answers, `/readme/`
 publishes `README.md`). Everything else — whether the wall still feels like
 the six similes rather than a generic guestbook — is a judgement call, made
 here and revisited each crit, not something a test can catch.
@@ -75,4 +76,6 @@ here and revisited each crit, not something a test can catch.
 Plain Node (`node:http`, no framework) plus `better-sqlite3` on the Fly
 volume at `/data`. No build step: the server runs its `.ts` source directly,
 so the Docker image only needs `node`, not a bundler. Keep it this small
-unless a real feature needs more.
+unless a real feature needs more. Live updates are server-sent events from an
+in-memory listener set (`src/live.ts`), which assumes one machine; the
+browser script (`src/client.js`) is progressive enhancement over plain forms.

@@ -2,12 +2,14 @@ import { randomUUID } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { createServer, type IncomingMessage } from "node:http";
 import { marked } from "marked";
-import { addTrace, isKind, recentTraces } from "./db.ts";
+import { addTrace, isKind, recentTraces, traceById, tracesSince } from "./db.ts";
+import { broadcast, openStream } from "./live.ts";
 import { renderReadme, renderWall } from "./templates.ts";
 
 const PORT = Number(process.env.PORT ?? 8080);
 const VISITOR_COOKIE = "visitor";
 const FIVE_YEARS = 60 * 60 * 24 * 365 * 5;
+const CLIENT_JS = readFileSync(new URL("./client.js", import.meta.url), "utf8");
 
 function parseCookies(header: string | undefined): Record<string, string> {
   const out: Record<string, string> = {};
@@ -59,13 +61,30 @@ const server = createServer(async (req, res) => {
       const kind = params.get("kind") ?? "";
       const text = (params.get("text") ?? "").trim().slice(0, 240);
       if (isKind(kind) && text.length > 0) {
-        addTrace(visitorId, kind, text);
+        const trace = traceById(addTrace(visitorId, kind, text));
+        if (trace) broadcast(trace);
       }
       res.writeHead(303, {
         location: "/",
         ...(setCookie ? { "set-cookie": setCookie } : {}),
       });
       res.end();
+      return;
+    }
+
+    if (url.pathname === "/events" && req.method === "GET") {
+      // A reconnecting EventSource sends Last-Event-ID; a fresh one carries
+      // the newest id its page was rendered with, so a trace posted between
+      // render and connect isn't lost either way.
+      const since = Number(req.headers["last-event-id"] ?? url.searchParams.get("since") ?? 0);
+      const missed = Number.isFinite(since) && since > 0 ? tracesSince(since) : [];
+      openStream(res, visitorId, missed);
+      return;
+    }
+
+    if (url.pathname === "/client.js" && req.method === "GET") {
+      res.writeHead(200, { "content-type": "text/javascript; charset=utf-8" });
+      res.end(CLIENT_JS);
       return;
     }
 

@@ -29,14 +29,46 @@ tracking or an algorithmic feed — is why the wall shows everything in one
 plain reverse-chronological list, oldest at the bottom, nothing curated or
 ranked. What you see is what's actually there.
 
-And the design point the final-project brief itself makes explicitly — build
+And the design point the final-project brief itself makes explicitly --- build
 something that's *better* because other people are using it right now, the
 way small local-multiplayer games (like [*Pico Park*](https://store.steampowered.com/app/1509960/PICO_PARK/))
-only work because everyone is present at once — is what this slice doesn't
-have yet. The wall updates on reload, not live; a second visitor's trace
-doesn't appear until you refresh. That's deliberate for this week (this
-crit's own brief says the real-time layer can wait), but it's the one thing
-standing between this and actually delivering co-presence. Next crit's job.
+only work because everyone is present at once --- is why the wall is live. A
+trace someone leaves appears on every other open page within about a second,
+with no reload. There's still no "three people are here" line and no names:
+the only sign anyone else is present is the wall moving.
+
+## Several people at once
+
+This is the one decision about shared use the app is built around, so it's
+written down rather than left to whatever the code happens to do.
+
+**New traces arrive live, and nothing else about the page changes under
+you.** A new trace slides in at the top of the wall; the list isn't rebuilt,
+so a half-typed thought in the form, your scroll position, and whatever
+you're reading stay put. The wall stays plain reverse-chronological whether
+it was loaded or streamed, so a page that has been open all afternoon shows
+exactly what a fresh load would.
+
+**A dropped connection catches up rather than starting over.** Each page
+keeps one server-sent-events stream open. If it drops (a phone sleeping, a
+train tunnel, the app's machine restarting), the browser reconnects and the
+server sends what was missed since the last trace that page saw, in order,
+with nothing doubled. A page also asks for anything posted between its own
+render and its stream opening, so a trace never falls into that gap.
+
+**Coming back tomorrow shows the wall, not what's new.** There's no unread
+marker, no "since your last visit" line, no count of what you missed. You see
+the same wall anyone else sees, with your own traces marked as yours. Marking
+what's new would be the first step towards chasing people back, which is the
+thing this app exists not to do.
+
+The alternatives were polling (simpler, but a fixed delay and a request every
+few seconds from every idle tab for a wall that mostly isn't moving) and
+WebSockets (two-way, which the wall doesn't need: posting is still an
+ordinary form submission, and works without JavaScript). The cost of SSE
+here is that the fan-out lives in one process's memory, which only works
+because the app runs on exactly one machine. A second machine would need a
+shared channel between them, and that's a real rewrite, not a setting.
 
 ## What's enforced vs. what's judged
 
@@ -54,9 +86,9 @@ need any of them, not that I've reasoned my way out of needing them forever.
 
 ## What I deliberately didn't build yet
 
-No real-time updates (crit 9), no visible distinction between visitors beyond
+No visible distinction between visitors beyond
 "yours vs. everyone else's" (no names, colours, or avatars — deferred until
 there's an actual multi-user feature that needs it), no server-side logging
-beyond what Fly captures by default (crit 11), and no moderation. All four are
+beyond what Fly captures by default (crit 11), and no moderation. All three are
 real gaps, not oversights, and each has a crit on the course's own schedule
 that's the right place to close it.

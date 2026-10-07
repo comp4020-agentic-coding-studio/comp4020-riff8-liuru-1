@@ -37,8 +37,8 @@ const insertTrace = db.prepare(
   "INSERT INTO traces (visitor_id, kind, text, created_at) VALUES (?, ?, ?, ?)",
 );
 
-export function addTrace(visitorId: string, kind: Kind, text: string): void {
-  insertTrace.run(visitorId, kind, text, Date.now());
+export function addTrace(visitorId: string, kind: Kind, text: string): number {
+  return Number(insertTrace.run(visitorId, kind, text, Date.now()).lastInsertRowid);
 }
 
 const selectRecent = db.prepare(
@@ -47,4 +47,22 @@ const selectRecent = db.prepare(
 
 export function recentTraces(limit = 200): Trace[] {
   return selectRecent.all(limit) as Trace[];
+}
+
+const selectSince = db.prepare(
+  "SELECT id, visitor_id AS visitorId, kind, text, created_at AS createdAt FROM traces WHERE id > ? ORDER BY id ASC LIMIT ?",
+);
+
+// What a reconnecting stream missed, oldest first so the client can prepend
+// each in turn and end up in the same order as a fresh page load.
+export function tracesSince(id: number, limit = 200): Trace[] {
+  return selectSince.all(id, limit) as Trace[];
+}
+
+const selectById = db.prepare(
+  "SELECT id, visitor_id AS visitorId, kind, text, created_at AS createdAt FROM traces WHERE id = ?",
+);
+
+export function traceById(id: number): Trace | undefined {
+  return selectById.get(id) as Trace | undefined;
 }
