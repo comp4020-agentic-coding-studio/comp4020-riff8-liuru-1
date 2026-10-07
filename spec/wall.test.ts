@@ -69,3 +69,15 @@ it("an unknown filter shows the whole wall rather than an empty one", async () =
   expect(doc.querySelector("ul.wall")?.hasAttribute("data-kind")).toBe(false);
   expect(doc.querySelector(`nav.filters a[aria-current="page"]`)?.getAttribute("href")).toBe("/");
 });
+
+it("sound starts off, behind a control that only appears once its script runs", async () => {
+  const toggle = (await page()).querySelector("form.trace-form button.sound-toggle");
+  expect(toggle, "no sound toggle in the form").not.toBeNull();
+  expect(toggle!.getAttribute("aria-pressed")).toBe("false");
+  expect(toggle!.hasAttribute("hidden")).toBe(true);
+
+  const res = await fetch(new URL("/sound.js", baseUrl));
+  expect(res.headers.get("content-type")).toMatch(/javascript/);
+  // the script itself has to honour reduced motion, not just the CSS
+  expect(await res.text()).toContain("prefers-reduced-motion: reduce");
+});

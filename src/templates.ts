@@ -68,6 +68,11 @@ const shell = (title: string, body: string): string => `<!doctype html>
         border-radius: 0.3rem;
         border: 1px solid #8886;
       }
+      form.trace-form .form-actions { display: flex; justify-content: space-between; align-items: center; gap: 0.6rem; }
+      form.trace-form button.sound-toggle { font-size: 0.8rem; padding: 0.25rem 0.7rem; }
+      form.trace-form button.sound-toggle[aria-pressed="true"] { border-color: currentColor; }
+      form.trace-form button.sound-toggle:disabled { cursor: default; opacity: 0.8; }
+      form.trace-form button[hidden] { display: none; }
       form.trace-form button {
         font: inherit;
         justify-self: start;
@@ -243,7 +248,10 @@ export function renderWall(
         <label>what passed through
           <input type="text" name="text" maxlength="240" required placeholder="a fragment, not an essay" />
         </label>
-        <button type="submit">let it go</button>
+        <div class="form-actions">
+          <button type="submit">let it go</button>
+          <button type="button" class="sound-toggle" aria-pressed="false" hidden>sound off</button>
+        </div>
       </form>
       <p class="note" role="status" id="post-note"></p>
       ${renderFilters(kind)}
@@ -253,6 +261,7 @@ export function renderWall(
       </ul>
     </main>
     <script src="/client.js" defer></script>
+    <script src="/sound.js" defer></script>
   `;
   return shell("六如 — a wall for passing things", body);
 }

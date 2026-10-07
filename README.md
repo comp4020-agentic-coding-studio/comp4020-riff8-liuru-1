@@ -113,6 +113,18 @@ The cost is real. A trace can now gather a small conversation, and an unkind
 answer under your thought can't be removed by you or anyone else. That makes
 the missing moderation below a sharper gap than it was.
 
+## Sound, and why it's still quiet
+
+Each as-if has a short sound of its own, synthesised in the browser: two drops
+of dew, a bubble's rising bloop, a crack and then thunder for lightning. It's
+off until you turn it on, it plays only when you pick an as-if yourself, and
+anyone whose system asks for reduced motion gets none of it. Above all, it
+never plays when someone else's trace or answer arrives. A chime for new
+activity is a notification, and a notification is the wall reaching out to
+pull you back, which is the one thing it doesn't do. The sound is for the
+moment you choose what your own thought is like, not a signal that others are
+here.
+
 ## What's enforced vs. what's judged
 
 Enforced, in `spec/`: a trace needs a real kind (one of the six) and non-empty

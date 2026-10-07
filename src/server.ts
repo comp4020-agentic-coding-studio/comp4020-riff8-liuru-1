@@ -20,7 +20,10 @@ import { renderReadme, renderWall } from "./templates.ts";
 const PORT = Number(process.env.PORT ?? 8080);
 const VISITOR_COOKIE = "visitor";
 const FIVE_YEARS = 60 * 60 * 24 * 365 * 5;
-const CLIENT_JS = readFileSync(new URL("./client.js", import.meta.url), "utf8");
+// The browser scripts, read once: progressive enhancement over plain forms.
+const SCRIPTS: Record<string, string> = Object.fromEntries(
+  ["client.js", "sound.js"].map((f) => [`/${f}`, readFileSync(new URL(`./${f}`, import.meta.url), "utf8")]),
+);
 
 function parseCookies(header: string | undefined): Record<string, string> {
   const out: Record<string, string> = {};
@@ -125,9 +128,10 @@ const server = createServer(async (req, res) => {
       return;
     }
 
-    if (url.pathname === "/client.js" && req.method === "GET") {
+    const script = SCRIPTS[url.pathname];
+    if (script !== undefined && req.method === "GET") {
       res.writeHead(200, { "content-type": "text/javascript; charset=utf-8" });
-      res.end(CLIENT_JS);
+      res.end(script);
       return;
     }
 
