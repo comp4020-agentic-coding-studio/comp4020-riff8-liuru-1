@@ -52,6 +52,21 @@ dreams, say) takes new traces of that kind live and quietly ignores the rest;
 filtering narrows the list, never reorders it, and switching filters is an
 ordinary link, so it's a fresh load of that view.
 
+**Answers arrive live too, into the thread they belong to.** An answer
+appears under its trace on every open page within about a second, at the
+bottom of that trace's short thread, oldest first, so it reads as a
+conversation. An answer form you've opened and half-filled stays as it was
+while other people's answers land above it. An answer never moves its trace up
+the wall: the wall is ordered by when each thought was left, not by how much
+talk it has drawn, because sorting by activity is where a ranked feed starts.
+
+**Two people answering the same trace at once both land.** Nothing on the
+wall is ever edited, only added to, so there's nothing for two people to
+conflict over. The server takes answers in the order they arrive, and every
+open page, and every later visitor, sees that same order. Neither sees the
+other typing; you find out someone else answered the moment their answer
+appears, the same way you find out about a new trace.
+
 **A dropped connection catches up rather than starting over.** Each page
 keeps one server-sent-events stream open. If it drops (a phone sleeping, a
 train tunnel, the app's machine restarting), the browser reconnects and the
@@ -61,9 +76,11 @@ render and its stream opening, so a trace never falls into that gap.
 
 **Coming back tomorrow shows the wall, not what's new.** There's no unread
 marker, no "since your last visit" line, no count of what you missed. You see
-the same wall anyone else sees, with your own traces marked as yours. Marking
-what's new would be the first step towards chasing people back, which is the
-thing this app exists not to do.
+the same wall anyone else sees, with your own traces and answers marked as
+yours. If someone answered one of your traces overnight, you'll find it under
+that trace when you scroll to it, and nowhere else: no "someone answered you".
+Marking what's new would be the first step towards chasing people back, which
+is the thing this app exists not to do.
 
 The alternatives were polling (simpler, but a fixed delay and a request every
 few seconds from every idle tab for a wall that mostly isn't moving) and
@@ -73,17 +90,46 @@ here is that the fan-out lives in one process's memory, which only works
 because the app runs on exactly one machine. A second machine would need a
 shared channel between them, and that's a real rewrite, not a setting.
 
+## Answers, and why it's still the same app
+
+The first version of this wall held one voice per thought, and part of the
+argument below is "not a message board with a select box on it". Answers
+push straight against that: a thought can now draw a reply, and replies are
+the basic unit of a message board. They're here because a wall that is better
+for other people being on it ought to let those people meet somewhere, and an
+answer under a stranger's passing thought is the smallest place that can
+happen.
+
+What keeps it the same app is everything an answer doesn't have. It has no
+name, so it's a voice, not a person you could follow. It's capped at 140
+characters, smaller than a trace, so the thought stays the main thing. It has
+no kind of its own; it belongs to the as-if it answers. Answers go one level
+deep (you can't answer an answer), there are no counts of them anywhere, they
+never lift a trace up the wall, and nothing tells you one arrived. Like
+traces, they're permanent once left. The six similes are still the only way
+anything enters the wall.
+
+The cost is real. A trace can now gather a small conversation, and an unkind
+answer under your thought can't be removed by you or anyone else. That makes
+the missing moderation below a sharper gap than it was.
+
 ## What's enforced vs. what's judged
 
 Enforced, in `spec/`: a trace needs a real kind (one of the six) and non-empty
 text capped at 240 characters, or the server silently drops it rather than
-storing garbage. Traces persist in SQLite on the app's own volume, so they
+storing garbage. An answer needs a trace that exists and non-empty text capped
+at 140. Live delivery is checked as a crowd: several separate visitors' open
+streams each receive what another visitor leaves within a second, simultaneous
+answers arrive in one agreed order, and a reconnecting stream gets exactly
+what it missed. Each of the six filters shows only its own kind, newest first,
+and together they add up to the whole wall. Traces persist in SQLite on the app's own volume, so they
 survive a restart or a redeploy — not just the current process.
 
 Judged, by me now and by a reader later: whether the wall actually feels like
 the six similes it's named after, not a message board with a select box on
 it, and whether the plain list stays legible once real people have used it.
-I haven't built moderation, rate limiting, or a way to remove a trace — for a
+I haven't built moderation, rate limiting, or a way to remove a trace or an
+answer — for a
 wall this small, the honest position is that I haven't yet had a reason to
 need any of them, not that I've reasoned my way out of needing them forever.
 

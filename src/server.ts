@@ -2,8 +2,19 @@ import { randomUUID } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { createServer, type IncomingMessage } from "node:http";
 import { marked } from "marked";
-import { addTrace, isKind, newestTraceId, recentTraces, traceById, tracesSince } from "./db.ts";
-import { broadcast, openStream } from "./live.ts";
+import {
+  addReply,
+  addTrace,
+  isKind,
+  newestReplyId,
+  newestTraceId,
+  recentTraces,
+  repliesFor,
+  repliesSince,
+  traceById,
+  tracesSince,
+} from "./db.ts";
+import { broadcastReply, broadcastTrace, openStream, parseCursor } from "./live.ts";
 import { renderReadme, renderWall } from "./templates.ts";
 
 const PORT = Number(process.env.PORT ?? 8080);
@@ -48,7 +59,10 @@ const server = createServer(async (req, res) => {
     if (url.pathname === "/" && req.method === "GET") {
       const asked = url.searchParams.get("kind") ?? "";
       const kind = isKind(asked) ? asked : undefined;
-      const html = renderWall(recentTraces(200, kind), visitorId, kind, newestTraceId());
+      const traces = recentTraces(200, kind);
+      const replies = repliesFor(traces.map((t) => t.id));
+      const since = `${newestTraceId()}.${newestReplyId()}`;
+      const html = renderWall(traces, replies, visitorId, kind, since);
       res.writeHead(200, {
         "content-type": "text/html; charset=utf-8",
         ...(setCookie ? { "set-cookie": setCookie } : {}),
@@ -64,7 +78,7 @@ const server = createServer(async (req, res) => {
       const text = (params.get("text") ?? "").trim().slice(0, 240);
       if (isKind(kind) && text.length > 0) {
         const trace = traceById(addTrace(visitorId, kind, text));
-        if (trace) broadcast(trace);
+        if (trace) broadcastTrace(trace);
       }
       res.writeHead(303, {
         location: "/",
@@ -78,9 +92,36 @@ const server = createServer(async (req, res) => {
       // A reconnecting EventSource sends Last-Event-ID; a fresh one carries
       // the newest id its page was rendered with, so a trace posted between
       // render and connect isn't lost either way.
-      const since = Number(req.headers["last-event-id"] ?? url.searchParams.get("since") ?? 0);
-      const missed = Number.isFinite(since) && since > 0 ? tracesSince(since) : [];
-      openStream(res, visitorId, missed);
+      // A stream with neither starts from now.
+      const raw = req.headers["last-event-id"] ?? url.searchParams.get("since") ?? "";
+      const since = parseCursor(String(raw));
+      if (since) {
+        const missed = { traces: tracesSince(since.trace), replies: repliesSince(since.reply) };
+        openStream(res, visitorId, since, missed);
+      } else {
+        const now = { trace: newestTraceId(), reply: newestReplyId() };
+        openStream(res, visitorId, now, { traces: [], replies: [] });
+      }
+      return;
+    }
+
+    if (url.pathname === "/reply" && req.method === "POST") {
+      const raw = await readBody(req);
+      const params = new URLSearchParams(raw);
+      const traceId = Number(params.get("trace"));
+      const text = (params.get("text") ?? "").trim().slice(0, 140);
+      if (Number.isInteger(traceId) && text.length > 0) {
+        const reply = addReply(traceId, visitorId, text);
+        if (reply) broadcastReply(reply);
+      }
+      // back to the view the answer was written from, at the trace it answers
+      const view = params.get("view") ?? "";
+      const back = isKind(view) ? `/?kind=${view}` : "/";
+      res.writeHead(303, {
+        location: Number.isInteger(traceId) ? `${back}#trace-${traceId}` : back,
+        ...(setCookie ? { "set-cookie": setCookie } : {}),
+      });
+      res.end();
       return;
     }
 

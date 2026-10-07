@@ -27,10 +27,24 @@ function addTrace({ id, kind, html }) {
   status.textContent = `just arrived, ${label}${text}`;
 }
 
+// An answer slots into its own trace's thread and nothing else moves: an open
+// answer form, half-typed, stays exactly as it was.
+function addReply({ id, traceId, html }) {
+  const thread = document.querySelector(`#trace-${traceId} ol.replies`);
+  if (!thread || document.getElementById(`reply-${id}`)) return;
+  const li = fromHtml(html);
+  li.classList.add("arrived");
+  thread.append(li);
+  const answered = document.querySelector(`#trace-${traceId} > .text`)?.textContent ?? "";
+  const whose = answered.startsWith("yours: ") ? "your trace" : "a trace";
+  status.textContent = `an answer to ${whose}, “${answered.replace(/^yours: /, "")}”: ${li.querySelector(".text")?.textContent ?? ""}`;
+}
+
 if (wall && "EventSource" in window) {
   const since = wall.dataset.since ?? "0";
   const events = new EventSource(`/events?since=${encodeURIComponent(since)}`);
   events.addEventListener("trace", (e) => addTrace(JSON.parse(e.data)));
+  events.addEventListener("reply", (e) => addReply(JSON.parse(e.data)));
 }
 
 // Post without leaving the page; the stream brings the trace back, the same
@@ -58,6 +72,26 @@ if (form && "EventSource" in window) {
       } else {
         note.textContent = "";
       }
+    } finally {
+      button.disabled = false;
+      input.focus();
+    }
+  });
+}
+
+// Answer forms arrive with live traces too, so listen once on the wall.
+if (wall && "EventSource" in window) {
+  wall.addEventListener("submit", async (e) => {
+    const replyForm = e.target.closest("form.reply-form");
+    if (!replyForm) return;
+    e.preventDefault();
+    const body = new URLSearchParams(new FormData(replyForm));
+    const input = replyForm.querySelector("input[name=text]");
+    const button = replyForm.querySelector("button[type=submit]");
+    button.disabled = true;
+    try {
+      await fetch(replyForm.action, { method: "POST", body, redirect: "manual" });
+      input.value = "";
     } finally {
       button.disabled = false;
       input.focus();

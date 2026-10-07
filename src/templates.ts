@@ -1,4 +1,4 @@
-import type { Kind, Trace } from "./db.ts";
+import type { Kind, Reply, Trace } from "./db.ts";
 
 const KIND_META: Record<Kind, { glyph: string; hanzi: string; label: string; plural: string }> = {
   dream: { glyph: "☁", hanzi: "夢", label: "a dream", plural: "dreams" },
@@ -104,10 +104,41 @@ const shell = (title: string, body: string): string => `<!doctype html>
       li.trace.mine { background: #8883; opacity: 1; }
       li.trace.arrived { animation: arrive 1.2s ease-out; }
       @keyframes arrive { from { opacity: 0; transform: translateY(-0.3rem); } }
-      @media (prefers-reduced-motion: reduce) { li.trace.arrived { animation: none; } }
+      @media (prefers-reduced-motion: reduce) { li.trace.arrived, li.reply.arrived { animation: none; } }
       li.trace .glyph { font-size: 1.1rem; text-align: center; }
       li.trace .text { overflow-wrap: anywhere; min-width: 0; }
       li.trace .when { font-size: 0.75rem; color: light-dark(#595959, #999); white-space: nowrap; }
+      li.trace .thread { grid-column: 2 / -1; font-size: 0.9rem; }
+      ol.replies {
+        list-style: none;
+        margin: 0.2rem 0 0.3rem;
+        padding: 0 0 0 0.7rem;
+        border-left: 2px solid #8885;
+        display: grid;
+        gap: 0.2rem;
+      }
+      ol.replies:empty { display: none; }
+      li.reply { overflow-wrap: anywhere; }
+      li.reply.mine .text { text-decoration: underline dotted #8889; text-underline-offset: 0.2em; }
+      li.reply.arrived { animation: arrive 1.2s ease-out; }
+      li.reply .when { font-size: 0.7rem; color: light-dark(#595959, #999); white-space: nowrap; }
+      details.answer summary {
+        cursor: pointer;
+        font-size: 0.8rem;
+        color: light-dark(#595959, #999);
+        width: fit-content;
+      }
+      form.reply-form { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: end; margin-top: 0.3rem; }
+      form.reply-form label { display: grid; gap: 0.15rem; font-size: 0.8rem; flex: 1 1 12rem; }
+      form.reply-form input,
+      form.reply-form button {
+        font: inherit;
+        padding: 0.25rem 0.45rem;
+        border-radius: 0.3rem;
+        border: 1px solid #8886;
+        background: transparent;
+      }
+      form.reply-form button { cursor: pointer; }
       .empty { color: light-dark(#595959, #999); font-style: italic; }
       pre.readme-body { white-space: pre-wrap; }
       .visually-hidden {
@@ -128,7 +159,13 @@ const shell = (title: string, body: string): string => `<!doctype html>
   </body>
 </html>`;
 
-export function renderTrace(t: Trace, visitorId: string): string {
+export function renderReply(r: Reply, visitorId: string): string {
+  const isMine = r.visitorId === visitorId;
+  const mineLabel = isMine ? `<span class="visually-hidden">yours: </span>` : "";
+  return `<li class="reply${isMine ? " mine" : ""}" id="reply-${r.id}"><span class="text">${mineLabel}${escapeHtml(r.text)}</span> <span class="when">${relativeTime(r.createdAt)}</span></li>`;
+}
+
+export function renderTrace(t: Trace, visitorId: string, replies: Reply[], view?: Kind): string {
   const meta = KIND_META[t.kind];
   const isMine = t.visitorId === visitorId;
   const mineLabel = isMine ? `<span class="visually-hidden">yours: </span>` : "";
@@ -137,6 +174,19 @@ export function renderTrace(t: Trace, visitorId: string): string {
             <span class="visually-hidden">tagged as ${escapeHtml(meta.label)}: </span>
             <span class="text">${mineLabel}${escapeHtml(t.text)}</span>
             <span class="when">${relativeTime(t.createdAt)}</span>
+            <div class="thread">
+              <ol class="replies" aria-label="answers">${replies.map((r) => renderReply(r, visitorId)).join("")}</ol>
+              <details class="answer">
+                <summary>answer<span class="visually-hidden"> this trace</span></summary>
+                <form class="reply-form" method="post" action="/reply">
+                  <input type="hidden" name="trace" value="${t.id}" />${view ? `\n                  <input type="hidden" name="view" value="${view}" />` : ""}
+                  <label>your answer
+                    <input type="text" name="text" maxlength="140" required placeholder="shorter still" />
+                  </label>
+                  <button type="submit">leave it</button>
+                </form>
+              </details>
+            </div>
           </li>`;
 }
 
@@ -157,9 +207,10 @@ function renderFilters(current: Kind | undefined): string {
 
 export function renderWall(
   traces: Trace[],
+  replies: Map<number, Reply[]>,
   visitorId: string,
   kind: Kind | undefined,
-  newest: number,
+  since: string,
 ): string {
   const options = Object.entries(KIND_META)
     .map(
@@ -169,7 +220,7 @@ export function renderWall(
     .join("");
 
   const items = traces.length
-    ? traces.map((t) => renderTrace(t, visitorId)).join("\n")
+    ? traces.map((t) => renderTrace(t, visitorId, replies.get(t.id) ?? [], kind)).join("\n")
     : `<li class="empty">${kind ? `no ${escapeHtml(KIND_META[kind].plural)} yet` : "nothing has passed through yet"}</li>`;
 
   const body = `
@@ -197,7 +248,7 @@ export function renderWall(
       <p class="note" role="status" id="post-note"></p>
       ${renderFilters(kind)}
       <p class="visually-hidden" role="status" aria-live="polite" id="live-status"></p>
-      <ul class="wall" data-since="${newest}"${kind ? ` data-kind="${kind}"` : ""}>
+      <ul class="wall" data-since="${since}"${kind ? ` data-kind="${kind}"` : ""}>
         ${items}
       </ul>
     </main>

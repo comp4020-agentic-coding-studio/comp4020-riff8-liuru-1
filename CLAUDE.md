@@ -53,7 +53,10 @@ not to build a profile of them.
   ranking of the wall. The list is plain reverse-chronological, always.
 - No feature that exists to bring someone back (streaks, notifications,
   unread badges). The wall doesn't chase anyone.
-- A trace is permanent once posted: no edit, no delete, no admin override.
+- A trace or an answer is permanent once posted: no edit, no delete, no admin
+  override.
+- Answers stay small: no names, 140 characters, one level deep, no counts,
+  and answering never moves a trace up the wall. README.md argues why.
   If that becomes a real problem, it needs a README argument first, not a
   quiet code change.
 - Keep the six kinds fixed. Don't add a seventh "custom" tag — the constraint
@@ -65,8 +68,9 @@ not to build a profile of them.
 ## Enforced vs. judged
 
 `spec/*.test.ts` is the enforced list: valid kind, non-empty text, a 240
-character cap, live delivery over `/events` (`spec/live.test.ts`), and the
-two course-wide checks (`/` answers, `/readme/`
+character cap, answers (`spec/replies.test.ts`), the six filters
+(`spec/wall.test.ts`), live delivery over `/events` (`spec/live.test.ts`), and
+the two course-wide checks (`/` answers, `/readme/`
 publishes `README.md`). Everything else — whether the wall still feels like
 the six similes rather than a generic guestbook — is a judgement call, made
 here and revisited each crit, not something a test can catch.

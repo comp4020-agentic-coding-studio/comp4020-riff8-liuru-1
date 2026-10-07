@@ -13,6 +13,16 @@ export interface Trace {
   createdAt: number;
 }
 
+// An answer to someone else's trace (or your own). Smaller than a trace, with
+// no kind of its own: it belongs to the thought it answers.
+export interface Reply {
+  id: number;
+  traceId: number;
+  visitorId: string;
+  text: string;
+  createdAt: number;
+}
+
 export function isKind(value: string): value is Kind {
   return (KINDS as readonly string[]).includes(value);
 }
@@ -31,6 +41,17 @@ db.exec(`
     text TEXT NOT NULL,
     created_at INTEGER NOT NULL
   )
+`);
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS replies (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    trace_id INTEGER NOT NULL REFERENCES traces(id),
+    visitor_id TEXT NOT NULL,
+    text TEXT NOT NULL,
+    created_at INTEGER NOT NULL
+  );
+  CREATE INDEX IF NOT EXISTS replies_by_trace ON replies (trace_id, id);
 `);
 
 const insertTrace = db.prepare(
@@ -75,4 +96,45 @@ const selectById = db.prepare(
 
 export function traceById(id: number): Trace | undefined {
   return selectById.get(id) as Trace | undefined;
+}
+
+const REPLY_COLUMNS = "id, trace_id AS traceId, visitor_id AS visitorId, text, created_at AS createdAt";
+const insertReply = db.prepare(
+  "INSERT INTO replies (trace_id, visitor_id, text, created_at) SELECT id, ?, ?, ? FROM traces WHERE id = ?",
+);
+const selectReplyById = db.prepare(`SELECT ${REPLY_COLUMNS} FROM replies WHERE id = ?`);
+
+// Only inserts when the trace exists: an answer to nothing is dropped, the
+// same way a trace with a made-up kind is.
+export function addReply(traceId: number, visitorId: string, text: string): Reply | undefined {
+  const result = insertReply.run(visitorId, text, Date.now(), traceId);
+  if (result.changes === 0) return undefined;
+  return selectReplyById.get(Number(result.lastInsertRowid)) as Reply;
+}
+
+const selectRepliesFor = db.prepare(
+  `SELECT ${REPLY_COLUMNS} FROM replies WHERE trace_id IN (SELECT value FROM json_each(?)) ORDER BY id ASC`,
+);
+
+// Oldest first under each trace, so a thread reads as a conversation.
+export function repliesFor(traceIds: number[]): Map<number, Reply[]> {
+  const out = new Map<number, Reply[]>();
+  for (const r of selectRepliesFor.all(JSON.stringify(traceIds)) as Reply[]) {
+    const list = out.get(r.traceId) ?? [];
+    list.push(r);
+    out.set(r.traceId, list);
+  }
+  return out;
+}
+
+const selectRepliesSince = db.prepare(`SELECT ${REPLY_COLUMNS} FROM replies WHERE id > ? ORDER BY id ASC LIMIT ?`);
+
+export function repliesSince(id: number, limit = 500): Reply[] {
+  return selectRepliesSince.all(id, limit) as Reply[];
+}
+
+const selectMaxReplyId = db.prepare("SELECT COALESCE(MAX(id), 0) AS id FROM replies");
+
+export function newestReplyId(): number {
+  return (selectMaxReplyId.get() as { id: number }).id;
 }
