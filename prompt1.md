@@ -12,3 +12,9 @@ they can tell their opinion or recact to a message
 
 whenver the user choose an as-if generate sound that relates to that for example:
 if the user chooses lighting, give a thunderstarike
+
+You make your own branches to check and resolve the issues that i told you. Then merge only the working versions to the main.
+so only the code that builds is merged to main.
+everytimw this happens, commmit and push the code
+
+
