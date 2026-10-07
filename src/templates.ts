@@ -1,12 +1,12 @@
 import type { Kind, Trace } from "./db.ts";
 
-const KIND_META: Record<Kind, { glyph: string; hanzi: string; label: string }> = {
-  dream: { glyph: "☁", hanzi: "夢", label: "a dream" },
-  illusion: { glyph: "◈", hanzi: "幻", label: "an illusion" },
-  bubble: { glyph: "○", hanzi: "泡", label: "a bubble" },
-  shadow: { glyph: "◐", hanzi: "影", label: "a shadow" },
-  dew: { glyph: "•", hanzi: "露", label: "dew" },
-  lightning: { glyph: "⚡", hanzi: "電", label: "a flash of lightning" },
+const KIND_META: Record<Kind, { glyph: string; hanzi: string; label: string; plural: string }> = {
+  dream: { glyph: "☁", hanzi: "夢", label: "a dream", plural: "dreams" },
+  illusion: { glyph: "◈", hanzi: "幻", label: "an illusion", plural: "illusions" },
+  bubble: { glyph: "○", hanzi: "泡", label: "a bubble", plural: "bubbles" },
+  shadow: { glyph: "◐", hanzi: "影", label: "a shadow", plural: "shadows" },
+  dew: { glyph: "•", hanzi: "露", label: "dew", plural: "dew" },
+  lightning: { glyph: "⚡", hanzi: "電", label: "a flash of lightning", plural: "lightning" },
 };
 
 export function escapeHtml(s: string): string {
@@ -77,6 +77,20 @@ const shell = (title: string, body: string): string => `<!doctype html>
         background: transparent;
         cursor: pointer;
       }
+      nav.filters ul { list-style: none; margin: 0 0 1rem; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+      nav.filters a {
+        display: inline-block;
+        padding: 0.2rem 0.6rem;
+        border: 1px solid #8886;
+        border-radius: 1rem;
+        color: inherit;
+        text-decoration: none;
+        font-size: 0.9rem;
+      }
+      nav.filters a[aria-current="page"] { background: #8884; border-color: currentColor; }
+      p.note { font-size: 0.9rem; margin: -1.25rem 0 1.25rem; min-height: 0; }
+      p.note:empty { display: none; }
+      p.note a { color: inherit; }
       ul.wall { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem; }
       li.trace {
         display: grid;
@@ -126,15 +140,37 @@ export function renderTrace(t: Trace, visitorId: string): string {
           </li>`;
 }
 
-export function renderWall(traces: Trace[], visitorId: string): string {
-  const newest = traces.reduce((max, t) => Math.max(max, t.id), 0);
+function renderFilters(current: Kind | undefined): string {
+  const link = (href: string, active: boolean, inner: string) =>
+    `<li><a href="${href}"${active ? ` aria-current="page"` : ""}>${inner}</a></li>`;
+  const kinds = (Object.entries(KIND_META) as [Kind, (typeof KIND_META)[Kind]][]).map(([kind, m]) =>
+    link(
+      `/?kind=${kind}`,
+      current === kind,
+      `<span aria-hidden="true">${m.glyph}</span> <span lang="zh-Hant">${m.hanzi}</span> ${escapeHtml(m.plural)}`,
+    ),
+  );
+  return `<nav class="filters" aria-label="show only one as-if">
+        <ul>${link("/", current === undefined, "everything")}${kinds.join("")}</ul>
+      </nav>`;
+}
+
+export function renderWall(
+  traces: Trace[],
+  visitorId: string,
+  kind: Kind | undefined,
+  newest: number,
+): string {
   const options = Object.entries(KIND_META)
-    .map(([value, m]) => `<option value="${value}">${m.hanzi} ${escapeHtml(m.label)}</option>`)
+    .map(
+      ([value, m]) =>
+        `<option value="${value}"${value === kind ? " selected" : ""}>${m.hanzi} ${escapeHtml(m.label)}</option>`,
+    )
     .join("");
 
   const items = traces.length
     ? traces.map((t) => renderTrace(t, visitorId)).join("\n")
-    : `<li class="empty">nothing has passed through yet</li>`;
+    : `<li class="empty">${kind ? `no ${escapeHtml(KIND_META[kind].plural)} yet` : "nothing has passed through yet"}</li>`;
 
   const body = `
     <header>
@@ -158,8 +194,10 @@ export function renderWall(traces: Trace[], visitorId: string): string {
         </label>
         <button type="submit">let it go</button>
       </form>
+      <p class="note" role="status" id="post-note"></p>
+      ${renderFilters(kind)}
       <p class="visually-hidden" role="status" aria-live="polite" id="live-status"></p>
-      <ul class="wall" data-since="${newest}">
+      <ul class="wall" data-since="${newest}"${kind ? ` data-kind="${kind}"` : ""}>
         ${items}
       </ul>
     </main>

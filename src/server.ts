@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { createServer, type IncomingMessage } from "node:http";
 import { marked } from "marked";
-import { addTrace, isKind, recentTraces, traceById, tracesSince } from "./db.ts";
+import { addTrace, isKind, newestTraceId, recentTraces, traceById, tracesSince } from "./db.ts";
 import { broadcast, openStream } from "./live.ts";
 import { renderReadme, renderWall } from "./templates.ts";
 
@@ -46,7 +46,9 @@ const server = createServer(async (req, res) => {
 
   try {
     if (url.pathname === "/" && req.method === "GET") {
-      const html = renderWall(recentTraces(), visitorId);
+      const asked = url.searchParams.get("kind") ?? "";
+      const kind = isKind(asked) ? asked : undefined;
+      const html = renderWall(recentTraces(200, kind), visitorId, kind, newestTraceId());
       res.writeHead(200, {
         "content-type": "text/html; charset=utf-8",
         ...(setCookie ? { "set-cookie": setCookie } : {}),

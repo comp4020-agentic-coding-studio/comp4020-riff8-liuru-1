@@ -5,6 +5,7 @@
 const wall = document.querySelector("ul.wall");
 const status = document.getElementById("live-status");
 const form = document.querySelector("form.trace-form");
+const note = document.getElementById("post-note");
 
 function fromHtml(html) {
   const t = document.createElement("template");
@@ -12,7 +13,9 @@ function fromHtml(html) {
   return t.content.firstElementChild;
 }
 
-function addTrace({ id, html }) {
+function addTrace({ id, kind, html }) {
+  // a filtered wall only takes its own kind, live as on a fresh load
+  if (wall.dataset.kind && wall.dataset.kind !== kind) return;
   if (document.getElementById(`trace-${id}`)) return;
   const li = fromHtml(html);
   li.classList.add("arrived");
@@ -42,6 +45,19 @@ if (form && "EventSource" in window) {
     try {
       await fetch(form.action, { method: "POST", body, redirect: "manual" });
       input.value = "";
+      // posting a kind this filtered view hides would otherwise look like it vanished
+      const kind = body.get("kind");
+      if (wall.dataset.kind && kind !== wall.dataset.kind) {
+        const chosen = form.querySelector(`option[value="${kind}"]`)?.textContent ?? kind;
+        note.innerHTML = "";
+        note.append(`Left as ${chosen.replace(/^\S+\s/, "")}; this view shows only one as-if. `);
+        const all = document.createElement("a");
+        all.href = "/";
+        all.textContent = "See everything";
+        note.append(all, ".");
+      } else {
+        note.textContent = "";
+      }
     } finally {
       button.disabled = false;
       input.focus();

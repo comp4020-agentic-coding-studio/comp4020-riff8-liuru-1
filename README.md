@@ -47,7 +47,10 @@ you.** A new trace slides in at the top of the wall; the list isn't rebuilt,
 so a half-typed thought in the form, your scroll position, and whatever
 you're reading stay put. The wall stays plain reverse-chronological whether
 it was loaded or streamed, so a page that has been open all afternoon shows
-exactly what a fresh load would.
+exactly what a fresh load would. A wall filtered to one as-if (only the
+dreams, say) takes new traces of that kind live and quietly ignores the rest;
+filtering narrows the list, never reorders it, and switching filters is an
+ordinary link, so it's a fresh load of that view.
 
 **A dropped connection catches up rather than starting over.** Each page
 keeps one server-sent-events stream open. If it drops (a phone sleeping, a

@@ -44,9 +44,19 @@ export function addTrace(visitorId: string, kind: Kind, text: string): number {
 const selectRecent = db.prepare(
   "SELECT id, visitor_id AS visitorId, kind, text, created_at AS createdAt FROM traces ORDER BY id DESC LIMIT ?",
 );
+const selectRecentOfKind = db.prepare(
+  "SELECT id, visitor_id AS visitorId, kind, text, created_at AS createdAt FROM traces WHERE kind = ? ORDER BY id DESC LIMIT ?",
+);
 
-export function recentTraces(limit = 200): Trace[] {
-  return selectRecent.all(limit) as Trace[];
+// Newest first, filtered or not: a filter narrows the wall, it never reorders it.
+export function recentTraces(limit = 200, kind?: Kind): Trace[] {
+  return (kind ? selectRecentOfKind.all(kind, limit) : selectRecent.all(limit)) as Trace[];
+}
+
+const selectMaxId = db.prepare("SELECT COALESCE(MAX(id), 0) AS id FROM traces");
+
+export function newestTraceId(): number {
+  return (selectMaxId.get() as { id: number }).id;
 }
 
 const selectSince = db.prepare(
