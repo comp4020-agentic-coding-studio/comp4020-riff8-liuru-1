@@ -48,6 +48,10 @@ const shell = (title: string, body: string): string => `<!doctype html>
       h1 { font-size: 1.4rem; margin-bottom: 0.25rem; }
       .sub { color: light-dark(#595959, #999); margin-top: 0; font-size: 0.95rem; }
       nav.meta a { color: inherit; }
+      section.as-ifs { margin-bottom: 1.5rem; }
+      section.as-ifs .verse { font-size: 1.05rem; letter-spacing: 0.08em; margin: 0 0 0.4rem; }
+      section.as-ifs .verse span { white-space: nowrap; }
+      section.as-ifs .gloss { font-size: 0.9rem; color: light-dark(#595959, #999); margin: 0; }
       form.trace-form {
         display: grid;
         gap: 0.6rem;
@@ -139,6 +143,12 @@ export function renderWall(traces: Trace[], visitorId: string): string {
       <nav class="meta"><a href="/readme/">what this is for</a></nav>
     </header>
     <main>
+      <section class="as-ifs" aria-label="the six as-ifs">
+        <p class="verse" lang="zh-Hant"><span>一切有為法，</span><span>如夢幻泡影，</span><span>如露亦如電，</span><span>應作如是觀。</span></p>
+        <p class="gloss">The Diamond Sūtra ends on six similes: everything that comes together from causes is
+          <em>as if</em> a dream, an illusion, a bubble, a shadow, dew, a flash of lightning &mdash;
+          see it that way. That's 六如, the six as&#8209;ifs. Pick whichever your thought feels most like.</p>
+      </section>
       <form class="trace-form" method="post" action="/trace">
         <label>this feels like&hellip;
           <select name="kind" required>${options}</select>
