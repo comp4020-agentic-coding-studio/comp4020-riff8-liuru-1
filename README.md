@@ -1,158 +1,167 @@
-# 六如 — a wall for passing things
+# Paper Planes — six colours, one shared sky
 
-This is a shared wall. Anyone who visits can leave a short, passing
-thought — tagged as one of the six similes from the closing lines of the
-Diamond Sūtra: a dream, an illusion, a bubble, a shadow, dew, a flash of
-lightning. Those six are also where my own name in this course comes from
-(Tang Yin's Buddhist name, 六如, "the six as-ifs"), so the theme isn't
-decoration bolted onto a generic guestbook — it's the actual design
-constraint: everything on the wall is supposed to feel like it's already
-passing.
+This is a student recreation of [Paper Planes](https://paperplanes.world/),
+the 2016 Google I/O piece by Active Theory, in which people around the world
+fold a message into a plane, throw it, catch a stranger's, stamp it with
+where they are and throw it on. It's made for COMP4020 at the ANU and isn't
+affiliated with Google or Active Theory.
 
-## What good means here
+It keeps the original's scene and loop: a pastel, slowly turning low-poly
+globe, planes circling it, a sheet that folds into a plane and flies off,
+catching one from the sky, unfolding it to read, stamping it, throwing it on.
+It changes four things on purpose:
 
-Good, for this app, is small and quiet rather than sticky. The brief points at
-the small web, home-cooked software, and games built for a handful of people
-rather than a market, and those are the three things I actually leaned on
-while deciding what to build and what to leave out.
+1. **Six colours of paper** — Coral, Orange, Yellow, Mint, Blue and Lavender
+   — instead of the original's white paper.
+2. **The whole thing works on a laptop.** The original's desktop page shows
+   the globe and asks you to join on a phone; here a mouse, a keyboard or a
+   touchscreen can each do everything.
+3. **You choose the place on your stamp.** The original stamps a plane with
+   your physical location. Here it's a country or region (and, if you like, a
+   city) you pick from a list, and it doesn't have to be where you are.
+   Nothing asks for your location.
+4. **You write a message on the plane**, up to 240 characters, and whoever
+   catches it reads exactly what you wrote, on the paper itself.
 
-Robin Sloan's [*An App Can Be a Home-Cooked Meal*](https://www.robinsloan.com/notes/home-cooked-app/)
-argues that software made for a specific, small circle of people — not a
-public, not a userbase — can afford to just be finished: no growth loop, no
-notifications chasing you back. The wall has no accounts, no follower count,
-no read receipts. You can find your own trace again, but there's nothing here
-trying to make you come back.
+## From six similes to six colours
 
-The [Small Technology Foundation](https://small-tech.org/)'s case for a small
-web — public spaces people can actually understand the whole of, without
-tracking or an algorithmic feed — is why the wall shows everything in one
-plain reverse-chronological list, oldest at the bottom, nothing curated or
-ranked. What you see is what's actually there.
+This repo used to be 六如, a wall where a passing thought was tagged as one
+of the six similes from the Diamond Sūtra's closing line — a dream, an
+illusion, a bubble, a shadow, dew, a flash of lightning. The pod that riffed
+on it asked for this instead, and asked specifically that the six choices
+become six equal paper colours rather than six kinds of thought with
+different rules. So a colour here means nothing: it never marks who wrote a
+plane, how popular it is, or what anyone may do with it. It's paper you
+liked the look of.
 
-And the design point the final-project brief itself makes explicitly --- build
-something that's *better* because other people are using it right now, the
-way small local-multiplayer games (like [*Pico Park*](https://store.steampowered.com/app/1509960/PICO_PARK/))
-only work because everyone is present at once --- is why the wall is live. A
-trace someone leaves appears on every other open page within about a second,
-with no reload. There's still no "three people are here" line and no names:
-the only sign anyone else is present is the wall moving.
+What survives from the wall is its temperament. There are still no accounts,
+no follower counts, no likes, no ranking and no notifications. A plane, like
+a trace, is permanent once thrown: nobody can edit or delete it, including
+whoever wrote it. The wall's traces and answers weren't migrated into
+planes, because they were never planes; they're kept exactly as they were,
+read-only, at [/archive](/archive), linked quietly from the About panel.
 
-## Several people at once
+## How it works
 
-This is the one decision about shared use the app is built around, so it's
-written down rather than left to whatever the code happens to do.
+Write on the sheet, choose a colour and a place, and press **Fold plane**.
+The sheet folds into a dart with the start of your message on one wing and
+your place on the other. Press **Throw plane** (or drag it upward and let
+go) and it joins the sky on every open page within about a second.
 
-**New traces arrive live, and nothing else about the page changes under
-you.** A new trace slides in at the top of the wall; the list isn't rebuilt,
-so a half-typed thought in the form, your scroll position, and whatever
-you're reading stay put. The wall stays plain reverse-chronological whether
-it was loaded or streamed, so a page that has been open all afternoon shows
-exactly what a fresh load would. The cost of inserting rather than
-rebuilding is that an arrival above whatever you're about to click nudges it
-down a line; I'd rather that than a wall that holds still by not being live.
-A wall filtered to one as-if (only the dreams, say) takes new traces of that
-kind live and quietly ignores the rest; filtering narrows the list, never
-reorders it, and switching filters is an ordinary link, so it's a fresh load
-of that view.
+**Catch a plane** brings up a net that follows the pointer; click a plane
+inside it to catch that one, or press **Catch an available plane** to take
+any. You get someone else's when there is one. The plane comes to you folded,
+with its preview on the wing; **Open / Unfold** spreads it into the sheet,
+with the whole message and every stamp so far. Add your own place and press
+**Stamp & send onward**, or **Release without stamping** to let it go as it
+was. **View journey** draws its route on the globe, stop by stop, with an
+approximate distance between the places people chose — a virtual journey,
+not a tracked one.
 
-**Answers arrive live too, into the thread they belong to.** An answer
-appears under its trace on every open page within about a second, at the
-bottom of that trace's short thread, oldest first, so it reads as a
-conversation. An answer form you've opened and half-filled stays as it was
-while other people's answers land above it. An answer never moves its trace up
-the wall: the wall is ordered by when each thought was left, not by how much
-talk it has drawn, because sorting by activity is where a ranked feed starts.
+**Your planes** lists what this browser has thrown, newest first, each with
+its current stamps and route.
 
-**Two people answering the same trace at once both land.** Nothing on the
-wall is ever edited, only added to, so there's nothing for two people to
-conflict over. The server takes answers in the order they arrive, and every
-open page, and every later visitor, sees that same order. Neither sees the
-other typing; you find out someone else answered the moment their answer
-appears, the same way you find out about a new trace.
+If the browser can't do WebGL, the same sky is drawn flat, with every action
+intact. With JavaScript off, the page is plain forms: write and throw, catch
+one, read it, stamp it or release it.
 
-**A dropped connection catches up rather than starting over.** Each page
-keeps one server-sent-events stream open. If it drops (a phone sleeping, a
-train tunnel, the app's machine restarting), the browser reconnects and the
-server sends what was missed since the last trace and answer that page saw,
-traces first and then answers, in order, with nothing doubled. A page also asks for anything posted between its own
-render and its stream opening, so a trace never falls into that gap.
+## People, and who may change what
 
-**Coming back tomorrow shows the wall, not what's new.** There's no unread
-marker, no "since your last visit" line, no count of what you missed. You see
-the same wall anyone else sees, with your own traces and answers marked as
-yours. If someone answered one of your traces overnight, you'll find it under
-that trace when you scroll to it, and nowhere else: no "someone answered you".
-Marking what's new would be the first step towards chasing people back, which
-is the thing this app exists not to do.
+A person is a browser. The first visit sets a random, long-lived `visitor`
+cookie (HttpOnly, never readable by the page's scripts), and that's the only
+identity there is. From it the server derives a public handle — a bird and
+six hex digits, like `swallow-c8d493` — with a one-way hash, so the handle can
+be shown on the page and written to the logs without revealing the cookie.
+You see your own handle at the bottom of the sky; a plane shows its author's
+handle, and each stamp shows its stamper's. There's no list of who's here
+and no count of anyone.
 
-The alternatives were polling (simpler, but a fixed delay and a request every
-few seconds from every idle tab for a wall that mostly isn't moving) and
-WebSockets (two-way, which the wall doesn't need: posting is still an
-ordinary form submission, and works without JavaScript). The cost of SSE
-here is that the fan-out lives in one process's memory, which only works
-because the app runs on exactly one machine. A second machine would need a
-shared channel between them, and that's a real rewrite, not a setting.
+| What | Who can read it | Who can change it | Enforced in |
+| --- | --- | --- | --- |
+| A plane's message, colour, author, origin stamp | everyone | nobody, ever | `src/planes.ts`, `createPlane`: written once, no update path exists |
+| Earlier stamps | everyone | nobody | stamps are only ever inserted, at the next sequence number |
+| Whether a plane is flying or held | everyone | whoever catches it, for 120 s | `catchPlane`: one conditional `UPDATE … WHERE state = 'flying'` |
+| A new stamp, or letting it go | — | only the visitor holding the current lease | `releasePlane`: checks visitor **and** lease id **and** expiry in one `UPDATE` |
+| Your planes | only you | — | `/api/mine` selects by the cookie's visitor id |
 
-## Answers, and why it's still the same app
+A catch holds the plane for 120 seconds, renewed every 30 while you're
+looking at it. Close the tab and the hold lapses; the server puts the plane
+back in the sky within five seconds of it expiring. A request carrying an old
+lease id (from a previous catch of the same plane, or someone else's) is
+refused, so a stale tab can't stamp a plane it no longer holds.
 
-The first version of this wall held one voice per thought, and part of the
-argument below is "not a message board with a select box on it". Answers
-push straight against that: a thought can now draw a reply, and replies are
-the basic unit of a message board. They're here because a wall that is better
-for other people being on it ought to let those people meet somewhere, and an
-answer under a stranger's passing thought is the smallest place that can
-happen.
+Every write carries a request key. Sending the same key twice — a double
+click, a retry after a dropped connection — returns the first result instead
+of making a second plane or stamp; the same key with a different payload is
+refused. Writes from another site are refused, request bodies are capped at
+8 KB, and each visitor gets a small per-minute budget (12 planes, 40 catches,
+40 releases). A garbled cookie gets a fresh identity instead of an error.
 
-What keeps it the same app is everything an answer doesn't have. It has no
-name, so it's a voice, not a person you could follow. It's capped at 140
-characters, smaller than a trace, so the thought stays the main thing. It has
-no kind of its own; it belongs to the as-if it answers. Answers go one level
-deep (you can't answer an answer), there are no counts of them anywhere, they
-never lift a trace up the wall, and nothing tells you one arrived. Like
-traces, they're permanent once left. The six similes are still the only way
-anything enters the wall.
+## Reading the logs
 
-The cost is real. A trace can now gather a small conversation, and an unkind
-answer under your thought can't be removed by you or anyone else. That makes
-the missing moderation below a sharper gap than it was.
+Every action prints one JSON line to stdout, which is what
+`flyctl logs -a comp4020-riff8-liuru-1` shows. Each line has the time, a
+request id, the action, the outcome, the actor's handle, and the plane id
+where there is one:
 
-## Sound, and why it's still quiet
+```
+{"action":"plane_create","outcome":"ok","actor":"robin-83ac23","plane":1,"colour":"blue","origin":"AU",…}
+{"action":"plane_catch","outcome":"ok","actor":"swallow-c8d493","plane":1,"creator":"robin-83ac23",…}
+{"action":"plane_catch","outcome":"refused","actor":"heron-b3358a","plane":1,"reason":"already_caught"}
+{"action":"plane_stamp","outcome":"ok","actor":"swallow-c8d493","plane":1,"seq":2,"region":"JP",…}
+```
 
-Each as-if has a short sound of its own, synthesised in the browser: two drops
-of dew, a bubble's rising bloop, a crack and then thunder for lightning. It's
-off until you turn it on, it plays only when you pick an as-if yourself, and
-anyone whose system asks for reduced motion gets none of it. Above all, it
-never plays when someone else's trace or answer arrives. A chime for new
-activity is a notification, and a notification is the wall reaching out to
-pull you back, which is the one thing it doesn't do. The sound is for the
-moment you choose what your own thought is like, not a signal that others are
-here.
+The actions are `visitor_issue`, `plane_create`, `plane_catch`,
+`plane_stamp`, `plane_release`, `lease_expire`, `lease_renew` (refusals
+only), `stream_open`/`stream_close`, and `write` for requests refused before
+they reach a route (cross-site, oversized, malformed). Refusals carry a
+short `reason`. Lines are written after a change commits, never before. No
+line ever holds a message body, a cookie, a lease id, an IP address or a raw
+request payload. To follow two people at a crit, read the handles shown at
+the bottom of each of their screens and watch for those in the log; nobody
+needs to generate test traffic on the live app to try it.
 
-## What's enforced vs. what's judged
+## Setup
 
-Enforced, in `spec/`: a trace needs a real kind (one of the six) and non-empty
-text capped at 240 characters, or the server silently drops it rather than
-storing garbage. An answer needs a trace that exists and non-empty text capped
-at 140. Live delivery is checked as a crowd: several separate visitors' open
-streams each receive what another visitor leaves within a second, simultaneous
-answers arrive in one agreed order, and a reconnecting stream gets exactly
-what it missed. Each of the six filters shows only its own kind, newest first,
-and together they add up to the whole wall. Traces persist in SQLite on the app's own volume, so they
-survive a restart or a redeploy — not just the current process.
+Node 24 and pnpm 11 (pinned in `mise.toml`). `pnpm install`, then
+`node src/server.ts`; it listens on `PORT` (default 8080) and keeps its
+SQLite file in `DATA_DIR` (default `./data`). `pnpm check` runs the
+type-check and the spec against a running server at `APP_URL`. The globe's
+land mask is generated once by `node scripts/build-land.ts` from Natural
+Earth's public-domain 1:110m land, via
+[world-atlas](https://github.com/topojson/world-atlas) (ISC), and committed;
+the place list is `src/web/regions.json`. Rendering uses
+[three.js](https://threejs.org/) (MIT), served from the app itself.
 
-Judged, by me now and by a reader later: whether the wall actually feels like
-the six similes it's named after, not a message board with a select box on
-it, and whether the plain list stays legible once real people have used it.
-I haven't built moderation, rate limiting, or a way to remove a trace or an
-answer — for a
-wall this small, the honest position is that I haven't yet had a reason to
-need any of them, not that I've reasoned my way out of needing them forever.
+## What's enforced vs. judged
 
-## What I deliberately didn't build yet
+Enforced in `spec/`: a plane needs one of the six colours, a place from the
+catalogue (a city has to belong to its country), and a message of 1 to 240
+code points that's stored exactly as written, line breaks and surrounding
+spaces included. Two catchers racing for one plane get exactly one winner.
+Only the lease holder can stamp or release, an old lease can't act on a new
+catch, and repeated keys don't duplicate anything. A catcher can't change a
+plane's message, colour or history. A thrown plane reaches other open pages
+within a second, a reconnecting page gets exactly what it missed, and the
+archive stays read-only.
 
-No visible distinction between visitors beyond "yours vs. everyone else's":
-no names, colours, or avatars. Answers made that a live question rather than a
-deferred one, and the answer is still no, for the reasons above. Also no
-server-side logging beyond what Fly captures by default (crit 11), and no
-moderation, which answers have made more pressing. Those two are real gaps,
-not oversights.
+Judged: whether the sky feels like Paper Planes — the scale of the globe,
+the fold, the throw, the moment of catching something a stranger wrote —
+rather than a form with a 3D background. That's checked by eye, at 1440×900
+and 390×844, and it's the crit's call.
+
+## Known limitations
+
+- The fold is DOM panels hinged in CSS 3D, not a cloth simulation; it reads
+  as a dart, but the paper doesn't bend.
+- The sky draws at most 60 flying planes, sampled at random; catching "any"
+  still draws from all of them.
+- Live updates fan out from one process's memory, which works because the
+  app runs on exactly one machine. A second machine would need a shared
+  channel.
+- The per-visitor limits are per cookie, so clearing cookies resets them.
+  There's still no moderation, and an unkind message can't be removed. If
+  the sky is ever exposed somewhere a stranger could flood it, that's the
+  first thing to revisit.
+- Handles are 24 bits of hash: plenty to tell a crit's worth of people
+  apart, not a guarantee across millions.
