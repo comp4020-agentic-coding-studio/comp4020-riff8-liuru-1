@@ -455,6 +455,7 @@ export function renderSky(o: SkyOptions): string {
                 <button type="button" data-action="journey">View journey</button>
               </div>
             </div>
+            <p class="held-note" role="status"></p>
             <p class="lease-warning" role="alert" hidden></p>
             <p class="error" id="held-error" role="alert"></p>
           </div>

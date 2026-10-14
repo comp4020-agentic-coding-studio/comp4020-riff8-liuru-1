@@ -708,7 +708,8 @@ function paintHeld() {
 function showHeld(note) {
   held.place = null;
   stampPicker.set(null, null);
-  held.error.textContent = note;
+  held.error.textContent = "";
+  $(".held-note").textContent = note;
   held.warning.hidden = true;
   releaseKey = null;
   app.dataset.surface = "held";

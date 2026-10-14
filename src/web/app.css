@@ -230,6 +230,8 @@ button[aria-disabled="true"], button:disabled { opacity: 0.55; cursor: not-allow
 .app[data-state="editing"] .rail { animation: railin 0.35s 0.35s both; }
 @keyframes railin { from { opacity: 0; translate: 12px 0; } }
 .plane-meta { font-size: 15px; line-height: 1.45; }
+.held-note { font-size: 14px; margin: 0; }
+.held-note:empty { display: none; }
 .lease-warning { font-size: 14px; padding: 8px 12px; border-radius: 10px; background: #fff3d6; }
 
 @media (max-width: 767px) {
