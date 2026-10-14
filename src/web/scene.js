@@ -8,7 +8,7 @@ const DEG = Math.PI / 180;
 const FOV = 38;
 const TILT = 23.4 * DEG;
 const IDLE_SPIN = 0.8 * DEG; // per second
-const LAND_LIFT = 0.018;
+const LAND_LIFT = 0.025;
 
 /** Unit vector for a latitude/longitude, with longitude 0 facing the camera. */
 export function latLngToVec(lat, lng, r = 1) {
@@ -75,10 +75,10 @@ function buildGlobe(land, detail) {
   const geo = new THREE.IcosahedronGeometry(1, detail);
   const pos = geo.attributes.position;
   const colors = new Float32Array(pos.count * 3);
-  const ocean1 = new THREE.Color("#A9C1EA");
-  const ocean2 = new THREE.Color("#BDB0E3");
-  const land1 = new THREE.Color("#5DB7A6");
-  const land2 = new THREE.Color("#93D6BC");
+  const ocean1 = new THREE.Color("#A3B4E8");
+  const ocean2 = new THREE.Color("#B7AEE6");
+  const land1 = new THREE.Color("#6FCFCB");
+  const land2 = new THREE.Color("#8FE0D6");
   const ice = new THREE.Color("#E8F0F6");
   const c = new THREE.Color();
   const rnd = mulberry(7);
@@ -109,7 +109,7 @@ function buildGlobe(land, detail) {
   geo.computeVertexNormals();
   const mat = new THREE.MeshLambertMaterial({ vertexColors: true, flatShading: true });
   const mesh = new THREE.Mesh(geo, mat);
-  const fill = new THREE.Mesh(new THREE.SphereGeometry(0.999, 64, 48), new THREE.MeshLambertMaterial({ color: 0x7fbfae }));
+  const fill = new THREE.Mesh(new THREE.SphereGeometry(0.999, 64, 48), new THREE.MeshLambertMaterial({ color: 0x5aa9b8 }));
   mesh.add(fill);
   return mesh;
 }
@@ -141,9 +141,10 @@ function haloSprite() {
   ctx.fillRect(0, 0, 256, 256);
   const tex = new THREE.CanvasTexture(cv);
   tex.colorSpace = THREE.SRGBColorSpace;
-  const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, depthWrite: false, depthTest: false }));
-  s.scale.set(4.2, 4.2, 1);
-  s.renderOrder = -1;
+  // behind the planet, and depth-tested, so it glows round it, never over it
+  const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, depthWrite: false }));
+  s.scale.set(4.6, 4.6, 1);
+  s.position.z = -1.4;
   return s;
 }
 
@@ -170,8 +171,8 @@ export class Sky {
 
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(FOV, 1, 0.1, 50);
-    this.scene.add(new THREE.HemisphereLight(0xf6f1ff, 0x9fb0d8, 1.25));
-    const sun = new THREE.DirectionalLight(0xfff8f0, 1.5);
+    this.scene.add(new THREE.HemisphereLight(0xfaf6ff, 0xb4bfe6, 2.1));
+    const sun = new THREE.DirectionalLight(0xfff8f0, 1.6);
     sun.position.set(-2.5, 3, 4);
     this.scene.add(sun);
 
@@ -186,7 +187,7 @@ export class Sky {
     this.spin = new THREE.Group();
     this.tilt.add(this.spin);
     const small = Math.min(innerWidth, innerHeight) < 600;
-    this.globe = buildGlobe(land, small ? 20 : 24);
+    this.globe = buildGlobe(land, small ? 22 : 28);
     this.spin.add(this.globe);
     const rim = new THREE.Mesh(new THREE.SphereGeometry(1.045, 48, 32), rimMaterial());
     this.tilt.add(rim);

@@ -27,7 +27,9 @@ import { bodyProblem, isColour, normaliseBody } from "./web/rules.js";
 // checked against the server's own record of the visitor, never a flag the
 // browser sent. See docs/decisions/0004-paper-planes.md for the table.
 
-export const LEASE_MS = 120_000;
+// LEASE_MS is overridable only so a local test can watch an abandoned hold expire
+// without waiting two minutes; production never sets it.
+export const LEASE_MS = Number(process.env.LEASE_MS) || 120_000;
 
 export interface PublicStamp {
   seq: number;
