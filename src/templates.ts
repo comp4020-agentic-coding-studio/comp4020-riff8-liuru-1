@@ -1,4 +1,7 @@
 import type { Kind, Reply, Trace } from "./db.ts";
+import type { Hold, PublicPlane } from "./planes.ts";
+import { COUNTRIES } from "./regions.ts";
+import { COLOURS, MAX_BODY } from "./web/rules.js";
 
 const KIND_META: Record<Kind, { glyph: string; hanzi: string; label: string; plural: string }> = {
   dream: { glyph: "☁", hanzi: "夢", label: "a dream", plural: "dreams" },
@@ -29,7 +32,7 @@ function relativeTime(ms: number): string {
   return `${days}d ago`;
 }
 
-const shell = (title: string, body: string): string => `<!doctype html>
+const archiveShell = (title: string, body: string): string => `<!doctype html>
 <html lang="en-AU">
   <head>
     <meta charset="utf-8" />
@@ -170,7 +173,9 @@ export function renderReply(r: Reply, visitorId: string): string {
   return `<li class="reply${isMine ? " mine" : ""}" id="reply-${r.id}"><span class="text">${mineLabel}${escapeHtml(r.text)}</span> <span class="when">${relativeTime(r.createdAt)}</span></li>`;
 }
 
-export function renderTrace(t: Trace, visitorId: string, replies: Reply[], view?: Kind): string {
+// The old wall, read-only: every trace and answer as it was left, with no
+// form to add to it. Paper planes replaced it as the way in (README.md).
+export function renderTrace(t: Trace, visitorId: string, replies: Reply[]): string {
   const meta = KIND_META[t.kind];
   const isMine = t.visitorId === visitorId;
   const mineLabel = isMine ? `<span class="visually-hidden">yours: </span>` : "";
@@ -181,16 +186,6 @@ export function renderTrace(t: Trace, visitorId: string, replies: Reply[], view?
             <span class="when">${relativeTime(t.createdAt)}</span>
             <div class="thread">
               <ol class="replies" aria-label="answers">${replies.map((r) => renderReply(r, visitorId)).join("")}</ol>
-              <details class="answer">
-                <summary>answer<span class="visually-hidden"> this trace</span></summary>
-                <form class="reply-form" method="post" action="/reply">
-                  <input type="hidden" name="trace" value="${t.id}" />${view ? `\n                  <input type="hidden" name="view" value="${view}" />` : ""}
-                  <label>your answer
-                    <input type="text" name="text" maxlength="140" required placeholder="shorter still" />
-                  </label>
-                  <button type="submit">leave it</button>
-                </form>
-              </details>
             </div>
           </li>`;
 }
@@ -200,76 +195,314 @@ function renderFilters(current: Kind | undefined): string {
     `<li><a href="${href}"${active ? ` aria-current="page"` : ""}>${inner}</a></li>`;
   const kinds = (Object.entries(KIND_META) as [Kind, (typeof KIND_META)[Kind]][]).map(([kind, m]) =>
     link(
-      `/?kind=${kind}`,
+      `/archive?kind=${kind}`,
       current === kind,
       `<span aria-hidden="true">${m.glyph}</span> <span lang="zh-Hant">${m.hanzi}</span> ${escapeHtml(m.plural)}`,
     ),
   );
   return `<nav class="filters" aria-label="show only one as-if">
-        <ul>${link("/", current === undefined, "everything")}${kinds.join("")}</ul>
+        <ul>${link("/archive", current === undefined, "everything")}${kinds.join("")}</ul>
       </nav>`;
 }
 
-export function renderWall(
+export function renderArchive(
   traces: Trace[],
   replies: Map<number, Reply[]>,
   visitorId: string,
   kind: Kind | undefined,
-  since: string,
 ): string {
-  const options = Object.entries(KIND_META)
-    .map(
-      ([value, m]) =>
-        `<option value="${value}"${value === kind ? " selected" : ""}>${m.hanzi} ${escapeHtml(m.label)}</option>`,
-    )
-    .join("");
-
   const items = traces.length
-    ? traces.map((t) => renderTrace(t, visitorId, replies.get(t.id) ?? [], kind)).join("\n")
-    : `<li class="empty">${kind ? `no ${escapeHtml(KIND_META[kind].plural)} yet` : "nothing has passed through yet"}</li>`;
+    ? traces.map((t) => renderTrace(t, visitorId, replies.get(t.id) ?? [])).join("\n")
+    : `<li class="empty">${kind ? `no ${escapeHtml(KIND_META[kind].plural)} were left` : "nothing was left on the wall"}</li>`;
 
   const body = `
     <header>
-      <h1>六如 &mdash; a wall for passing things</h1>
-      <p class="sub">leave a thought as one of the six as-ifs; it stays here, quietly, whether or not you come back</p>
-      <nav class="meta"><a href="/readme/">what this is for</a></nav>
+      <h1>六如 &mdash; the wall, archived</h1>
+      <p class="sub">before the paper planes, this was a wall of passing thoughts. It's kept here as it was left, to read, not to add to.</p>
+      <nav class="meta"><a href="/">back to the sky</a> &middot; <a href="/readme/">why it changed</a></nav>
     </header>
     <main>
       <section class="as-ifs" aria-label="the six as-ifs">
         <p class="verse" lang="zh-Hant"><span>一切有為法，</span><span>如夢幻泡影，</span><span>如露亦如電，</span><span>應作如是觀。</span></p>
         <p class="gloss">The Diamond Sūtra ends on six similes: everything that comes together from causes is
           <em>as if</em> a dream, an illusion, a bubble, a shadow, dew, a flash of lightning &mdash;
-          see it that way. That's 六如, the six as&#8209;ifs. Pick whichever your thought feels most like.</p>
+          see it that way. That's 六如, the six as&#8209;ifs. Each trace here was tagged with one.</p>
       </section>
-      <form class="trace-form" method="post" action="/trace">
-        <label>this feels like&hellip;
-          <select name="kind" required>${options}</select>
-        </label>
-        <label>what passed through
-          <input type="text" name="text" maxlength="240" required placeholder="a fragment, not an essay" />
-        </label>
-        <div class="form-actions">
-          <button type="submit">let it go</button>
-          <button type="button" class="sound-toggle" aria-pressed="false" hidden>sound off</button>
-        </div>
-      </form>
-      <p class="note" role="status" id="post-note"></p>
       ${renderFilters(kind)}
-      <p class="visually-hidden" role="status" aria-live="polite" id="live-status"></p>
-      <ul class="wall" data-since="${since}"${kind ? ` data-kind="${kind}"` : ""}>
+      <ul class="wall">
         ${items}
       </ul>
     </main>
-    <script src="/client.js" defer></script>
-    <script src="/sound.js" defer></script>
   `;
-  return shell("六如 — a wall for passing things", body);
+  return archiveShell("六如 — the wall, archived", body);
 }
 
 export function renderReadme(bodyHtml: string): string {
   const body = `
-    <nav class="meta"><a href="/">back to the wall</a></nav>
+    <nav class="meta"><a href="/">back to the sky</a></nav>
     <main>${bodyHtml}</main>
   `;
-  return shell("About — 六如", body);
+  return archiveShell("About — Paper Planes", body);
+}
+
+// ---------------------------------------------------------------------------
+// The sky. One page: the scene and every panel are in this HTML, and
+// /web/app.js runs them. With JavaScript off, the <noscript> block below is
+// the whole app as plain forms.
+
+const colourName = (id: string): string => COLOURS.find((c) => c.id === id)?.name ?? id;
+
+const when = (ms: number): string =>
+  new Date(ms).toLocaleDateString("en-AU", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+
+function placeOptions(): string {
+  return COUNTRIES.map(
+    (c) =>
+      `<optgroup label="${escapeHtml(c.name)}"><option value="${c.id}">${escapeHtml(c.name)} (anywhere)</option>${c.cities
+        .map((ct) => `<option value="${ct.id}">${escapeHtml(ct.name)}, ${escapeHtml(c.name)}</option>`)
+        .join("")}</optgroup>`,
+  ).join("");
+}
+
+function stampList(p: PublicPlane): string {
+  return `<ol class="nojs-stamps">${p.stamps
+    .map((s) => `<li>${s.seq === 1 ? "From" : "Stamped in"} ${escapeHtml(s.label)}, ${when(s.at)}, by ${escapeHtml(s.by)}</li>`)
+    .join("")}</ol>`;
+}
+
+function nojsPlane(p: PublicPlane): string {
+  return `<article class="nojs-plane" style="--paper:${COLOURS.find((c) => c.id === p.colour)?.hex ?? "#ccc"}">
+      <p class="nojs-meta">${escapeHtml(colourName(p.colour))} plane #${p.id} from ${escapeHtml(p.author)}</p>
+      <p class="nojs-body">${escapeHtml(p.body)}</p>
+      ${stampList(p)}
+    </article>`;
+}
+
+function renderNoscript(o: SkyOptions): string {
+  const places = placeOptions();
+  const colours = COLOURS.map(
+    (c, i) =>
+      `<label class="nojs-swatch"><input type="radio" name="colour" value="${c.id}"${i === 4 ? " checked" : ""} /> <span style="background:${c.hex}"></span>${c.name}</label>`,
+  ).join("");
+  const held = o.hold
+    ? `<section aria-labelledby="nojs-held"><h2 id="nojs-held">The plane you caught</h2>
+        ${nojsPlane(o.hold.plane)}
+        <form method="post" action="/planes/${o.hold.planeId}/release">
+          <input type="hidden" name="lease" value="${o.hold.leaseId}" />
+          <input type="hidden" name="key" value="${o.formKey}s" />
+          <label>Add your stamp <select name="place" required><option value="">Choose a place</option>${places}</select></label>
+          <button type="submit">Stamp &amp; send onward</button>
+        </form>
+        <form method="post" action="/planes/${o.hold.planeId}/release">
+          <input type="hidden" name="lease" value="${o.hold.leaseId}" />
+          <input type="hidden" name="key" value="${o.formKey}r" />
+          <button type="submit">Release without stamping</button>
+        </form>
+      </section>`
+    : `<section aria-labelledby="nojs-catch"><h2 id="nojs-catch">Catch a plane</h2>
+        <form method="post" action="/catch"><button type="submit">Catch an available plane</button></form>
+      </section>`;
+  return `<noscript>
+    <div class="nojs">
+      ${o.note ? `<p class="nojs-note" role="status">${escapeHtml(o.note)}</p>` : ""}
+      ${held}
+      <section aria-labelledby="nojs-create"><h2 id="nojs-create">Create a plane</h2>
+        <form method="post" action="/planes">
+          <input type="hidden" name="key" value="${o.formKey}c" />
+          <label>Your message (up to ${MAX_BODY} characters)<textarea name="body" rows="5" required></textarea></label>
+          <fieldset><legend>Paper colour</legend>${colours}</fieldset>
+          <label>The place your plane represents (it doesn't have to be where you are)
+            <select name="place" required><option value="">Choose a place</option>${places}</select></label>
+          <button type="submit">Throw plane</button>
+        </form>
+      </section>
+      <section aria-labelledby="nojs-mine"><h2 id="nojs-mine">Your planes</h2>
+        ${o.mine.length ? o.mine.map(nojsPlane).join("") : "<p>You haven't thrown a plane from this browser yet.</p>"}
+      </section>
+    </div>
+  </noscript>`;
+}
+
+export interface SkyOptions {
+  handle: string;
+  hold?: Hold & { plane: PublicPlane };
+  mine: PublicPlane[];
+  cursor: number;
+  note?: string;
+  formKey: string;
+}
+
+const PLANE_MARK = `<svg class="mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 11.5 22 3l-6.5 18-4-7.5z" fill="currentColor" opacity=".9"/><path d="M11.5 13.5 22 3" stroke="#fff" stroke-width="1.2"/></svg>`;
+
+export function renderSky(o: SkyOptions): string {
+  const swatches = COLOURS.map(
+    (c) => `<label class="swatch">
+              <input type="radio" name="colour" value="${c.id}" />
+              <span class="dot" style="--c:${c.hex}" aria-hidden="true"></span>
+              <span class="swatch-name">${c.name}</span>
+            </label>`,
+  ).join("");
+  const picker = (id: string, label: string) => `<div class="picker" data-picker="${id}">
+              <label for="${id}-country">${label}</label>
+              <div class="combo">
+                <input id="${id}-country" type="text" role="combobox" autocomplete="off" spellcheck="false"
+                  aria-autocomplete="list" aria-expanded="false" aria-controls="${id}-list" aria-describedby="${id}-hint ${id}-error"
+                  placeholder="Search, e.g. Australia or Tokyo" />
+                <ul id="${id}-list" role="listbox" aria-label="${label} results" hidden></ul>
+              </div>
+              <label for="${id}-city" class="city-label">City <span class="optional">(optional)</span></label>
+              <select id="${id}-city" disabled><option value="">Choose a country first</option></select>
+              <p class="hint" id="${id}-hint">Choose the place your plane represents &mdash; it does not have to be where you are.</p>
+              <p class="error" id="${id}-error" role="alert"></p>
+            </div>`;
+
+  const body = `
+    <div id="sky" aria-hidden="true"></div>
+    <div id="net" aria-hidden="true"></div>
+    <header class="top">
+      <a class="brand" href="/">${PLANE_MARK}<span class="brand-text"><span class="brand-name">Paper Planes</span><span class="brand-sub">Six colours. One shared sky.</span></span></a>
+      <nav class="secondary" aria-label="More">
+        <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="secondary-items">Menu</button>
+        <div id="secondary-items" class="secondary-items">
+          <button type="button" data-action="mine">Your planes</button>
+          <button type="button" data-action="sound" aria-pressed="false">Sound off</button>
+          <button type="button" data-action="about">About</button>
+        </div>
+      </nav>
+    </header>
+    <p class="you">You are <strong class="handle">${escapeHtml(o.handle)}</strong> <span class="you-note">in this browser</span></p>
+    <p class="connection" role="status" hidden>Reconnecting&hellip;</p>
+    <p class="caption" aria-live="polite"></p>
+    <p class="toast" role="status" aria-live="assertive"></p>
+
+    <main id="app" class="app" data-state="world" data-cursor="${o.cursor}">
+      <section class="panel world-panel" aria-label="The sky">
+        <p class="hint-first">Write on a sheet, fold it into a plane and throw it into the sky. Catch someone else's, read it, stamp it and send it on.</p>
+        <p class="empty-sky" hidden>No planes are flying yet. Make the first one.</p>
+        <div class="actions">
+          <button type="button" class="primary" data-action="create">Create a plane</button>
+          <button type="button" class="primary" data-action="catch">Catch a plane</button>
+        </div>
+      </section>
+
+      <section class="panel composer" role="dialog" aria-modal="true" aria-labelledby="composer-title">
+        <h2 id="composer-title" class="visually-hidden">Create a plane</h2>
+        <ol class="progress" aria-label="Steps">
+          <li data-step="write">Write</li><li data-step="choose">Colour &amp; region</li><li data-step="fold">Fold</li><li data-step="throw">Throw</li>
+        </ol>
+        <div class="composer-grid">
+          <div class="paper-slot" data-slot="composer">
+            <div class="face">
+              <p class="face-origin"></p>
+              <label for="message" class="visually-hidden">Your message</label>
+              <textarea id="message" class="face-body" maxlength="1000" aria-describedby="message-count message-error" placeholder="Write something for a stranger to find&hellip;"></textarea>
+              <ol class="face-stamps" aria-label="Stamp preview"></ol>
+            </div>
+            <p class="sending" hidden>Sending&hellip;</p>
+          </div>
+          <div class="rail">
+            <p class="counter" id="message-count" aria-live="polite">0 / ${MAX_BODY}</p>
+            <p class="error" id="message-error" role="alert"></p>
+            <fieldset class="swatches">
+              <legend>Paper colour</legend>
+              <div class="swatch-row">${swatches}</div>
+            </fieldset>
+            ${picker("origin", "Country / region")}
+            <div class="rail-actions edit-actions">
+              <button type="button" class="primary" data-action="fold">Fold plane</button>
+              <button type="button" data-action="close-composer">Back to sky</button>
+            </div>
+            <div class="rail-actions ready-actions">
+              <button type="button" class="primary" data-action="throw">Throw plane</button>
+              <button type="button" data-action="unfold-draft">Back to edit</button>
+              <p class="gesture-hint">Or drag the plane upward and let go.</p>
+            </div>
+            <p class="error" id="send-error" role="alert"></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel catching" aria-labelledby="catching-title">
+        <h2 id="catching-title" class="instruction">Point the net at a plane and click it</h2>
+        <div class="actions">
+          <button type="button" class="primary" data-action="catch-any">Catch an available plane</button>
+          <button type="button" data-action="cancel-catch">Back to sky</button>
+        </div>
+      </section>
+
+      <section class="panel held" role="dialog" aria-modal="true" aria-labelledby="held-title">
+        <h2 id="held-title" class="visually-hidden">The plane you caught</h2>
+        <div class="composer-grid">
+          <div class="paper-slot" data-slot="held">
+            <div class="face">
+              <p class="face-origin"></p>
+              <div class="face-body reading" tabindex="0" aria-label="The message on this plane"></div>
+              <ol class="face-stamps" aria-label="Stamps"></ol>
+              <button type="button" class="all-stamps" data-action="journey" hidden></button>
+            </div>
+          </div>
+          <div class="rail">
+            <p class="plane-meta"></p>
+            <div class="rail-actions folded-actions">
+              <button type="button" class="primary" data-action="open">Open / Unfold</button>
+              <button type="button" data-action="release">Back to sky</button>
+            </div>
+            <div class="reading-actions">
+              ${picker("stamp", "Add your stamp")}
+              <div class="rail-actions">
+                <button type="button" class="primary" data-action="stamp">Stamp &amp; send onward</button>
+                <button type="button" data-action="release">Release without stamping</button>
+                <button type="button" data-action="journey">View journey</button>
+              </div>
+            </div>
+            <p class="lease-warning" role="alert" hidden></p>
+            <p class="error" id="held-error" role="alert"></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel journey" aria-labelledby="journey-title">
+        <div class="journey-card">
+          <h2 id="journey-title">Journey</h2>
+          <p class="journey-body"></p>
+          <ol class="journey-list"></ol>
+          <p class="journey-distance"></p>
+          <button type="button" data-action="close-journey">Back</button>
+        </div>
+      </section>
+    </main>
+
+    <aside class="drawer" aria-labelledby="drawer-title" hidden>
+      <div class="drawer-head"><h2 id="drawer-title">Your planes</h2><button type="button" data-action="close-drawer">Close</button></div>
+      <p class="drawer-note">Planes thrown from this browser. There's no account: another browser, or cleared cookies, starts a fresh list.</p>
+      <ul class="mine-list"></ul>
+      <button type="button" class="more" data-action="more-mine" hidden>Load more</button>
+    </aside>
+
+    <dialog class="about" aria-labelledby="about-title">
+      <h2 id="about-title">About</h2>
+      <p>A student recreation of <a href="https://paperplanes.world/">Paper Planes</a> (Active Theory for Google I/O, 2016), made for COMP4020 at the ANU. Not affiliated with or endorsed by Google or Active Theory.</p>
+      <p>Write a message, fold it into one of six colours of paper, and throw it. Anyone can catch it, read it, add a stamp from a place they choose, and send it on. The place is a label you pick, never your location.</p>
+      <p>Map data: <a href="https://www.naturalearthdata.com/">Natural Earth</a> (public domain), via <a href="https://github.com/topojson/world-atlas">world-atlas</a>. 3D: <a href="https://threejs.org/">three.js</a>.</p>
+      <p><a href="/readme/">How it works and why</a> &middot; <a href="/archive">The old wall (六如), archived</a></p>
+      <form method="dialog"><button>Close</button></form>
+    </dialog>
+
+    ${renderNoscript(o)}
+    <script type="importmap">{"imports":{"three":"/vendor/three.module.js"}}</script>
+    <script type="module" src="/web/app.js"></script>
+  `;
+  return `<!doctype html>
+<html lang="en-AU" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
+    <title>Paper Planes</title>
+    <script>document.documentElement.className = "js";</script>
+    <link rel="stylesheet" href="/web/app.css" />
+  </head>
+  <body>
+    ${body}
+  </body>
+</html>`;
 }

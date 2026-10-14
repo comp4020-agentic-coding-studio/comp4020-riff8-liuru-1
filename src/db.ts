@@ -138,3 +138,212 @@ const selectMaxReplyId = db.prepare("SELECT COALESCE(MAX(id), 0) AS id FROM repl
 export function newestReplyId(): number {
   return (selectMaxReplyId.get() as { id: number }).id;
 }
+
+// ---------------------------------------------------------------------------
+// Paper planes. Added beside the wall's tables, never replacing them: traces
+// and replies stay exactly as they were and are read by /archive.
+//
+// A plane's body, colour, origin and creator are written once and never
+// updated. Only `state` and the lease columns change: flying -> held (one
+// visitor, one lease id, an expiry) -> flying again. The origin is stamp 1, so
+// a journey is just the plane's stamps in seq order.
+db.exec(`
+  CREATE TABLE IF NOT EXISTS planes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    creator_id TEXT NOT NULL,
+    colour TEXT NOT NULL,
+    body TEXT NOT NULL,
+    created_at INTEGER NOT NULL,
+    state TEXT NOT NULL DEFAULT 'flying' CHECK (state IN ('flying', 'held')),
+    lease_id TEXT,
+    lease_holder TEXT,
+    lease_expires INTEGER
+  );
+  CREATE INDEX IF NOT EXISTS planes_by_state ON planes (state);
+  CREATE INDEX IF NOT EXISTS planes_by_creator ON planes (creator_id, id);
+  CREATE INDEX IF NOT EXISTS planes_by_holder ON planes (lease_holder);
+
+  CREATE TABLE IF NOT EXISTS stamps (
+    plane_id INTEGER NOT NULL REFERENCES planes(id),
+    seq INTEGER NOT NULL,
+    actor_id TEXT NOT NULL,
+    country TEXT NOT NULL,
+    city TEXT,
+    created_at INTEGER NOT NULL,
+    PRIMARY KEY (plane_id, seq)
+  );
+
+  -- One row per idempotent write: the same actor sending the same key gets
+  -- the first response back instead of a second plane or a second stamp.
+  CREATE TABLE IF NOT EXISTS requests (
+    actor_id TEXT NOT NULL,
+    key TEXT NOT NULL,
+    op TEXT NOT NULL,
+    fingerprint TEXT NOT NULL,
+    plane_id INTEGER,
+    created_at INTEGER NOT NULL,
+    PRIMARY KEY (actor_id, key)
+  );
+
+  -- Every committed change to the sky, in order: the SSE cursor, so a
+  -- reconnecting page can be sent exactly what it missed.
+  CREATE TABLE IF NOT EXISTS sky_events (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    kind TEXT NOT NULL,
+    plane_id INTEGER NOT NULL,
+    created_at INTEGER NOT NULL
+  );
+`);
+
+export interface PlaneRow {
+  id: number;
+  creatorId: string;
+  colour: string;
+  body: string;
+  createdAt: number;
+  state: "flying" | "held";
+  leaseId: string | null;
+  leaseHolder: string | null;
+  leaseExpires: number | null;
+}
+
+export interface StampRow {
+  planeId: number;
+  seq: number;
+  actorId: string;
+  country: string;
+  city: string | null;
+  createdAt: number;
+}
+
+export interface RequestRow {
+  op: string;
+  fingerprint: string;
+  planeId: number | null;
+}
+
+export interface SkyEvent {
+  id: number;
+  kind: string;
+  planeId: number;
+}
+
+const PLANE_COLUMNS = `id, creator_id AS creatorId, colour, body, created_at AS createdAt, state,
+  lease_id AS leaseId, lease_holder AS leaseHolder, lease_expires AS leaseExpires`;
+const STAMP_COLUMNS = `plane_id AS planeId, seq, actor_id AS actorId, country, city, created_at AS createdAt`;
+
+const q = {
+  insertPlane: db.prepare("INSERT INTO planes (creator_id, colour, body, created_at) VALUES (?, ?, ?, ?)"),
+  insertStamp: db.prepare(
+    "INSERT INTO stamps (plane_id, seq, actor_id, country, city, created_at) VALUES (?, ?, ?, ?, ?, ?)",
+  ),
+  nextSeq: db.prepare("SELECT COALESCE(MAX(seq), 0) + 1 AS seq FROM stamps WHERE plane_id = ?"),
+  plane: db.prepare(`SELECT ${PLANE_COLUMNS} FROM planes WHERE id = ?`),
+  stampsFor: db.prepare(
+    `SELECT ${STAMP_COLUMNS} FROM stamps WHERE plane_id IN (SELECT value FROM json_each(?)) ORDER BY plane_id, seq`,
+  ),
+  flyingSample: db.prepare(`SELECT ${PLANE_COLUMNS} FROM planes WHERE state = 'flying' ORDER BY RANDOM() LIMIT ?`),
+  // someone else's plane first; your own only when nothing else is flying
+  catchCandidate: db.prepare(
+    `SELECT id FROM planes WHERE state = 'flying' ORDER BY (creator_id = ?), RANDOM() LIMIT 1`,
+  ),
+  acquire: db.prepare(
+    `UPDATE planes SET state = 'held', lease_id = ?, lease_holder = ?, lease_expires = ?
+     WHERE id = ? AND state = 'flying'`,
+  ),
+  renew: db.prepare(
+    `UPDATE planes SET lease_expires = ?
+     WHERE id = ? AND state = 'held' AND lease_holder = ? AND lease_id = ? AND lease_expires > ?`,
+  ),
+  release: db.prepare(
+    `UPDATE planes SET state = 'flying', lease_id = NULL, lease_holder = NULL, lease_expires = NULL
+     WHERE id = ? AND state = 'held' AND lease_holder = ? AND lease_id = ? AND lease_expires > ?`,
+  ),
+  expired: db.prepare(`SELECT ${PLANE_COLUMNS} FROM planes WHERE state = 'held' AND lease_expires <= ?`),
+  expire: db.prepare(
+    `UPDATE planes SET state = 'flying', lease_id = NULL, lease_holder = NULL, lease_expires = NULL
+     WHERE id = ? AND state = 'held' AND lease_expires <= ?`,
+  ),
+  heldBy: db.prepare(
+    `SELECT ${PLANE_COLUMNS} FROM planes WHERE state = 'held' AND lease_holder = ? AND lease_expires > ? LIMIT 1`,
+  ),
+  mine: db.prepare(`SELECT ${PLANE_COLUMNS} FROM planes WHERE creator_id = ? AND id < ? ORDER BY id DESC LIMIT ?`),
+  request: db.prepare("SELECT op, fingerprint, plane_id AS planeId FROM requests WHERE actor_id = ? AND key = ?"),
+  insertRequest: db.prepare(
+    "INSERT INTO requests (actor_id, key, op, fingerprint, plane_id, created_at) VALUES (?, ?, ?, ?, ?, ?)",
+  ),
+  insertEvent: db.prepare("INSERT INTO sky_events (kind, plane_id, created_at) VALUES (?, ?, ?)"),
+  eventsSince: db.prepare("SELECT id, kind, plane_id AS planeId FROM sky_events WHERE id > ? ORDER BY id ASC LIMIT ?"),
+  newestEvent: db.prepare("SELECT COALESCE(MAX(id), 0) AS id FROM sky_events"),
+};
+
+export const transaction = <T>(fn: () => T): T => db.transaction(fn)();
+
+export function insertPlane(creatorId: string, colour: string, body: string, at: number): number {
+  return Number(q.insertPlane.run(creatorId, colour, body, at).lastInsertRowid);
+}
+
+export function appendStamp(
+  planeId: number,
+  actorId: string,
+  country: string,
+  city: string | null,
+  at: number,
+): number {
+  const { seq } = q.nextSeq.get(planeId) as { seq: number };
+  q.insertStamp.run(planeId, seq, actorId, country, city, at);
+  return seq;
+}
+
+export const planeRow = (id: number): PlaneRow | undefined => q.plane.get(id) as PlaneRow | undefined;
+
+export function stampsFor(planeIds: number[]): Map<number, StampRow[]> {
+  const out = new Map<number, StampRow[]>(planeIds.map((id) => [id, []]));
+  for (const s of q.stampsFor.all(JSON.stringify(planeIds)) as StampRow[]) out.get(s.planeId)?.push(s);
+  return out;
+}
+
+export const flyingSample = (limit: number): PlaneRow[] => q.flyingSample.all(limit) as PlaneRow[];
+
+export function catchCandidate(visitorId: string): number | undefined {
+  return (q.catchCandidate.get(visitorId) as { id: number } | undefined)?.id;
+}
+
+export function acquire(planeId: number, leaseId: string, holder: string, expires: number): boolean {
+  return q.acquire.run(leaseId, holder, expires, planeId).changes === 1;
+}
+
+export function renew(planeId: number, holder: string, leaseId: string, now: number, expires: number): boolean {
+  return q.renew.run(expires, planeId, holder, leaseId, now).changes === 1;
+}
+
+export function releaseHold(planeId: number, holder: string, leaseId: string, now: number): boolean {
+  return q.release.run(planeId, holder, leaseId, now).changes === 1;
+}
+
+export const expiredHolds = (now: number): PlaneRow[] => q.expired.all(now) as PlaneRow[];
+
+export function expireHold(planeId: number, now: number): boolean {
+  return q.expire.run(planeId, now).changes === 1;
+}
+
+export const heldBy = (visitorId: string, now: number): PlaneRow | undefined =>
+  q.heldBy.get(visitorId, now) as PlaneRow | undefined;
+
+export function planesBy(creatorId: string, before: number, limit: number): PlaneRow[] {
+  return q.mine.all(creatorId, before, limit) as PlaneRow[];
+}
+
+export const findRequest = (actorId: string, key: string): RequestRow | undefined =>
+  q.request.get(actorId, key) as RequestRow | undefined;
+
+export function recordRequest(actorId: string, key: string, op: string, fingerprint: string, planeId: number): void {
+  q.insertRequest.run(actorId, key, op, fingerprint, planeId, Date.now());
+}
+
+export function recordEvent(kind: string, planeId: number): number {
+  return Number(q.insertEvent.run(kind, planeId, Date.now()).lastInsertRowid);
+}
+
+export const eventsSince = (id: number, limit = 500): SkyEvent[] => q.eventsSince.all(id, limit) as SkyEvent[];
+export const newestEventId = (): number => (q.newestEvent.get() as { id: number }).id;

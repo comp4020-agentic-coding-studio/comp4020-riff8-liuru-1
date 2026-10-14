@@ -1,0 +1,1161 @@
+{
+  "countries": [
+    { "id": "AF", "name": "Afghanistan", "aliases": ["阿富汗"], "lat": 33.9, "lng": 67.7,
+      "cities": [
+        { "id": "AF-kabul", "name": "Kabul", "aliases": ["喀布尔"], "lat": 34.53, "lng": 69.17 },
+        { "id": "AF-herat", "name": "Herat", "aliases": ["赫拉特"], "lat": 34.35, "lng": 62.2 },
+        { "id": "AF-kandahar", "name": "Kandahar", "aliases": ["坎大哈"], "lat": 31.63, "lng": 65.74 }
+      ] },
+    { "id": "AL", "name": "Albania", "aliases": ["阿尔巴尼亚"], "lat": 41.15, "lng": 20.17,
+      "cities": [
+        { "id": "AL-tirana", "name": "Tirana", "aliases": ["地拉那"], "lat": 41.33, "lng": 19.82 },
+        { "id": "AL-durres", "name": "Durrës", "aliases": ["都拉斯", "Durres"], "lat": 41.32, "lng": 19.45 }
+      ] },
+    { "id": "DZ", "name": "Algeria", "aliases": ["阿尔及利亚"], "lat": 28, "lng": 2.6,
+      "cities": [
+        { "id": "DZ-algiers", "name": "Algiers", "aliases": ["阿尔及尔"], "lat": 36.75, "lng": 3.06 },
+        { "id": "DZ-constantine", "name": "Constantine", "aliases": ["君士坦丁"], "lat": 36.37, "lng": 6.61 },
+        { "id": "DZ-oran", "name": "Oran", "aliases": ["奥兰"], "lat": 35.7, "lng": -0.63 }
+      ] },
+    { "id": "AD", "name": "Andorra", "aliases": ["安道尔"], "lat": 42.55, "lng": 1.58,
+      "cities": [
+        { "id": "AD-andorra-la-vella", "name": "Andorra la Vella", "aliases": ["安道尔城"], "lat": 42.51, "lng": 1.52 }
+      ] },
+    { "id": "AO", "name": "Angola", "aliases": ["安哥拉"], "lat": -11.2, "lng": 17.9,
+      "cities": [
+        { "id": "AO-luanda", "name": "Luanda", "aliases": ["罗安达"], "lat": -8.84, "lng": 13.23 },
+        { "id": "AO-huambo", "name": "Huambo", "aliases": ["万博"], "lat": -12.78, "lng": 15.74 }
+      ] },
+    { "id": "AQ", "name": "Antarctica", "aliases": ["南极洲"], "lat": -82.9, "lng": 0,
+      "cities": [
+        { "id": "AQ-mcmurdo-station", "name": "McMurdo Station", "aliases": ["麦克默多站", "McMurdo"], "lat": -77.85, "lng": 166.67 }
+      ] },
+    { "id": "AG", "name": "Antigua and Barbuda", "aliases": ["安提瓜和巴布达"], "lat": 17.06, "lng": -61.8,
+      "cities": [
+        { "id": "AG-saint-johns", "name": "Saint John's", "aliases": ["圣约翰", "St. John's"], "lat": 17.12, "lng": -61.85 }
+      ] },
+    { "id": "AR", "name": "Argentina", "aliases": ["阿根廷"], "lat": -34, "lng": -64,
+      "cities": [
+        { "id": "AR-buenos-aires", "name": "Buenos Aires", "aliases": ["布宜诺斯艾利斯"], "lat": -34.6, "lng": -58.38 },
+        { "id": "AR-bariloche", "name": "Bariloche", "aliases": ["巴里洛切", "San Carlos de Bariloche"], "lat": -41.13, "lng": -71.31 },
+        { "id": "AR-cordoba", "name": "Córdoba", "aliases": ["科尔多瓦", "Cordoba"], "lat": -31.42, "lng": -64.18 },
+        { "id": "AR-mendoza", "name": "Mendoza", "aliases": ["门多萨"], "lat": -32.89, "lng": -68.83 },
+        { "id": "AR-rosario", "name": "Rosario", "aliases": ["罗萨里奥"], "lat": -32.95, "lng": -60.64 },
+        { "id": "AR-ushuaia", "name": "Ushuaia", "aliases": ["乌斯怀亚"], "lat": -54.8, "lng": -68.3 }
+      ] },
+    { "id": "AM", "name": "Armenia", "aliases": ["亚美尼亚"], "lat": 40.1, "lng": 45,
+      "cities": [
+        { "id": "AM-yerevan", "name": "Yerevan", "aliases": ["埃里温"], "lat": 40.18, "lng": 44.51 }
+      ] },
+    { "id": "AU", "name": "Australia", "aliases": ["澳大利亚","Oz"], "lat": -25.3, "lng": 133.8,
+      "cities": [
+        { "id": "AU-canberra", "name": "Canberra", "aliases": ["堪培拉"], "lat": -35.28, "lng": 149.13 },
+        { "id": "AU-adelaide", "name": "Adelaide", "aliases": ["阿德莱德"], "lat": -34.93, "lng": 138.6 },
+        { "id": "AU-brisbane", "name": "Brisbane", "aliases": ["布里斯班"], "lat": -27.47, "lng": 153.03 },
+        { "id": "AU-darwin", "name": "Darwin", "aliases": ["达尔文"], "lat": -12.46, "lng": 130.84 },
+        { "id": "AU-hobart", "name": "Hobart", "aliases": ["霍巴特"], "lat": -42.88, "lng": 147.33 },
+        { "id": "AU-melbourne", "name": "Melbourne", "aliases": ["墨尔本"], "lat": -37.81, "lng": 144.96 },
+        { "id": "AU-perth", "name": "Perth", "aliases": ["珀斯"], "lat": -31.95, "lng": 115.86 },
+        { "id": "AU-sydney", "name": "Sydney", "aliases": ["悉尼"], "lat": -33.87, "lng": 151.21 }
+      ] },
+    { "id": "AT", "name": "Austria", "aliases": ["奥地利"], "lat": 47.5, "lng": 14.5,
+      "cities": [
+        { "id": "AT-vienna", "name": "Vienna", "aliases": ["维也纳", "Wien"], "lat": 48.21, "lng": 16.37 },
+        { "id": "AT-graz", "name": "Graz", "aliases": ["格拉茨"], "lat": 47.07, "lng": 15.44 },
+        { "id": "AT-innsbruck", "name": "Innsbruck", "aliases": ["因斯布鲁克"], "lat": 47.26, "lng": 11.39 },
+        { "id": "AT-salzburg", "name": "Salzburg", "aliases": ["萨尔茨堡"], "lat": 47.8, "lng": 13.04 }
+      ] },
+    { "id": "AZ", "name": "Azerbaijan", "aliases": ["阿塞拜疆"], "lat": 40.3, "lng": 47.7,
+      "cities": [
+        { "id": "AZ-baku", "name": "Baku", "aliases": ["巴库"], "lat": 40.41, "lng": 49.87 }
+      ] },
+    { "id": "BS", "name": "Bahamas", "aliases": ["巴哈马"], "lat": 24.7, "lng": -77.9,
+      "cities": [
+        { "id": "BS-nassau", "name": "Nassau", "aliases": ["拿骚"], "lat": 25.05, "lng": -77.35 }
+      ] },
+    { "id": "BH", "name": "Bahrain", "aliases": ["巴林"], "lat": 26, "lng": 50.55,
+      "cities": [
+        { "id": "BH-manama", "name": "Manama", "aliases": ["麦纳麦"], "lat": 26.23, "lng": 50.59 }
+      ] },
+    { "id": "BD", "name": "Bangladesh", "aliases": ["孟加拉国","孟加拉"], "lat": 23.7, "lng": 90.3,
+      "cities": [
+        { "id": "BD-dhaka", "name": "Dhaka", "aliases": ["达卡", "Dacca"], "lat": 23.81, "lng": 90.41 },
+        { "id": "BD-chittagong", "name": "Chittagong", "aliases": ["吉大港", "Chattogram"], "lat": 22.36, "lng": 91.78 }
+      ] },
+    { "id": "BB", "name": "Barbados", "aliases": ["巴巴多斯"], "lat": 13.19, "lng": -59.54,
+      "cities": [
+        { "id": "BB-bridgetown", "name": "Bridgetown", "aliases": ["布里奇敦"], "lat": 13.1, "lng": -59.61 }
+      ] },
+    { "id": "BY", "name": "Belarus", "aliases": ["白俄罗斯"], "lat": 53.7, "lng": 27.9,
+      "cities": [
+        { "id": "BY-minsk", "name": "Minsk", "aliases": ["明斯克"], "lat": 53.9, "lng": 27.57 }
+      ] },
+    { "id": "BE", "name": "Belgium", "aliases": ["比利时"], "lat": 50.6, "lng": 4.6,
+      "cities": [
+        { "id": "BE-brussels", "name": "Brussels", "aliases": ["布鲁塞尔", "Bruxelles"], "lat": 50.85, "lng": 4.35 },
+        { "id": "BE-antwerp", "name": "Antwerp", "aliases": ["安特卫普", "Antwerpen"], "lat": 51.22, "lng": 4.4 },
+        { "id": "BE-bruges", "name": "Bruges", "aliases": ["布鲁日", "Brugge"], "lat": 51.21, "lng": 3.22 },
+        { "id": "BE-ghent", "name": "Ghent", "aliases": ["根特", "Gent"], "lat": 51.05, "lng": 3.72 }
+      ] },
+    { "id": "BZ", "name": "Belize", "aliases": ["伯利兹"], "lat": 17.2, "lng": -88.7,
+      "cities": [
+        { "id": "BZ-belmopan", "name": "Belmopan", "aliases": ["贝尔莫潘"], "lat": 17.25, "lng": -88.77 }
+      ] },
+    { "id": "BJ", "name": "Benin", "aliases": ["贝宁"], "lat": 9.6, "lng": 2.3,
+      "cities": [
+        { "id": "BJ-porto-novo", "name": "Porto-Novo", "aliases": ["波多诺伏"], "lat": 6.5, "lng": 2.63 },
+        { "id": "BJ-cotonou", "name": "Cotonou", "aliases": ["科托努"], "lat": 6.37, "lng": 2.39 }
+      ] },
+    { "id": "BM", "name": "Bermuda", "aliases": ["百慕大"], "lat": 32.3, "lng": -64.75,
+      "cities": [
+        { "id": "BM-hamilton", "name": "Hamilton", "aliases": ["汉密尔顿"], "lat": 32.29, "lng": -64.78 }
+      ] },
+    { "id": "BT", "name": "Bhutan", "aliases": ["不丹"], "lat": 27.4, "lng": 90.4,
+      "cities": [
+        { "id": "BT-thimphu", "name": "Thimphu", "aliases": ["廷布"], "lat": 27.47, "lng": 89.64 },
+        { "id": "BT-paro", "name": "Paro", "aliases": ["帕罗"], "lat": 27.43, "lng": 89.41 }
+      ] },
+    { "id": "BO", "name": "Bolivia", "aliases": ["玻利维亚"], "lat": -16.7, "lng": -64.7,
+      "cities": [
+        { "id": "BO-sucre", "name": "Sucre", "aliases": ["苏克雷"], "lat": -19.04, "lng": -65.26 },
+        { "id": "BO-cochabamba", "name": "Cochabamba", "aliases": ["科恰班巴"], "lat": -17.39, "lng": -66.16 },
+        { "id": "BO-la-paz", "name": "La Paz", "aliases": ["拉巴斯"], "lat": -16.5, "lng": -68.15 },
+        { "id": "BO-santa-cruz-de-la-sierra", "name": "Santa Cruz de la Sierra", "aliases": ["圣克鲁斯", "Santa Cruz"], "lat": -17.78, "lng": -63.18 }
+      ] },
+    { "id": "BA", "name": "Bosnia and Herzegovina", "aliases": ["波黑","波斯尼亚和黑塞哥维那","Bosnia"], "lat": 44.2, "lng": 17.8,
+      "cities": [
+        { "id": "BA-sarajevo", "name": "Sarajevo", "aliases": ["萨拉热窝"], "lat": 43.86, "lng": 18.41 },
+        { "id": "BA-mostar", "name": "Mostar", "aliases": ["莫斯塔尔"], "lat": 43.34, "lng": 17.81 }
+      ] },
+    { "id": "BW", "name": "Botswana", "aliases": ["博茨瓦纳"], "lat": -22.3, "lng": 24.7,
+      "cities": [
+        { "id": "BW-gaborone", "name": "Gaborone", "aliases": ["哈博罗内"], "lat": -24.65, "lng": 25.91 }
+      ] },
+    { "id": "BR", "name": "Brazil", "aliases": ["巴西"], "lat": -10.8, "lng": -52.9,
+      "cities": [
+        { "id": "BR-brasilia", "name": "Brasília", "aliases": ["巴西利亚", "Brasilia"], "lat": -15.79, "lng": -47.88 },
+        { "id": "BR-fortaleza", "name": "Fortaleza", "aliases": ["福塔莱萨"], "lat": -3.73, "lng": -38.52 },
+        { "id": "BR-manaus", "name": "Manaus", "aliases": ["马瑙斯"], "lat": -3.12, "lng": -60.02 },
+        { "id": "BR-porto-alegre", "name": "Porto Alegre", "aliases": ["阿雷格里港"], "lat": -30.03, "lng": -51.23 },
+        { "id": "BR-recife", "name": "Recife", "aliases": ["累西腓"], "lat": -8.05, "lng": -34.88 },
+        { "id": "BR-rio-de-janeiro", "name": "Rio de Janeiro", "aliases": ["里约热内卢", "Rio"], "lat": -22.91, "lng": -43.17 },
+        { "id": "BR-salvador", "name": "Salvador", "aliases": ["萨尔瓦多"], "lat": -12.97, "lng": -38.5 },
+        { "id": "BR-sao-paulo", "name": "São Paulo", "aliases": ["圣保罗", "Sao Paulo"], "lat": -23.55, "lng": -46.63 }
+      ] },
+    { "id": "BN", "name": "Brunei", "aliases": ["文莱"], "lat": 4.5, "lng": 114.7,
+      "cities": [
+        { "id": "BN-bandar-seri-begawan", "name": "Bandar Seri Begawan", "aliases": ["斯里巴加湾市"], "lat": 4.89, "lng": 114.94 }
+      ] },
+    { "id": "BG", "name": "Bulgaria", "aliases": ["保加利亚"], "lat": 42.7, "lng": 25.5,
+      "cities": [
+        { "id": "BG-sofia", "name": "Sofia", "aliases": ["索非亚"], "lat": 42.7, "lng": 23.32 },
+        { "id": "BG-plovdiv", "name": "Plovdiv", "aliases": ["普罗夫迪夫"], "lat": 42.14, "lng": 24.75 },
+        { "id": "BG-varna", "name": "Varna", "aliases": ["瓦尔纳"], "lat": 43.21, "lng": 27.92 }
+      ] },
+    { "id": "BF", "name": "Burkina Faso", "aliases": ["布基纳法索"], "lat": 12.2, "lng": -1.6,
+      "cities": [
+        { "id": "BF-ouagadougou", "name": "Ouagadougou", "aliases": ["瓦加杜古"], "lat": 12.37, "lng": -1.52 }
+      ] },
+    { "id": "BI", "name": "Burundi", "aliases": ["布隆迪"], "lat": -3.4, "lng": 29.9,
+      "cities": [
+        { "id": "BI-gitega", "name": "Gitega", "aliases": ["基特加"], "lat": -3.43, "lng": 29.93 },
+        { "id": "BI-bujumbura", "name": "Bujumbura", "aliases": ["布琼布拉"], "lat": -3.38, "lng": 29.36 }
+      ] },
+    { "id": "CV", "name": "Cabo Verde", "aliases": ["佛得角","Cape Verde"], "lat": 16, "lng": -24,
+      "cities": [
+        { "id": "CV-praia", "name": "Praia", "aliases": ["普拉亚"], "lat": 14.93, "lng": -23.51 }
+      ] },
+    { "id": "KH", "name": "Cambodia", "aliases": ["柬埔寨"], "lat": 12.6, "lng": 104.9,
+      "cities": [
+        { "id": "KH-phnom-penh", "name": "Phnom Penh", "aliases": ["金边"], "lat": 11.56, "lng": 104.93 },
+        { "id": "KH-siem-reap", "name": "Siem Reap", "aliases": ["暹粒"], "lat": 13.36, "lng": 103.86 },
+        { "id": "KH-sihanoukville", "name": "Sihanoukville", "aliases": ["西哈努克港"], "lat": 10.63, "lng": 103.5 }
+      ] },
+    { "id": "CM", "name": "Cameroon", "aliases": ["喀麦隆"], "lat": 5.7, "lng": 12.7,
+      "cities": [
+        { "id": "CM-yaounde", "name": "Yaoundé", "aliases": ["雅温得", "Yaounde"], "lat": 3.85, "lng": 11.5 },
+        { "id": "CM-douala", "name": "Douala", "aliases": ["杜阿拉"], "lat": 4.05, "lng": 9.77 }
+      ] },
+    { "id": "CA", "name": "Canada", "aliases": ["加拿大"], "lat": 56.1, "lng": -106.3,
+      "cities": [
+        { "id": "CA-ottawa", "name": "Ottawa", "aliases": ["渥太华"], "lat": 45.42, "lng": -75.7 },
+        { "id": "CA-calgary", "name": "Calgary", "aliases": ["卡尔加里"], "lat": 51.05, "lng": -114.07 },
+        { "id": "CA-edmonton", "name": "Edmonton", "aliases": ["埃德蒙顿"], "lat": 53.55, "lng": -113.49 },
+        { "id": "CA-halifax", "name": "Halifax", "aliases": ["哈利法克斯"], "lat": 44.65, "lng": -63.58 },
+        { "id": "CA-montreal", "name": "Montreal", "aliases": ["蒙特利尔", "Montréal"], "lat": 45.5, "lng": -73.57 },
+        { "id": "CA-quebec-city", "name": "Quebec City", "aliases": ["魁北克城", "Québec"], "lat": 46.81, "lng": -71.21 },
+        { "id": "CA-toronto", "name": "Toronto", "aliases": ["多伦多"], "lat": 43.65, "lng": -79.38 },
+        { "id": "CA-vancouver", "name": "Vancouver", "aliases": ["温哥华"], "lat": 49.28, "lng": -123.12 }
+      ] },
+    { "id": "CF", "name": "Central African Republic", "aliases": ["中非共和国","中非"], "lat": 6.6, "lng": 20.9,
+      "cities": [
+        { "id": "CF-bangui", "name": "Bangui", "aliases": ["班吉"], "lat": 4.36, "lng": 18.56 }
+      ] },
+    { "id": "TD", "name": "Chad", "aliases": ["乍得"], "lat": 15.5, "lng": 18.7,
+      "cities": [
+        { "id": "TD-ndjamena", "name": "N'Djamena", "aliases": ["恩贾梅纳", "Ndjamena"], "lat": 12.13, "lng": 15.05 }
+      ] },
+    { "id": "CL", "name": "Chile", "aliases": ["智利"], "lat": -35.7, "lng": -71.5,
+      "cities": [
+        { "id": "CL-santiago", "name": "Santiago", "aliases": ["圣地亚哥"], "lat": -33.45, "lng": -70.67 },
+        { "id": "CL-punta-arenas", "name": "Punta Arenas", "aliases": ["蓬塔阿雷纳斯"], "lat": -53.16, "lng": -70.91 },
+        { "id": "CL-san-pedro-de-atacama", "name": "San Pedro de Atacama", "aliases": ["圣佩德罗·德阿塔卡马"], "lat": -22.91, "lng": -68.2 },
+        { "id": "CL-valparaiso", "name": "Valparaíso", "aliases": ["瓦尔帕莱索", "Valparaiso"], "lat": -33.05, "lng": -71.62 }
+      ] },
+    { "id": "CN", "name": "China", "aliases": ["中国","PRC","People's Republic of China"], "lat": 35.9, "lng": 104.2,
+      "cities": [
+        { "id": "CN-beijing", "name": "Beijing", "aliases": ["北京", "Peking"], "lat": 39.9, "lng": 116.4 },
+        { "id": "CN-chengdu", "name": "Chengdu", "aliases": ["成都"], "lat": 30.57, "lng": 104.07 },
+        { "id": "CN-chongqing", "name": "Chongqing", "aliases": ["重庆"], "lat": 29.56, "lng": 106.55 },
+        { "id": "CN-guangzhou", "name": "Guangzhou", "aliases": ["广州", "Canton"], "lat": 23.13, "lng": 113.26 },
+        { "id": "CN-hangzhou", "name": "Hangzhou", "aliases": ["杭州"], "lat": 30.27, "lng": 120.15 },
+        { "id": "CN-harbin", "name": "Harbin", "aliases": ["哈尔滨"], "lat": 45.8, "lng": 126.53 },
+        { "id": "CN-kunming", "name": "Kunming", "aliases": ["昆明"], "lat": 25.04, "lng": 102.71 },
+        { "id": "CN-lhasa", "name": "Lhasa", "aliases": ["拉萨"], "lat": 29.65, "lng": 91.1 },
+        { "id": "CN-nanjing", "name": "Nanjing", "aliases": ["南京", "Nanking"], "lat": 32.06, "lng": 118.8 },
+        { "id": "CN-shanghai", "name": "Shanghai", "aliases": ["上海"], "lat": 31.23, "lng": 121.47 },
+        { "id": "CN-shenzhen", "name": "Shenzhen", "aliases": ["深圳"], "lat": 22.54, "lng": 114.06 },
+        { "id": "CN-suzhou", "name": "Suzhou", "aliases": ["苏州"], "lat": 31.3, "lng": 120.59 },
+        { "id": "CN-urumqi", "name": "Urumqi", "aliases": ["乌鲁木齐"], "lat": 43.83, "lng": 87.62 },
+        { "id": "CN-wuhan", "name": "Wuhan", "aliases": ["武汉"], "lat": 30.59, "lng": 114.31 },
+        { "id": "CN-xian", "name": "Xi'an", "aliases": ["西安", "Xian"], "lat": 34.34, "lng": 108.94 }
+      ] },
+    { "id": "CO", "name": "Colombia", "aliases": ["哥伦比亚"], "lat": 4.6, "lng": -74.3,
+      "cities": [
+        { "id": "CO-bogota", "name": "Bogotá", "aliases": ["波哥大", "Bogota"], "lat": 4.71, "lng": -74.07 },
+        { "id": "CO-cali", "name": "Cali", "aliases": ["卡利"], "lat": 3.45, "lng": -76.53 },
+        { "id": "CO-cartagena", "name": "Cartagena", "aliases": ["卡塔赫纳"], "lat": 10.39, "lng": -75.48 },
+        { "id": "CO-medellin", "name": "Medellín", "aliases": ["麦德林", "Medellin"], "lat": 6.24, "lng": -75.58 }
+      ] },
+    { "id": "KM", "name": "Comoros", "aliases": ["科摩罗"], "lat": -11.9, "lng": 43.9,
+      "cities": [
+        { "id": "KM-moroni", "name": "Moroni", "aliases": ["莫罗尼"], "lat": -11.7, "lng": 43.26 }
+      ] },
+    { "id": "CR", "name": "Costa Rica", "aliases": ["哥斯达黎加"], "lat": 9.9, "lng": -84.1,
+      "cities": [
+        { "id": "CR-san-jose", "name": "San José", "aliases": ["圣何塞", "San Jose"], "lat": 9.93, "lng": -84.08 }
+      ] },
+    { "id": "CI", "name": "Côte d'Ivoire", "aliases": ["科特迪瓦","Ivory Coast","Cote d'Ivoire"], "lat": 7.6, "lng": -5.5,
+      "cities": [
+        { "id": "CI-yamoussoukro", "name": "Yamoussoukro", "aliases": ["亚穆苏克罗"], "lat": 6.82, "lng": -5.28 },
+        { "id": "CI-abidjan", "name": "Abidjan", "aliases": ["阿比让"], "lat": 5.36, "lng": -4.01 }
+      ] },
+    { "id": "HR", "name": "Croatia", "aliases": ["克罗地亚"], "lat": 45.1, "lng": 15.2,
+      "cities": [
+        { "id": "HR-zagreb", "name": "Zagreb", "aliases": ["萨格勒布"], "lat": 45.81, "lng": 15.98 },
+        { "id": "HR-dubrovnik", "name": "Dubrovnik", "aliases": ["杜布罗夫尼克"], "lat": 42.65, "lng": 18.09 },
+        { "id": "HR-split", "name": "Split", "aliases": ["斯普利特"], "lat": 43.51, "lng": 16.44 }
+      ] },
+    { "id": "CU", "name": "Cuba", "aliases": ["古巴"], "lat": 21.6, "lng": -79,
+      "cities": [
+        { "id": "CU-havana", "name": "Havana", "aliases": ["哈瓦那", "La Habana"], "lat": 23.11, "lng": -82.37 },
+        { "id": "CU-santiago-de-cuba", "name": "Santiago de Cuba", "aliases": ["古巴圣地亚哥"], "lat": 20.02, "lng": -75.83 },
+        { "id": "CU-varadero", "name": "Varadero", "aliases": ["巴拉德罗"], "lat": 23.15, "lng": -81.25 }
+      ] },
+    { "id": "CY", "name": "Cyprus", "aliases": ["塞浦路斯"], "lat": 35, "lng": 33.2,
+      "cities": [
+        { "id": "CY-nicosia", "name": "Nicosia", "aliases": ["尼科西亚"], "lat": 35.19, "lng": 33.38 },
+        { "id": "CY-limassol", "name": "Limassol", "aliases": ["利马索尔"], "lat": 34.68, "lng": 33.04 }
+      ] },
+    { "id": "CZ", "name": "Czechia", "aliases": ["捷克","Czech Republic"], "lat": 49.8, "lng": 15.5,
+      "cities": [
+        { "id": "CZ-prague", "name": "Prague", "aliases": ["布拉格", "Praha"], "lat": 50.08, "lng": 14.44 },
+        { "id": "CZ-brno", "name": "Brno", "aliases": ["布尔诺"], "lat": 49.2, "lng": 16.61 },
+        { "id": "CZ-ostrava", "name": "Ostrava", "aliases": ["俄斯特拉发"], "lat": 49.82, "lng": 18.26 }
+      ] },
+    { "id": "DK", "name": "Denmark", "aliases": ["丹麦"], "lat": 56, "lng": 10,
+      "cities": [
+        { "id": "DK-copenhagen", "name": "Copenhagen", "aliases": ["哥本哈根", "København"], "lat": 55.68, "lng": 12.57 },
+        { "id": "DK-aarhus", "name": "Aarhus", "aliases": ["奥胡斯"], "lat": 56.16, "lng": 10.2 },
+        { "id": "DK-odense", "name": "Odense", "aliases": ["欧登塞"], "lat": 55.4, "lng": 10.39 }
+      ] },
+    { "id": "DJ", "name": "Djibouti", "aliases": ["吉布提"], "lat": 11.8, "lng": 42.6,
+      "cities": [
+        { "id": "DJ-djibouti", "name": "Djibouti", "aliases": ["吉布提市", "Djibouti City"], "lat": 11.59, "lng": 43.15 }
+      ] },
+    { "id": "DM", "name": "Dominica", "aliases": ["多米尼克"], "lat": 15.4, "lng": -61.35,
+      "cities": [
+        { "id": "DM-roseau", "name": "Roseau", "aliases": ["罗索"], "lat": 15.3, "lng": -61.39 }
+      ] },
+    { "id": "DO", "name": "Dominican Republic", "aliases": ["多米尼加","多米尼加共和国"], "lat": 18.9, "lng": -70.2,
+      "cities": [
+        { "id": "DO-santo-domingo", "name": "Santo Domingo", "aliases": ["圣多明各"], "lat": 18.49, "lng": -69.93 },
+        { "id": "DO-punta-cana", "name": "Punta Cana", "aliases": ["蓬塔卡纳"], "lat": 18.58, "lng": -68.4 }
+      ] },
+    { "id": "CD", "name": "DR Congo", "aliases": ["刚果(金)","刚果民主共和国","刚果（金）","Democratic Republic of the Congo","Congo-Kinshasa","DRC"], "lat": -2.9, "lng": 23.7,
+      "cities": [
+        { "id": "CD-kinshasa", "name": "Kinshasa", "aliases": ["金沙萨"], "lat": -4.44, "lng": 15.27 },
+        { "id": "CD-goma", "name": "Goma", "aliases": ["戈马"], "lat": -1.68, "lng": 29.22 },
+        { "id": "CD-lubumbashi", "name": "Lubumbashi", "aliases": ["卢本巴希"], "lat": -11.66, "lng": 27.48 }
+      ] },
+    { "id": "EC", "name": "Ecuador", "aliases": ["厄瓜多尔"], "lat": -1.4, "lng": -78.4,
+      "cities": [
+        { "id": "EC-quito", "name": "Quito", "aliases": ["基多"], "lat": -0.18, "lng": -78.47 },
+        { "id": "EC-guayaquil", "name": "Guayaquil", "aliases": ["瓜亚基尔"], "lat": -2.17, "lng": -79.92 }
+      ] },
+    { "id": "EG", "name": "Egypt", "aliases": ["埃及"], "lat": 26.8, "lng": 30,
+      "cities": [
+        { "id": "EG-cairo", "name": "Cairo", "aliases": ["开罗"], "lat": 30.04, "lng": 31.24 },
+        { "id": "EG-alexandria", "name": "Alexandria", "aliases": ["亚历山大"], "lat": 31.2, "lng": 29.92 },
+        { "id": "EG-aswan", "name": "Aswan", "aliases": ["阿斯旺"], "lat": 24.09, "lng": 32.9 },
+        { "id": "EG-luxor", "name": "Luxor", "aliases": ["卢克索"], "lat": 25.69, "lng": 32.64 },
+        { "id": "EG-sharm-el-sheikh", "name": "Sharm El Sheikh", "aliases": ["沙姆沙伊赫"], "lat": 27.92, "lng": 34.33 }
+      ] },
+    { "id": "SV", "name": "El Salvador", "aliases": ["萨尔瓦多"], "lat": 13.7, "lng": -88.9,
+      "cities": [
+        { "id": "SV-san-salvador", "name": "San Salvador", "aliases": ["圣萨尔瓦多"], "lat": 13.69, "lng": -89.22 }
+      ] },
+    { "id": "GQ", "name": "Equatorial Guinea", "aliases": ["赤道几内亚"], "lat": 1.6, "lng": 10.5,
+      "cities": [
+        { "id": "GQ-malabo", "name": "Malabo", "aliases": ["马拉博"], "lat": 3.75, "lng": 8.78 }
+      ] },
+    { "id": "ER", "name": "Eritrea", "aliases": ["厄立特里亚"], "lat": 15.4, "lng": 38.9,
+      "cities": [
+        { "id": "ER-asmara", "name": "Asmara", "aliases": ["阿斯马拉"], "lat": 15.34, "lng": 38.93 }
+      ] },
+    { "id": "EE", "name": "Estonia", "aliases": ["爱沙尼亚"], "lat": 58.7, "lng": 25.5,
+      "cities": [
+        { "id": "EE-tallinn", "name": "Tallinn", "aliases": ["塔林"], "lat": 59.44, "lng": 24.75 },
+        { "id": "EE-tartu", "name": "Tartu", "aliases": ["塔尔图"], "lat": 58.38, "lng": 26.72 }
+      ] },
+    { "id": "SZ", "name": "Eswatini", "aliases": ["斯威士兰","埃斯瓦蒂尼","Swaziland"], "lat": -26.5, "lng": 31.5,
+      "cities": [
+        { "id": "SZ-mbabane", "name": "Mbabane", "aliases": ["姆巴巴内"], "lat": -26.31, "lng": 31.14 }
+      ] },
+    { "id": "ET", "name": "Ethiopia", "aliases": ["埃塞俄比亚"], "lat": 9.1, "lng": 40.5,
+      "cities": [
+        { "id": "ET-addis-ababa", "name": "Addis Ababa", "aliases": ["亚的斯亚贝巴"], "lat": 9.03, "lng": 38.74 },
+        { "id": "ET-lalibela", "name": "Lalibela", "aliases": ["拉利贝拉"], "lat": 12.03, "lng": 39.04 }
+      ] },
+    { "id": "FO", "name": "Faroe Islands", "aliases": ["法罗群岛","Faroes"], "lat": 62, "lng": -6.9,
+      "cities": [
+        { "id": "FO-torshavn", "name": "Tórshavn", "aliases": ["托尔斯港", "Torshavn"], "lat": 62.01, "lng": -6.77 }
+      ] },
+    { "id": "FJ", "name": "Fiji", "aliases": ["斐济"], "lat": -17.7, "lng": 178,
+      "cities": [
+        { "id": "FJ-suva", "name": "Suva", "aliases": ["苏瓦"], "lat": -18.14, "lng": 178.44 },
+        { "id": "FJ-nadi", "name": "Nadi", "aliases": ["楠迪"], "lat": -17.8, "lng": 177.42 }
+      ] },
+    { "id": "FI", "name": "Finland", "aliases": ["芬兰"], "lat": 64, "lng": 26,
+      "cities": [
+        { "id": "FI-helsinki", "name": "Helsinki", "aliases": ["赫尔辛基"], "lat": 60.17, "lng": 24.94 },
+        { "id": "FI-rovaniemi", "name": "Rovaniemi", "aliases": ["罗瓦涅米"], "lat": 66.5, "lng": 25.73 },
+        { "id": "FI-tampere", "name": "Tampere", "aliases": ["坦佩雷"], "lat": 61.5, "lng": 23.76 },
+        { "id": "FI-turku", "name": "Turku", "aliases": ["图尔库"], "lat": 60.45, "lng": 22.27 }
+      ] },
+    { "id": "FR", "name": "France", "aliases": ["法国"], "lat": 46.6, "lng": 2.4,
+      "cities": [
+        { "id": "FR-paris", "name": "Paris", "aliases": ["巴黎"], "lat": 48.86, "lng": 2.35 },
+        { "id": "FR-bordeaux", "name": "Bordeaux", "aliases": ["波尔多"], "lat": 44.84, "lng": -0.58 },
+        { "id": "FR-lyon", "name": "Lyon", "aliases": ["里昂"], "lat": 45.76, "lng": 4.84 },
+        { "id": "FR-marseille", "name": "Marseille", "aliases": ["马赛"], "lat": 43.3, "lng": 5.37 },
+        { "id": "FR-nice", "name": "Nice", "aliases": ["尼斯"], "lat": 43.7, "lng": 7.27 },
+        { "id": "FR-strasbourg", "name": "Strasbourg", "aliases": ["斯特拉斯堡"], "lat": 48.57, "lng": 7.75 },
+        { "id": "FR-toulouse", "name": "Toulouse", "aliases": ["图卢兹"], "lat": 43.6, "lng": 1.44 }
+      ] },
+    { "id": "PF", "name": "French Polynesia", "aliases": ["法属波利尼西亚","Tahiti"], "lat": -17.7, "lng": -149.4,
+      "cities": [
+        { "id": "PF-papeete", "name": "Papeete", "aliases": ["帕皮提"], "lat": -17.54, "lng": -149.57 },
+        { "id": "PF-bora-bora", "name": "Bora Bora", "aliases": ["波拉波拉"], "lat": -16.5, "lng": -151.74 }
+      ] },
+    { "id": "GA", "name": "Gabon", "aliases": ["加蓬"], "lat": -0.8, "lng": 11.6,
+      "cities": [
+        { "id": "GA-libreville", "name": "Libreville", "aliases": ["利伯维尔"], "lat": 0.42, "lng": 9.47 }
+      ] },
+    { "id": "GM", "name": "Gambia", "aliases": ["冈比亚","The Gambia"], "lat": 13.45, "lng": -15.4,
+      "cities": [
+        { "id": "GM-banjul", "name": "Banjul", "aliases": ["班珠尔"], "lat": 13.45, "lng": -16.58 }
+      ] },
+    { "id": "GE", "name": "Georgia", "aliases": ["格鲁吉亚"], "lat": 42.3, "lng": 43.4,
+      "cities": [
+        { "id": "GE-tbilisi", "name": "Tbilisi", "aliases": ["第比利斯"], "lat": 41.72, "lng": 44.79 },
+        { "id": "GE-batumi", "name": "Batumi", "aliases": ["巴统"], "lat": 41.65, "lng": 41.64 }
+      ] },
+    { "id": "DE", "name": "Germany", "aliases": ["德国"], "lat": 51.2, "lng": 10.4,
+      "cities": [
+        { "id": "DE-berlin", "name": "Berlin", "aliases": ["柏林"], "lat": 52.52, "lng": 13.4 },
+        { "id": "DE-cologne", "name": "Cologne", "aliases": ["科隆", "Köln"], "lat": 50.94, "lng": 6.96 },
+        { "id": "DE-dresden", "name": "Dresden", "aliases": ["德累斯顿"], "lat": 51.05, "lng": 13.74 },
+        { "id": "DE-frankfurt", "name": "Frankfurt", "aliases": ["法兰克福"], "lat": 50.11, "lng": 8.68 },
+        { "id": "DE-hamburg", "name": "Hamburg", "aliases": ["汉堡"], "lat": 53.55, "lng": 9.99 },
+        { "id": "DE-munich", "name": "Munich", "aliases": ["慕尼黑", "München"], "lat": 48.14, "lng": 11.58 },
+        { "id": "DE-stuttgart", "name": "Stuttgart", "aliases": ["斯图加特"], "lat": 48.78, "lng": 9.18 }
+      ] },
+    { "id": "GH", "name": "Ghana", "aliases": ["加纳"], "lat": 7.9, "lng": -1,
+      "cities": [
+        { "id": "GH-accra", "name": "Accra", "aliases": ["阿克拉"], "lat": 5.6, "lng": -0.19 },
+        { "id": "GH-kumasi", "name": "Kumasi", "aliases": ["库马西"], "lat": 6.69, "lng": -1.62 }
+      ] },
+    { "id": "GR", "name": "Greece", "aliases": ["希腊"], "lat": 39.1, "lng": 22.9,
+      "cities": [
+        { "id": "GR-athens", "name": "Athens", "aliases": ["雅典"], "lat": 37.98, "lng": 23.73 },
+        { "id": "GR-heraklion", "name": "Heraklion", "aliases": ["伊拉克利翁"], "lat": 35.34, "lng": 25.14 },
+        { "id": "GR-santorini", "name": "Santorini", "aliases": ["圣托里尼"], "lat": 36.39, "lng": 25.46 },
+        { "id": "GR-thessaloniki", "name": "Thessaloniki", "aliases": ["塞萨洛尼基"], "lat": 40.64, "lng": 22.94 }
+      ] },
+    { "id": "GL", "name": "Greenland", "aliases": ["格陵兰"], "lat": 72, "lng": -40,
+      "cities": [
+        { "id": "GL-nuuk", "name": "Nuuk", "aliases": ["努克", "Godthåb"], "lat": 64.18, "lng": -51.72 },
+        { "id": "GL-ilulissat", "name": "Ilulissat", "aliases": ["伊卢利萨特"], "lat": 69.22, "lng": -51.1 }
+      ] },
+    { "id": "GD", "name": "Grenada", "aliases": ["格林纳达"], "lat": 12.12, "lng": -61.68,
+      "cities": [
+        { "id": "GD-st-georges", "name": "St. George's", "aliases": ["圣乔治", "Saint George's"], "lat": 12.06, "lng": -61.75 }
+      ] },
+    { "id": "GU", "name": "Guam", "aliases": ["关岛"], "lat": 13.44, "lng": 144.79,
+      "cities": [
+        { "id": "GU-hagatna", "name": "Hagåtña", "aliases": ["阿加尼亚", "Hagatna", "Agana"], "lat": 13.48, "lng": 144.75 }
+      ] },
+    { "id": "GT", "name": "Guatemala", "aliases": ["危地马拉"], "lat": 15.5, "lng": -90.4,
+      "cities": [
+        { "id": "GT-guatemala-city", "name": "Guatemala City", "aliases": ["危地马拉城"], "lat": 14.63, "lng": -90.51 },
+        { "id": "GT-antigua-guatemala", "name": "Antigua Guatemala", "aliases": ["安提瓜危地马拉", "Antigua"], "lat": 14.56, "lng": -90.73 }
+      ] },
+    { "id": "GN", "name": "Guinea", "aliases": ["几内亚"], "lat": 10.4, "lng": -10.9,
+      "cities": [
+        { "id": "GN-conakry", "name": "Conakry", "aliases": ["科纳克里"], "lat": 9.64, "lng": -13.58 }
+      ] },
+    { "id": "GW", "name": "Guinea-Bissau", "aliases": ["几内亚比绍"], "lat": 12, "lng": -15.2,
+      "cities": [
+        { "id": "GW-bissau", "name": "Bissau", "aliases": ["比绍"], "lat": 11.86, "lng": -15.6 }
+      ] },
+    { "id": "GY", "name": "Guyana", "aliases": ["圭亚那"], "lat": 4.9, "lng": -58.9,
+      "cities": [
+        { "id": "GY-georgetown", "name": "Georgetown", "aliases": ["乔治敦"], "lat": 6.8, "lng": -58.16 }
+      ] },
+    { "id": "HT", "name": "Haiti", "aliases": ["海地"], "lat": 19.1, "lng": -72.7,
+      "cities": [
+        { "id": "HT-port-au-prince", "name": "Port-au-Prince", "aliases": ["太子港"], "lat": 18.54, "lng": -72.34 }
+      ] },
+    { "id": "HN", "name": "Honduras", "aliases": ["洪都拉斯"], "lat": 14.8, "lng": -86.6,
+      "cities": [
+        { "id": "HN-tegucigalpa", "name": "Tegucigalpa", "aliases": ["特古西加尔巴"], "lat": 14.07, "lng": -87.19 }
+      ] },
+    { "id": "HK", "name": "Hong Kong", "aliases": ["香港","中国香港","HKSAR"], "lat": 22.32, "lng": 114.17,
+      "cities": [
+        { "id": "HK-hong-kong", "name": "Hong Kong", "aliases": ["香港"], "lat": 22.32, "lng": 114.17 }
+      ] },
+    { "id": "HU", "name": "Hungary", "aliases": ["匈牙利"], "lat": 47.2, "lng": 19.5,
+      "cities": [
+        { "id": "HU-budapest", "name": "Budapest", "aliases": ["布达佩斯"], "lat": 47.5, "lng": 19.04 },
+        { "id": "HU-debrecen", "name": "Debrecen", "aliases": ["德布勒森"], "lat": 47.53, "lng": 21.63 }
+      ] },
+    { "id": "IS", "name": "Iceland", "aliases": ["冰岛"], "lat": 64.9, "lng": -18.6,
+      "cities": [
+        { "id": "IS-reykjavik", "name": "Reykjavík", "aliases": ["雷克雅未克", "Reykjavik"], "lat": 64.15, "lng": -21.94 },
+        { "id": "IS-akureyri", "name": "Akureyri", "aliases": ["阿克雷里"], "lat": 65.68, "lng": -18.1 }
+      ] },
+    { "id": "IN", "name": "India", "aliases": ["印度"], "lat": 22.9, "lng": 79.6,
+      "cities": [
+        { "id": "IN-new-delhi", "name": "New Delhi", "aliases": ["新德里", "Delhi"], "lat": 28.61, "lng": 77.21 },
+        { "id": "IN-bengaluru", "name": "Bengaluru", "aliases": ["班加罗尔", "Bangalore"], "lat": 12.97, "lng": 77.59 },
+        { "id": "IN-chennai", "name": "Chennai", "aliases": ["金奈", "Madras"], "lat": 13.08, "lng": 80.27 },
+        { "id": "IN-hyderabad", "name": "Hyderabad", "aliases": ["海得拉巴"], "lat": 17.39, "lng": 78.49 },
+        { "id": "IN-jaipur", "name": "Jaipur", "aliases": ["斋浦尔"], "lat": 26.91, "lng": 75.79 },
+        { "id": "IN-kolkata", "name": "Kolkata", "aliases": ["加尔各答", "Calcutta"], "lat": 22.57, "lng": 88.36 },
+        { "id": "IN-mumbai", "name": "Mumbai", "aliases": ["孟买", "Bombay"], "lat": 19.08, "lng": 72.88 },
+        { "id": "IN-varanasi", "name": "Varanasi", "aliases": ["瓦拉纳西", "Benares", "Banaras"], "lat": 25.32, "lng": 83.01 }
+      ] },
+    { "id": "ID", "name": "Indonesia", "aliases": ["印度尼西亚","印尼"], "lat": -2.5, "lng": 118,
+      "cities": [
+        { "id": "ID-jakarta", "name": "Jakarta", "aliases": ["雅加达"], "lat": -6.2, "lng": 106.85 },
+        { "id": "ID-bandung", "name": "Bandung", "aliases": ["万隆"], "lat": -6.92, "lng": 107.61 },
+        { "id": "ID-denpasar", "name": "Denpasar", "aliases": ["登巴萨", "Bali"], "lat": -8.65, "lng": 115.22 },
+        { "id": "ID-makassar", "name": "Makassar", "aliases": ["望加锡"], "lat": -5.15, "lng": 119.43 },
+        { "id": "ID-medan", "name": "Medan", "aliases": ["棉兰"], "lat": 3.6, "lng": 98.67 },
+        { "id": "ID-surabaya", "name": "Surabaya", "aliases": ["泗水"], "lat": -7.25, "lng": 112.75 },
+        { "id": "ID-yogyakarta", "name": "Yogyakarta", "aliases": ["日惹", "Jogja"], "lat": -7.8, "lng": 110.36 }
+      ] },
+    { "id": "IR", "name": "Iran", "aliases": ["伊朗"], "lat": 32.4, "lng": 53.7,
+      "cities": [
+        { "id": "IR-tehran", "name": "Tehran", "aliases": ["德黑兰"], "lat": 35.69, "lng": 51.39 },
+        { "id": "IR-isfahan", "name": "Isfahan", "aliases": ["伊斯法罕"], "lat": 32.65, "lng": 51.67 },
+        { "id": "IR-mashhad", "name": "Mashhad", "aliases": ["马什哈德"], "lat": 36.3, "lng": 59.6 },
+        { "id": "IR-shiraz", "name": "Shiraz", "aliases": ["设拉子"], "lat": 29.59, "lng": 52.58 },
+        { "id": "IR-tabriz", "name": "Tabriz", "aliases": ["大不里士"], "lat": 38.08, "lng": 46.29 }
+      ] },
+    { "id": "IQ", "name": "Iraq", "aliases": ["伊拉克"], "lat": 33.2, "lng": 43.7,
+      "cities": [
+        { "id": "IQ-baghdad", "name": "Baghdad", "aliases": ["巴格达"], "lat": 33.31, "lng": 44.37 },
+        { "id": "IQ-basra", "name": "Basra", "aliases": ["巴士拉"], "lat": 30.51, "lng": 47.78 },
+        { "id": "IQ-erbil", "name": "Erbil", "aliases": ["埃尔比勒"], "lat": 36.19, "lng": 44.01 },
+        { "id": "IQ-mosul", "name": "Mosul", "aliases": ["摩苏尔"], "lat": 36.34, "lng": 43.13 }
+      ] },
+    { "id": "IE", "name": "Ireland", "aliases": ["爱尔兰"], "lat": 53.4, "lng": -8.2,
+      "cities": [
+        { "id": "IE-dublin", "name": "Dublin", "aliases": ["都柏林"], "lat": 53.35, "lng": -6.26 },
+        { "id": "IE-cork", "name": "Cork", "aliases": ["科克"], "lat": 51.9, "lng": -8.47 },
+        { "id": "IE-galway", "name": "Galway", "aliases": ["戈尔韦"], "lat": 53.27, "lng": -9.05 }
+      ] },
+    { "id": "IL", "name": "Israel", "aliases": ["以色列"], "lat": 31, "lng": 34.9,
+      "cities": [
+        { "id": "IL-jerusalem", "name": "Jerusalem", "aliases": ["耶路撒冷"], "lat": 31.77, "lng": 35.21 },
+        { "id": "IL-haifa", "name": "Haifa", "aliases": ["海法"], "lat": 32.79, "lng": 34.99 },
+        { "id": "IL-tel-aviv", "name": "Tel Aviv", "aliases": ["特拉维夫"], "lat": 32.09, "lng": 34.78 }
+      ] },
+    { "id": "IT", "name": "Italy", "aliases": ["意大利"], "lat": 42.8, "lng": 12.6,
+      "cities": [
+        { "id": "IT-rome", "name": "Rome", "aliases": ["罗马", "Roma"], "lat": 41.9, "lng": 12.5 },
+        { "id": "IT-bologna", "name": "Bologna", "aliases": ["博洛尼亚"], "lat": 44.49, "lng": 11.34 },
+        { "id": "IT-florence", "name": "Florence", "aliases": ["佛罗伦萨", "Firenze"], "lat": 43.77, "lng": 11.26 },
+        { "id": "IT-milan", "name": "Milan", "aliases": ["米兰", "Milano"], "lat": 45.46, "lng": 9.19 },
+        { "id": "IT-naples", "name": "Naples", "aliases": ["那不勒斯", "Napoli"], "lat": 40.85, "lng": 14.27 },
+        { "id": "IT-palermo", "name": "Palermo", "aliases": ["巴勒莫"], "lat": 38.12, "lng": 13.36 },
+        { "id": "IT-turin", "name": "Turin", "aliases": ["都灵", "Torino"], "lat": 45.07, "lng": 7.69 },
+        { "id": "IT-venice", "name": "Venice", "aliases": ["威尼斯", "Venezia"], "lat": 45.44, "lng": 12.32 }
+      ] },
+    { "id": "JM", "name": "Jamaica", "aliases": ["牙买加"], "lat": 18.1, "lng": -77.3,
+      "cities": [
+        { "id": "JM-kingston", "name": "Kingston", "aliases": ["金斯敦"], "lat": 17.97, "lng": -76.79 },
+        { "id": "JM-montego-bay", "name": "Montego Bay", "aliases": ["蒙特哥贝"], "lat": 18.48, "lng": -77.92 }
+      ] },
+    { "id": "JP", "name": "Japan", "aliases": ["日本"], "lat": 36.2, "lng": 138.3,
+      "cities": [
+        { "id": "JP-tokyo", "name": "Tokyo", "aliases": ["东京"], "lat": 35.68, "lng": 139.65 },
+        { "id": "JP-fukuoka", "name": "Fukuoka", "aliases": ["福冈"], "lat": 33.59, "lng": 130.4 },
+        { "id": "JP-hiroshima", "name": "Hiroshima", "aliases": ["广岛"], "lat": 34.39, "lng": 132.46 },
+        { "id": "JP-kyoto", "name": "Kyoto", "aliases": ["京都"], "lat": 35.01, "lng": 135.77 },
+        { "id": "JP-nagoya", "name": "Nagoya", "aliases": ["名古屋"], "lat": 35.18, "lng": 136.91 },
+        { "id": "JP-naha", "name": "Naha", "aliases": ["那霸", "Okinawa"], "lat": 26.21, "lng": 127.68 },
+        { "id": "JP-osaka", "name": "Osaka", "aliases": ["大阪"], "lat": 34.69, "lng": 135.5 },
+        { "id": "JP-sapporo", "name": "Sapporo", "aliases": ["札幌"], "lat": 43.06, "lng": 141.35 }
+      ] },
+    { "id": "JO", "name": "Jordan", "aliases": ["约旦"], "lat": 31, "lng": 36.5,
+      "cities": [
+        { "id": "JO-amman", "name": "Amman", "aliases": ["安曼"], "lat": 31.95, "lng": 35.93 },
+        { "id": "JO-aqaba", "name": "Aqaba", "aliases": ["亚喀巴"], "lat": 29.53, "lng": 35.01 },
+        { "id": "JO-petra", "name": "Petra", "aliases": ["佩特拉"], "lat": 30.33, "lng": 35.44 }
+      ] },
+    { "id": "KZ", "name": "Kazakhstan", "aliases": ["哈萨克斯坦"], "lat": 48, "lng": 66.9,
+      "cities": [
+        { "id": "KZ-astana", "name": "Astana", "aliases": ["阿斯塔纳", "Nur-Sultan"], "lat": 51.17, "lng": 71.43 },
+        { "id": "KZ-almaty", "name": "Almaty", "aliases": ["阿拉木图"], "lat": 43.24, "lng": 76.89 }
+      ] },
+    { "id": "KE", "name": "Kenya", "aliases": ["肯尼亚"], "lat": 0, "lng": 37.9,
+      "cities": [
+        { "id": "KE-nairobi", "name": "Nairobi", "aliases": ["内罗毕"], "lat": -1.29, "lng": 36.82 },
+        { "id": "KE-mombasa", "name": "Mombasa", "aliases": ["蒙巴萨"], "lat": -4.04, "lng": 39.67 }
+      ] },
+    { "id": "KI", "name": "Kiribati", "aliases": ["基里巴斯"], "lat": 1.45, "lng": 173,
+      "cities": [
+        { "id": "KI-tarawa", "name": "Tarawa", "aliases": ["塔拉瓦", "South Tarawa"], "lat": 1.33, "lng": 172.98 }
+      ] },
+    { "id": "XK", "name": "Kosovo", "aliases": ["科索沃"], "lat": 42.6, "lng": 20.9,
+      "cities": [
+        { "id": "XK-pristina", "name": "Pristina", "aliases": ["普里什蒂纳", "Prishtina"], "lat": 42.66, "lng": 21.17 },
+        { "id": "XK-prizren", "name": "Prizren", "aliases": ["普里兹伦"], "lat": 42.21, "lng": 20.74 }
+      ] },
+    { "id": "KW", "name": "Kuwait", "aliases": ["科威特"], "lat": 29.3, "lng": 47.5,
+      "cities": [
+        { "id": "KW-kuwait-city", "name": "Kuwait City", "aliases": ["科威特城"], "lat": 29.38, "lng": 47.99 }
+      ] },
+    { "id": "KG", "name": "Kyrgyzstan", "aliases": ["吉尔吉斯斯坦"], "lat": 41.2, "lng": 74.8,
+      "cities": [
+        { "id": "KG-bishkek", "name": "Bishkek", "aliases": ["比什凯克"], "lat": 42.87, "lng": 74.59 }
+      ] },
+    { "id": "LA", "name": "Laos", "aliases": ["老挝"], "lat": 19.9, "lng": 102.5,
+      "cities": [
+        { "id": "LA-vientiane", "name": "Vientiane", "aliases": ["万象"], "lat": 17.97, "lng": 102.6 },
+        { "id": "LA-luang-prabang", "name": "Luang Prabang", "aliases": ["琅勃拉邦"], "lat": 19.89, "lng": 102.13 }
+      ] },
+    { "id": "LV", "name": "Latvia", "aliases": ["拉脱维亚"], "lat": 56.9, "lng": 24.6,
+      "cities": [
+        { "id": "LV-riga", "name": "Riga", "aliases": ["里加"], "lat": 56.95, "lng": 24.11 }
+      ] },
+    { "id": "LB", "name": "Lebanon", "aliases": ["黎巴嫩"], "lat": 33.9, "lng": 35.9,
+      "cities": [
+        { "id": "LB-beirut", "name": "Beirut", "aliases": ["贝鲁特"], "lat": 33.89, "lng": 35.5 }
+      ] },
+    { "id": "LS", "name": "Lesotho", "aliases": ["莱索托"], "lat": -29.6, "lng": 28.2,
+      "cities": [
+        { "id": "LS-maseru", "name": "Maseru", "aliases": ["马塞卢"], "lat": -29.31, "lng": 27.48 }
+      ] },
+    { "id": "LR", "name": "Liberia", "aliases": ["利比里亚"], "lat": 6.4, "lng": -9.4,
+      "cities": [
+        { "id": "LR-monrovia", "name": "Monrovia", "aliases": ["蒙罗维亚"], "lat": 6.3, "lng": -10.8 }
+      ] },
+    { "id": "LY", "name": "Libya", "aliases": ["利比亚"], "lat": 26.3, "lng": 17.2,
+      "cities": [
+        { "id": "LY-tripoli", "name": "Tripoli", "aliases": ["的黎波里"], "lat": 32.89, "lng": 13.19 },
+        { "id": "LY-benghazi", "name": "Benghazi", "aliases": ["班加西"], "lat": 32.12, "lng": 20.07 }
+      ] },
+    { "id": "LI", "name": "Liechtenstein", "aliases": ["列支敦士登"], "lat": 47.17, "lng": 9.56,
+      "cities": [
+        { "id": "LI-vaduz", "name": "Vaduz", "aliases": ["瓦杜兹"], "lat": 47.14, "lng": 9.52 }
+      ] },
+    { "id": "LT", "name": "Lithuania", "aliases": ["立陶宛"], "lat": 55.2, "lng": 23.9,
+      "cities": [
+        { "id": "LT-vilnius", "name": "Vilnius", "aliases": ["维尔纽斯"], "lat": 54.69, "lng": 25.28 },
+        { "id": "LT-kaunas", "name": "Kaunas", "aliases": ["考纳斯"], "lat": 54.9, "lng": 23.9 }
+      ] },
+    { "id": "LU", "name": "Luxembourg", "aliases": ["卢森堡"], "lat": 49.8, "lng": 6.1,
+      "cities": [
+        { "id": "LU-luxembourg-city", "name": "Luxembourg City", "aliases": ["卢森堡市", "Luxembourg"], "lat": 49.61, "lng": 6.13 }
+      ] },
+    { "id": "MO", "name": "Macao", "aliases": ["澳门","中国澳门","Macau"], "lat": 22.2, "lng": 113.55,
+      "cities": [
+        { "id": "MO-macao", "name": "Macao", "aliases": ["澳门", "Macau"], "lat": 22.2, "lng": 113.55 }
+      ] },
+    { "id": "MG", "name": "Madagascar", "aliases": ["马达加斯加"], "lat": -18.8, "lng": 46.9,
+      "cities": [
+        { "id": "MG-antananarivo", "name": "Antananarivo", "aliases": ["塔那那利佛"], "lat": -18.88, "lng": 47.51 }
+      ] },
+    { "id": "MW", "name": "Malawi", "aliases": ["马拉维"], "lat": -13.3, "lng": 34.3,
+      "cities": [
+        { "id": "MW-lilongwe", "name": "Lilongwe", "aliases": ["利隆圭"], "lat": -13.96, "lng": 33.77 },
+        { "id": "MW-blantyre", "name": "Blantyre", "aliases": ["布兰太尔"], "lat": -15.79, "lng": 35 }
+      ] },
+    { "id": "MY", "name": "Malaysia", "aliases": ["马来西亚"], "lat": 4.2, "lng": 102,
+      "cities": [
+        { "id": "MY-kuala-lumpur", "name": "Kuala Lumpur", "aliases": ["吉隆坡", "KL"], "lat": 3.14, "lng": 101.69 },
+        { "id": "MY-george-town", "name": "George Town", "aliases": ["乔治市", "Penang"], "lat": 5.41, "lng": 100.34 },
+        { "id": "MY-johor-bahru", "name": "Johor Bahru", "aliases": ["新山"], "lat": 1.49, "lng": 103.74 },
+        { "id": "MY-kota-kinabalu", "name": "Kota Kinabalu", "aliases": ["亚庇"], "lat": 5.98, "lng": 116.07 },
+        { "id": "MY-kuching", "name": "Kuching", "aliases": ["古晋"], "lat": 1.55, "lng": 110.34 },
+        { "id": "MY-malacca", "name": "Malacca", "aliases": ["马六甲", "Melaka"], "lat": 2.2, "lng": 102.25 }
+      ] },
+    { "id": "MV", "name": "Maldives", "aliases": ["马尔代夫"], "lat": 3.2, "lng": 73.2,
+      "cities": [
+        { "id": "MV-male", "name": "Malé", "aliases": ["马累", "Male"], "lat": 4.18, "lng": 73.51 }
+      ] },
+    { "id": "ML", "name": "Mali", "aliases": ["马里"], "lat": 17.6, "lng": -4,
+      "cities": [
+        { "id": "ML-bamako", "name": "Bamako", "aliases": ["巴马科"], "lat": 12.64, "lng": -8 },
+        { "id": "ML-timbuktu", "name": "Timbuktu", "aliases": ["廷巴克图"], "lat": 16.77, "lng": -3 }
+      ] },
+    { "id": "MT", "name": "Malta", "aliases": ["马耳他"], "lat": 35.9, "lng": 14.4,
+      "cities": [
+        { "id": "MT-valletta", "name": "Valletta", "aliases": ["瓦莱塔"], "lat": 35.9, "lng": 14.51 }
+      ] },
+    { "id": "MH", "name": "Marshall Islands", "aliases": ["马绍尔群岛"], "lat": 7.1, "lng": 171.2,
+      "cities": [
+        { "id": "MH-majuro", "name": "Majuro", "aliases": ["马朱罗"], "lat": 7.09, "lng": 171.38 }
+      ] },
+    { "id": "MR", "name": "Mauritania", "aliases": ["毛里塔尼亚"], "lat": 20.3, "lng": -10.9,
+      "cities": [
+        { "id": "MR-nouakchott", "name": "Nouakchott", "aliases": ["努瓦克肖特"], "lat": 18.08, "lng": -15.98 }
+      ] },
+    { "id": "MU", "name": "Mauritius", "aliases": ["毛里求斯"], "lat": -20.3, "lng": 57.6,
+      "cities": [
+        { "id": "MU-port-louis", "name": "Port Louis", "aliases": ["路易港"], "lat": -20.16, "lng": 57.5 }
+      ] },
+    { "id": "MX", "name": "Mexico", "aliases": ["墨西哥"], "lat": 23.6, "lng": -102.5,
+      "cities": [
+        { "id": "MX-mexico-city", "name": "Mexico City", "aliases": ["墨西哥城", "Ciudad de México"], "lat": 19.43, "lng": -99.13 },
+        { "id": "MX-cancun", "name": "Cancún", "aliases": ["坎昆", "Cancun"], "lat": 21.16, "lng": -86.85 },
+        { "id": "MX-guadalajara", "name": "Guadalajara", "aliases": ["瓜达拉哈拉"], "lat": 20.67, "lng": -103.35 },
+        { "id": "MX-merida", "name": "Mérida", "aliases": ["梅里达", "Merida"], "lat": 20.97, "lng": -89.62 },
+        { "id": "MX-monterrey", "name": "Monterrey", "aliases": ["蒙特雷"], "lat": 25.69, "lng": -100.32 },
+        { "id": "MX-oaxaca", "name": "Oaxaca", "aliases": ["瓦哈卡"], "lat": 17.07, "lng": -96.73 },
+        { "id": "MX-tijuana", "name": "Tijuana", "aliases": ["蒂华纳"], "lat": 32.51, "lng": -117.04 }
+      ] },
+    { "id": "FM", "name": "Micronesia", "aliases": ["密克罗尼西亚","Federated States of Micronesia"], "lat": 6.9, "lng": 158.2,
+      "cities": [
+        { "id": "FM-palikir", "name": "Palikir", "aliases": ["帕利基尔"], "lat": 6.92, "lng": 158.16 }
+      ] },
+    { "id": "MD", "name": "Moldova", "aliases": ["摩尔多瓦"], "lat": 47.4, "lng": 28.4,
+      "cities": [
+        { "id": "MD-chisinau", "name": "Chișinău", "aliases": ["基希讷乌", "Chisinau", "Kishinev"], "lat": 47.01, "lng": 28.86 }
+      ] },
+    { "id": "MC", "name": "Monaco", "aliases": ["摩纳哥"], "lat": 43.74, "lng": 7.42,
+      "cities": [
+        { "id": "MC-monaco", "name": "Monaco", "aliases": ["摩纳哥城", "Monte Carlo"], "lat": 43.74, "lng": 7.42 }
+      ] },
+    { "id": "MN", "name": "Mongolia", "aliases": ["蒙古","蒙古国"], "lat": 46.9, "lng": 103.8,
+      "cities": [
+        { "id": "MN-ulaanbaatar", "name": "Ulaanbaatar", "aliases": ["乌兰巴托", "Ulan Bator"], "lat": 47.92, "lng": 106.92 }
+      ] },
+    { "id": "ME", "name": "Montenegro", "aliases": ["黑山"], "lat": 42.7, "lng": 19.4,
+      "cities": [
+        { "id": "ME-podgorica", "name": "Podgorica", "aliases": ["波德戈里察"], "lat": 42.44, "lng": 19.26 },
+        { "id": "ME-kotor", "name": "Kotor", "aliases": ["科托尔"], "lat": 42.42, "lng": 18.77 }
+      ] },
+    { "id": "MA", "name": "Morocco", "aliases": ["摩洛哥"], "lat": 31.8, "lng": -7.1,
+      "cities": [
+        { "id": "MA-rabat", "name": "Rabat", "aliases": ["拉巴特"], "lat": 34.02, "lng": -6.84 },
+        { "id": "MA-casablanca", "name": "Casablanca", "aliases": ["卡萨布兰卡"], "lat": 33.57, "lng": -7.59 },
+        { "id": "MA-fes", "name": "Fes", "aliases": ["菲斯", "Fez"], "lat": 34.03, "lng": -5 },
+        { "id": "MA-marrakesh", "name": "Marrakesh", "aliases": ["马拉喀什", "Marrakech"], "lat": 31.63, "lng": -8 },
+        { "id": "MA-tangier", "name": "Tangier", "aliases": ["丹吉尔", "Tangiers"], "lat": 35.77, "lng": -5.8 }
+      ] },
+    { "id": "MZ", "name": "Mozambique", "aliases": ["莫桑比克"], "lat": -18.7, "lng": 35.5,
+      "cities": [
+        { "id": "MZ-maputo", "name": "Maputo", "aliases": ["马普托"], "lat": -25.97, "lng": 32.57 },
+        { "id": "MZ-beira", "name": "Beira", "aliases": ["贝拉"], "lat": -19.84, "lng": 34.84 }
+      ] },
+    { "id": "MM", "name": "Myanmar", "aliases": ["缅甸","Burma"], "lat": 21.9, "lng": 95.96,
+      "cities": [
+        { "id": "MM-naypyidaw", "name": "Naypyidaw", "aliases": ["内比都", "Nay Pyi Taw"], "lat": 19.76, "lng": 96.08 },
+        { "id": "MM-bagan", "name": "Bagan", "aliases": ["蒲甘"], "lat": 21.17, "lng": 94.86 },
+        { "id": "MM-mandalay", "name": "Mandalay", "aliases": ["曼德勒"], "lat": 21.97, "lng": 96.08 },
+        { "id": "MM-yangon", "name": "Yangon", "aliases": ["仰光", "Rangoon"], "lat": 16.87, "lng": 96.2 }
+      ] },
+    { "id": "NA", "name": "Namibia", "aliases": ["纳米比亚"], "lat": -22.96, "lng": 18.5,
+      "cities": [
+        { "id": "NA-windhoek", "name": "Windhoek", "aliases": ["温得和克"], "lat": -22.56, "lng": 17.08 },
+        { "id": "NA-swakopmund", "name": "Swakopmund", "aliases": ["斯瓦科普蒙德"], "lat": -22.68, "lng": 14.53 }
+      ] },
+    { "id": "NR", "name": "Nauru", "aliases": ["瑙鲁"], "lat": -0.52, "lng": 166.93,
+      "cities": [
+        { "id": "NR-yaren", "name": "Yaren", "aliases": ["亚伦"], "lat": -0.55, "lng": 166.92 }
+      ] },
+    { "id": "NP", "name": "Nepal", "aliases": ["尼泊尔"], "lat": 28.4, "lng": 84.1,
+      "cities": [
+        { "id": "NP-kathmandu", "name": "Kathmandu", "aliases": ["加德满都"], "lat": 27.72, "lng": 85.32 },
+        { "id": "NP-pokhara", "name": "Pokhara", "aliases": ["博卡拉"], "lat": 28.21, "lng": 83.99 }
+      ] },
+    { "id": "NL", "name": "Netherlands", "aliases": ["荷兰","尼德兰","Holland","The Netherlands"], "lat": 52.1, "lng": 5.3,
+      "cities": [
+        { "id": "NL-amsterdam", "name": "Amsterdam", "aliases": ["阿姆斯特丹"], "lat": 52.37, "lng": 4.9 },
+        { "id": "NL-rotterdam", "name": "Rotterdam", "aliases": ["鹿特丹"], "lat": 51.92, "lng": 4.48 },
+        { "id": "NL-the-hague", "name": "The Hague", "aliases": ["海牙", "Den Haag"], "lat": 52.08, "lng": 4.31 },
+        { "id": "NL-utrecht", "name": "Utrecht", "aliases": ["乌得勒支"], "lat": 52.09, "lng": 5.12 }
+      ] },
+    { "id": "NC", "name": "New Caledonia", "aliases": ["新喀里多尼亚"], "lat": -21.25, "lng": 165.5,
+      "cities": [
+        { "id": "NC-noumea", "name": "Nouméa", "aliases": ["努美阿", "Noumea"], "lat": -22.28, "lng": 166.46 }
+      ] },
+    { "id": "NZ", "name": "New Zealand", "aliases": ["新西兰","Aotearoa"], "lat": -41, "lng": 174,
+      "cities": [
+        { "id": "NZ-wellington", "name": "Wellington", "aliases": ["惠灵顿"], "lat": -41.29, "lng": 174.78 },
+        { "id": "NZ-auckland", "name": "Auckland", "aliases": ["奥克兰"], "lat": -36.85, "lng": 174.76 },
+        { "id": "NZ-christchurch", "name": "Christchurch", "aliases": ["基督城", "克赖斯特彻奇"], "lat": -43.53, "lng": 172.64 },
+        { "id": "NZ-queenstown", "name": "Queenstown", "aliases": ["皇后镇"], "lat": -45.03, "lng": 168.66 }
+      ] },
+    { "id": "NI", "name": "Nicaragua", "aliases": ["尼加拉瓜"], "lat": 12.9, "lng": -85.2,
+      "cities": [
+        { "id": "NI-managua", "name": "Managua", "aliases": ["马那瓜"], "lat": 12.13, "lng": -86.25 },
+        { "id": "NI-granada", "name": "Granada", "aliases": ["格拉纳达"], "lat": 11.93, "lng": -85.96 }
+      ] },
+    { "id": "NE", "name": "Niger", "aliases": ["尼日尔"], "lat": 17.6, "lng": 8.1,
+      "cities": [
+        { "id": "NE-niamey", "name": "Niamey", "aliases": ["尼亚美"], "lat": 13.51, "lng": 2.11 },
+        { "id": "NE-agadez", "name": "Agadez", "aliases": ["阿加德兹"], "lat": 16.97, "lng": 7.99 }
+      ] },
+    { "id": "NG", "name": "Nigeria", "aliases": ["尼日利亚"], "lat": 9.1, "lng": 8.7,
+      "cities": [
+        { "id": "NG-abuja", "name": "Abuja", "aliases": ["阿布贾"], "lat": 9.08, "lng": 7.4 },
+        { "id": "NG-ibadan", "name": "Ibadan", "aliases": ["伊巴丹"], "lat": 7.38, "lng": 3.95 },
+        { "id": "NG-kano", "name": "Kano", "aliases": ["卡诺"], "lat": 12, "lng": 8.52 },
+        { "id": "NG-lagos", "name": "Lagos", "aliases": ["拉各斯"], "lat": 6.52, "lng": 3.38 },
+        { "id": "NG-port-harcourt", "name": "Port Harcourt", "aliases": ["哈科特港"], "lat": 4.82, "lng": 7.03 }
+      ] },
+    { "id": "KP", "name": "North Korea", "aliases": ["朝鲜","北朝鲜","DPRK"], "lat": 40.3, "lng": 127.5,
+      "cities": [
+        { "id": "KP-pyongyang", "name": "Pyongyang", "aliases": ["平壤"], "lat": 39.04, "lng": 125.76 }
+      ] },
+    { "id": "MK", "name": "North Macedonia", "aliases": ["北马其顿","Macedonia"], "lat": 41.6, "lng": 21.7,
+      "cities": [
+        { "id": "MK-skopje", "name": "Skopje", "aliases": ["斯科普里"], "lat": 41.99, "lng": 21.43 },
+        { "id": "MK-ohrid", "name": "Ohrid", "aliases": ["奥赫里德"], "lat": 41.12, "lng": 20.8 }
+      ] },
+    { "id": "NO", "name": "Norway", "aliases": ["挪威"], "lat": 61, "lng": 8.5,
+      "cities": [
+        { "id": "NO-oslo", "name": "Oslo", "aliases": ["奥斯陆"], "lat": 59.91, "lng": 10.75 },
+        { "id": "NO-bergen", "name": "Bergen", "aliases": ["卑尔根"], "lat": 60.39, "lng": 5.32 },
+        { "id": "NO-stavanger", "name": "Stavanger", "aliases": ["斯塔万格"], "lat": 58.97, "lng": 5.73 },
+        { "id": "NO-troms", "name": "Tromsø", "aliases": ["特罗姆瑟", "Tromso"], "lat": 69.65, "lng": 18.96 },
+        { "id": "NO-trondheim", "name": "Trondheim", "aliases": ["特隆赫姆"], "lat": 63.43, "lng": 10.4 }
+      ] },
+    { "id": "OM", "name": "Oman", "aliases": ["阿曼"], "lat": 21.5, "lng": 55.9,
+      "cities": [
+        { "id": "OM-muscat", "name": "Muscat", "aliases": ["马斯喀特"], "lat": 23.59, "lng": 58.41 },
+        { "id": "OM-salalah", "name": "Salalah", "aliases": ["塞拉莱"], "lat": 17.02, "lng": 54.09 }
+      ] },
+    { "id": "PK", "name": "Pakistan", "aliases": ["巴基斯坦"], "lat": 30.4, "lng": 69.3,
+      "cities": [
+        { "id": "PK-islamabad", "name": "Islamabad", "aliases": ["伊斯兰堡"], "lat": 33.69, "lng": 73.05 },
+        { "id": "PK-karachi", "name": "Karachi", "aliases": ["卡拉奇"], "lat": 24.86, "lng": 67 },
+        { "id": "PK-lahore", "name": "Lahore", "aliases": ["拉合尔"], "lat": 31.55, "lng": 74.34 },
+        { "id": "PK-peshawar", "name": "Peshawar", "aliases": ["白沙瓦"], "lat": 34.01, "lng": 71.58 }
+      ] },
+    { "id": "PW", "name": "Palau", "aliases": ["帕劳"], "lat": 7.5, "lng": 134.6,
+      "cities": [
+        { "id": "PW-ngerulmud", "name": "Ngerulmud", "aliases": ["恩吉鲁穆德"], "lat": 7.5, "lng": 134.62 },
+        { "id": "PW-koror", "name": "Koror", "aliases": ["科罗尔"], "lat": 7.34, "lng": 134.48 }
+      ] },
+    { "id": "PS", "name": "Palestine", "aliases": ["巴勒斯坦","State of Palestine"], "lat": 31.9, "lng": 35.2,
+      "cities": [
+        { "id": "PS-ramallah", "name": "Ramallah", "aliases": ["拉马拉"], "lat": 31.9, "lng": 35.2 },
+        { "id": "PS-bethlehem", "name": "Bethlehem", "aliases": ["伯利恒"], "lat": 31.7, "lng": 35.2 },
+        { "id": "PS-gaza", "name": "Gaza", "aliases": ["加沙", "Gaza City"], "lat": 31.5, "lng": 34.47 },
+        { "id": "PS-hebron", "name": "Hebron", "aliases": ["希伯伦"], "lat": 31.53, "lng": 35.1 }
+      ] },
+    { "id": "PA", "name": "Panama", "aliases": ["巴拿马"], "lat": 8.5, "lng": -80.8,
+      "cities": [
+        { "id": "PA-panama-city", "name": "Panama City", "aliases": ["巴拿马城"], "lat": 8.98, "lng": -79.52 }
+      ] },
+    { "id": "PG", "name": "Papua New Guinea", "aliases": ["巴布亚新几内亚"], "lat": -6.3, "lng": 143.9,
+      "cities": [
+        { "id": "PG-port-moresby", "name": "Port Moresby", "aliases": ["莫尔兹比港"], "lat": -9.44, "lng": 147.18 },
+        { "id": "PG-lae", "name": "Lae", "aliases": ["莱城"], "lat": -6.73, "lng": 147 }
+      ] },
+    { "id": "PY", "name": "Paraguay", "aliases": ["巴拉圭"], "lat": -23.4, "lng": -58.4,
+      "cities": [
+        { "id": "PY-asuncion", "name": "Asunción", "aliases": ["亚松森", "Asuncion"], "lat": -25.26, "lng": -57.58 }
+      ] },
+    { "id": "PE", "name": "Peru", "aliases": ["秘鲁"], "lat": -9.2, "lng": -75,
+      "cities": [
+        { "id": "PE-lima", "name": "Lima", "aliases": ["利马"], "lat": -12.05, "lng": -77.04 },
+        { "id": "PE-arequipa", "name": "Arequipa", "aliases": ["阿雷基帕"], "lat": -16.41, "lng": -71.54 },
+        { "id": "PE-cusco", "name": "Cusco", "aliases": ["库斯科", "Cuzco"], "lat": -13.53, "lng": -71.97 },
+        { "id": "PE-iquitos", "name": "Iquitos", "aliases": ["伊基托斯"], "lat": -3.75, "lng": -73.25 },
+        { "id": "PE-machu-picchu", "name": "Machu Picchu", "aliases": ["马丘比丘"], "lat": -13.16, "lng": -72.55 }
+      ] },
+    { "id": "PH", "name": "Philippines", "aliases": ["菲律宾"], "lat": 12.9, "lng": 121.8,
+      "cities": [
+        { "id": "PH-manila", "name": "Manila", "aliases": ["马尼拉"], "lat": 14.6, "lng": 120.98 },
+        { "id": "PH-cebu-city", "name": "Cebu City", "aliases": ["宿务", "Cebu"], "lat": 10.32, "lng": 123.89 },
+        { "id": "PH-davao", "name": "Davao", "aliases": ["达沃"], "lat": 7.07, "lng": 125.61 },
+        { "id": "PH-puerto-princesa", "name": "Puerto Princesa", "aliases": ["公主港"], "lat": 9.74, "lng": 118.74 }
+      ] },
+    { "id": "PL", "name": "Poland", "aliases": ["波兰"], "lat": 51.9, "lng": 19.1,
+      "cities": [
+        { "id": "PL-warsaw", "name": "Warsaw", "aliases": ["华沙", "Warszawa"], "lat": 52.23, "lng": 21.01 },
+        { "id": "PL-gdansk", "name": "Gdańsk", "aliases": ["格但斯克", "Gdansk"], "lat": 54.35, "lng": 18.65 },
+        { "id": "PL-krakow", "name": "Kraków", "aliases": ["克拉科夫", "Krakow"], "lat": 50.06, "lng": 19.94 },
+        { "id": "PL-wroc-aw", "name": "Wrocław", "aliases": ["弗罗茨瓦夫", "Wroclaw"], "lat": 51.11, "lng": 17.04 }
+      ] },
+    { "id": "PT", "name": "Portugal", "aliases": ["葡萄牙"], "lat": 39.4, "lng": -8.2,
+      "cities": [
+        { "id": "PT-lisbon", "name": "Lisbon", "aliases": ["里斯本", "Lisboa"], "lat": 38.72, "lng": -9.14 },
+        { "id": "PT-faro", "name": "Faro", "aliases": ["法鲁"], "lat": 37.02, "lng": -7.93 },
+        { "id": "PT-porto", "name": "Porto", "aliases": ["波尔图"], "lat": 41.15, "lng": -8.61 }
+      ] },
+    { "id": "PR", "name": "Puerto Rico", "aliases": ["波多黎各"], "lat": 18.22, "lng": -66.5,
+      "cities": [
+        { "id": "PR-san-juan", "name": "San Juan", "aliases": ["圣胡安"], "lat": 18.47, "lng": -66.11 }
+      ] },
+    { "id": "QA", "name": "Qatar", "aliases": ["卡塔尔"], "lat": 25.35, "lng": 51.18,
+      "cities": [
+        { "id": "QA-doha", "name": "Doha", "aliases": ["多哈"], "lat": 25.29, "lng": 51.53 }
+      ] },
+    { "id": "CG", "name": "Republic of the Congo", "aliases": ["刚果(布)","刚果共和国","刚果（布）","Congo","Congo-Brazzaville","Congo Republic"], "lat": -0.7, "lng": 15.2,
+      "cities": [
+        { "id": "CG-brazzaville", "name": "Brazzaville", "aliases": ["布拉柴维尔"], "lat": -4.27, "lng": 15.28 }
+      ] },
+    { "id": "RO", "name": "Romania", "aliases": ["罗马尼亚"], "lat": 45.9, "lng": 25,
+      "cities": [
+        { "id": "RO-bucharest", "name": "Bucharest", "aliases": ["布加勒斯特"], "lat": 44.43, "lng": 26.1 },
+        { "id": "RO-brasov", "name": "Brașov", "aliases": ["布拉索夫", "Brasov"], "lat": 45.65, "lng": 25.6 },
+        { "id": "RO-cluj-napoca", "name": "Cluj-Napoca", "aliases": ["克卢日-纳波卡", "Cluj"], "lat": 46.77, "lng": 23.6 }
+      ] },
+    { "id": "RU", "name": "Russia", "aliases": ["俄罗斯","Russian Federation"], "lat": 61.5, "lng": 105.3,
+      "cities": [
+        { "id": "RU-moscow", "name": "Moscow", "aliases": ["莫斯科"], "lat": 55.76, "lng": 37.62 },
+        { "id": "RU-irkutsk", "name": "Irkutsk", "aliases": ["伊尔库茨克"], "lat": 52.29, "lng": 104.3 },
+        { "id": "RU-kazan", "name": "Kazan", "aliases": ["喀山"], "lat": 55.8, "lng": 49.1 },
+        { "id": "RU-novosibirsk", "name": "Novosibirsk", "aliases": ["新西伯利亚"], "lat": 55.03, "lng": 82.92 },
+        { "id": "RU-saint-petersburg", "name": "Saint Petersburg", "aliases": ["圣彼得堡", "St. Petersburg", "St Petersburg"], "lat": 59.93, "lng": 30.34 },
+        { "id": "RU-sochi", "name": "Sochi", "aliases": ["索契"], "lat": 43.6, "lng": 39.73 },
+        { "id": "RU-vladivostok", "name": "Vladivostok", "aliases": ["符拉迪沃斯托克", "海参崴"], "lat": 43.12, "lng": 131.89 },
+        { "id": "RU-yekaterinburg", "name": "Yekaterinburg", "aliases": ["叶卡捷琳堡"], "lat": 56.84, "lng": 60.6 }
+      ] },
+    { "id": "RW", "name": "Rwanda", "aliases": ["卢旺达"], "lat": -1.94, "lng": 29.87,
+      "cities": [
+        { "id": "RW-kigali", "name": "Kigali", "aliases": ["基加利"], "lat": -1.95, "lng": 30.06 }
+      ] },
+    { "id": "KN", "name": "Saint Kitts and Nevis", "aliases": ["圣基茨和尼维斯","St Kitts and Nevis"], "lat": 17.3, "lng": -62.7,
+      "cities": [
+        { "id": "KN-basseterre", "name": "Basseterre", "aliases": ["巴斯特尔"], "lat": 17.3, "lng": -62.73 }
+      ] },
+    { "id": "LC", "name": "Saint Lucia", "aliases": ["圣卢西亚","St Lucia"], "lat": 13.9, "lng": -61,
+      "cities": [
+        { "id": "LC-castries", "name": "Castries", "aliases": ["卡斯特里"], "lat": 14.01, "lng": -60.99 }
+      ] },
+    { "id": "VC", "name": "Saint Vincent and the Grenadines", "aliases": ["圣文森特和格林纳丁斯","St Vincent"], "lat": 13.25, "lng": -61.2,
+      "cities": [
+        { "id": "VC-kingstown", "name": "Kingstown", "aliases": ["金斯敦"], "lat": 13.16, "lng": -61.22 }
+      ] },
+    { "id": "WS", "name": "Samoa", "aliases": ["萨摩亚"], "lat": -13.76, "lng": -172.1,
+      "cities": [
+        { "id": "WS-apia", "name": "Apia", "aliases": ["阿皮亚"], "lat": -13.83, "lng": -171.76 }
+      ] },
+    { "id": "SM", "name": "San Marino", "aliases": ["圣马力诺"], "lat": 43.94, "lng": 12.46,
+      "cities": [
+        { "id": "SM-city-of-san-marino", "name": "City of San Marino", "aliases": ["圣马力诺市", "San Marino"], "lat": 43.94, "lng": 12.45 }
+      ] },
+    { "id": "ST", "name": "São Tomé and Príncipe", "aliases": ["圣多美和普林西比","Sao Tome and Principe"], "lat": 0.19, "lng": 6.61,
+      "cities": [
+        { "id": "ST-sao-tome", "name": "São Tomé", "aliases": ["圣多美", "Sao Tome"], "lat": 0.34, "lng": 6.73 }
+      ] },
+    { "id": "SA", "name": "Saudi Arabia", "aliases": ["沙特阿拉伯","沙特","KSA"], "lat": 23.9, "lng": 45.1,
+      "cities": [
+        { "id": "SA-riyadh", "name": "Riyadh", "aliases": ["利雅得"], "lat": 24.71, "lng": 46.68 },
+        { "id": "SA-dammam", "name": "Dammam", "aliases": ["达曼"], "lat": 26.43, "lng": 50.1 },
+        { "id": "SA-jeddah", "name": "Jeddah", "aliases": ["吉达", "Jiddah"], "lat": 21.54, "lng": 39.17 },
+        { "id": "SA-mecca", "name": "Mecca", "aliases": ["麦加", "Makkah"], "lat": 21.39, "lng": 39.86 },
+        { "id": "SA-medina", "name": "Medina", "aliases": ["麦地那", "Madinah"], "lat": 24.47, "lng": 39.61 }
+      ] },
+    { "id": "SN", "name": "Senegal", "aliases": ["塞内加尔"], "lat": 14.5, "lng": -14.45,
+      "cities": [
+        { "id": "SN-dakar", "name": "Dakar", "aliases": ["达喀尔"], "lat": 14.72, "lng": -17.47 }
+      ] },
+    { "id": "RS", "name": "Serbia", "aliases": ["塞尔维亚"], "lat": 44, "lng": 21,
+      "cities": [
+        { "id": "RS-belgrade", "name": "Belgrade", "aliases": ["贝尔格莱德", "Beograd"], "lat": 44.79, "lng": 20.45 },
+        { "id": "RS-novi-sad", "name": "Novi Sad", "aliases": ["诺维萨德"], "lat": 45.25, "lng": 19.84 }
+      ] },
+    { "id": "SC", "name": "Seychelles", "aliases": ["塞舌尔"], "lat": -4.68, "lng": 55.49,
+      "cities": [
+        { "id": "SC-victoria", "name": "Victoria", "aliases": ["维多利亚"], "lat": -4.62, "lng": 55.45 }
+      ] },
+    { "id": "SL", "name": "Sierra Leone", "aliases": ["塞拉利昂"], "lat": 8.46, "lng": -11.78,
+      "cities": [
+        { "id": "SL-freetown", "name": "Freetown", "aliases": ["弗里敦"], "lat": 8.48, "lng": -13.23 }
+      ] },
+    { "id": "SG", "name": "Singapore", "aliases": ["新加坡"], "lat": 1.35, "lng": 103.82,
+      "cities": [
+        { "id": "SG-singapore", "name": "Singapore", "aliases": ["新加坡"], "lat": 1.35, "lng": 103.82 }
+      ] },
+    { "id": "SK", "name": "Slovakia", "aliases": ["斯洛伐克"], "lat": 48.7, "lng": 19.7,
+      "cities": [
+        { "id": "SK-bratislava", "name": "Bratislava", "aliases": ["布拉迪斯拉发"], "lat": 48.15, "lng": 17.11 },
+        { "id": "SK-kosice", "name": "Košice", "aliases": ["科希策", "Kosice"], "lat": 48.72, "lng": 21.26 }
+      ] },
+    { "id": "SI", "name": "Slovenia", "aliases": ["斯洛文尼亚"], "lat": 46.15, "lng": 14.99,
+      "cities": [
+        { "id": "SI-ljubljana", "name": "Ljubljana", "aliases": ["卢布尔雅那"], "lat": 46.06, "lng": 14.51 },
+        { "id": "SI-bled", "name": "Bled", "aliases": ["布莱德"], "lat": 46.37, "lng": 14.11 }
+      ] },
+    { "id": "SB", "name": "Solomon Islands", "aliases": ["所罗门群岛"], "lat": -9.6, "lng": 160.2,
+      "cities": [
+        { "id": "SB-honiara", "name": "Honiara", "aliases": ["霍尼亚拉"], "lat": -9.43, "lng": 159.95 }
+      ] },
+    { "id": "SO", "name": "Somalia", "aliases": ["索马里"], "lat": 5.15, "lng": 46.2,
+      "cities": [
+        { "id": "SO-mogadishu", "name": "Mogadishu", "aliases": ["摩加迪沙"], "lat": 2.05, "lng": 45.32 },
+        { "id": "SO-hargeisa", "name": "Hargeisa", "aliases": ["哈尔格萨"], "lat": 9.56, "lng": 44.06 }
+      ] },
+    { "id": "ZA", "name": "South Africa", "aliases": ["南非"], "lat": -30.6, "lng": 22.9,
+      "cities": [
+        { "id": "ZA-pretoria", "name": "Pretoria", "aliases": ["比勒陀利亚", "Tshwane"], "lat": -25.75, "lng": 28.19 },
+        { "id": "ZA-bloemfontein", "name": "Bloemfontein", "aliases": ["布隆方丹"], "lat": -29.12, "lng": 26.21 },
+        { "id": "ZA-cape-town", "name": "Cape Town", "aliases": ["开普敦"], "lat": -33.92, "lng": 18.42 },
+        { "id": "ZA-durban", "name": "Durban", "aliases": ["德班"], "lat": -29.86, "lng": 31.02 },
+        { "id": "ZA-johannesburg", "name": "Johannesburg", "aliases": ["约翰内斯堡", "Joburg"], "lat": -26.2, "lng": 28.05 }
+      ] },
+    { "id": "KR", "name": "South Korea", "aliases": ["韩国","大韩民国","Korea","Republic of Korea"], "lat": 36.5, "lng": 127.8,
+      "cities": [
+        { "id": "KR-seoul", "name": "Seoul", "aliases": ["首尔"], "lat": 37.57, "lng": 126.98 },
+        { "id": "KR-busan", "name": "Busan", "aliases": ["釜山", "Pusan"], "lat": 35.18, "lng": 129.08 },
+        { "id": "KR-daegu", "name": "Daegu", "aliases": ["大邱"], "lat": 35.87, "lng": 128.6 },
+        { "id": "KR-incheon", "name": "Incheon", "aliases": ["仁川"], "lat": 37.46, "lng": 126.71 },
+        { "id": "KR-jeju", "name": "Jeju", "aliases": ["济州", "Jeju City"], "lat": 33.5, "lng": 126.53 }
+      ] },
+    { "id": "SS", "name": "South Sudan", "aliases": ["南苏丹"], "lat": 7.3, "lng": 30.2,
+      "cities": [
+        { "id": "SS-juba", "name": "Juba", "aliases": ["朱巴"], "lat": 4.85, "lng": 31.58 }
+      ] },
+    { "id": "ES", "name": "Spain", "aliases": ["西班牙"], "lat": 40.2, "lng": -3.7,
+      "cities": [
+        { "id": "ES-madrid", "name": "Madrid", "aliases": ["马德里"], "lat": 40.42, "lng": -3.7 },
+        { "id": "ES-barcelona", "name": "Barcelona", "aliases": ["巴塞罗那"], "lat": 41.39, "lng": 2.17 },
+        { "id": "ES-bilbao", "name": "Bilbao", "aliases": ["毕尔巴鄂"], "lat": 43.26, "lng": -2.93 },
+        { "id": "ES-las-palmas", "name": "Las Palmas", "aliases": ["拉斯帕尔马斯", "Gran Canaria"], "lat": 28.12, "lng": -15.43 },
+        { "id": "ES-malaga", "name": "Málaga", "aliases": ["马拉加", "Malaga"], "lat": 36.72, "lng": -4.42 },
+        { "id": "ES-palma", "name": "Palma", "aliases": ["帕尔马", "Palma de Mallorca"], "lat": 39.57, "lng": 2.65 },
+        { "id": "ES-seville", "name": "Seville", "aliases": ["塞维利亚", "Sevilla"], "lat": 37.39, "lng": -5.98 },
+        { "id": "ES-valencia", "name": "Valencia", "aliases": ["瓦伦西亚"], "lat": 39.47, "lng": -0.38 }
+      ] },
+    { "id": "LK", "name": "Sri Lanka", "aliases": ["斯里兰卡"], "lat": 7.9, "lng": 80.7,
+      "cities": [
+        { "id": "LK-sri-jayawardenepura-kotte", "name": "Sri Jayawardenepura Kotte", "aliases": ["斯里贾亚瓦德纳普拉科特", "Kotte"], "lat": 6.89, "lng": 79.92 },
+        { "id": "LK-colombo", "name": "Colombo", "aliases": ["科伦坡"], "lat": 6.93, "lng": 79.86 },
+        { "id": "LK-galle", "name": "Galle", "aliases": ["加勒"], "lat": 6.03, "lng": 80.22 },
+        { "id": "LK-kandy", "name": "Kandy", "aliases": ["康提"], "lat": 7.29, "lng": 80.63 }
+      ] },
+    { "id": "SD", "name": "Sudan", "aliases": ["苏丹"], "lat": 15.6, "lng": 30.2,
+      "cities": [
+        { "id": "SD-khartoum", "name": "Khartoum", "aliases": ["喀土穆"], "lat": 15.5, "lng": 32.56 },
+        { "id": "SD-omdurman", "name": "Omdurman", "aliases": ["恩图曼"], "lat": 15.64, "lng": 32.48 }
+      ] },
+    { "id": "SR", "name": "Suriname", "aliases": ["苏里南"], "lat": 4, "lng": -56,
+      "cities": [
+        { "id": "SR-paramaribo", "name": "Paramaribo", "aliases": ["帕拉马里博"], "lat": 5.85, "lng": -55.2 }
+      ] },
+    { "id": "SE", "name": "Sweden", "aliases": ["瑞典"], "lat": 62, "lng": 15,
+      "cities": [
+        { "id": "SE-stockholm", "name": "Stockholm", "aliases": ["斯德哥尔摩"], "lat": 59.33, "lng": 18.07 },
+        { "id": "SE-gothenburg", "name": "Gothenburg", "aliases": ["哥德堡", "Göteborg"], "lat": 57.71, "lng": 11.97 },
+        { "id": "SE-kiruna", "name": "Kiruna", "aliases": ["基律纳"], "lat": 67.86, "lng": 20.23 },
+        { "id": "SE-malmo", "name": "Malmö", "aliases": ["马尔默", "Malmo"], "lat": 55.6, "lng": 13 },
+        { "id": "SE-uppsala", "name": "Uppsala", "aliases": ["乌普萨拉"], "lat": 59.86, "lng": 17.64 }
+      ] },
+    { "id": "CH", "name": "Switzerland", "aliases": ["瑞士"], "lat": 46.8, "lng": 8.2,
+      "cities": [
+        { "id": "CH-bern", "name": "Bern", "aliases": ["伯尔尼", "Berne"], "lat": 46.95, "lng": 7.45 },
+        { "id": "CH-basel", "name": "Basel", "aliases": ["巴塞尔"], "lat": 47.56, "lng": 7.59 },
+        { "id": "CH-geneva", "name": "Geneva", "aliases": ["日内瓦", "Genève"], "lat": 46.2, "lng": 6.14 },
+        { "id": "CH-lausanne", "name": "Lausanne", "aliases": ["洛桑"], "lat": 46.52, "lng": 6.63 },
+        { "id": "CH-lucerne", "name": "Lucerne", "aliases": ["卢塞恩", "Luzern"], "lat": 47.05, "lng": 8.31 },
+        { "id": "CH-zurich", "name": "Zurich", "aliases": ["苏黎世", "Zürich"], "lat": 47.38, "lng": 8.54 }
+      ] },
+    { "id": "SY", "name": "Syria", "aliases": ["叙利亚"], "lat": 34.8, "lng": 39,
+      "cities": [
+        { "id": "SY-damascus", "name": "Damascus", "aliases": ["大马士革"], "lat": 33.51, "lng": 36.28 },
+        { "id": "SY-aleppo", "name": "Aleppo", "aliases": ["阿勒颇"], "lat": 36.2, "lng": 37.16 }
+      ] },
+    { "id": "TW", "name": "Taiwan", "aliases": ["台湾","中国台湾","Chinese Taipei","Republic of China"], "lat": 23.7, "lng": 121,
+      "cities": [
+        { "id": "TW-taipei", "name": "Taipei", "aliases": ["台北"], "lat": 25.03, "lng": 121.57 },
+        { "id": "TW-hualien", "name": "Hualien", "aliases": ["花莲"], "lat": 23.98, "lng": 121.6 },
+        { "id": "TW-kaohsiung", "name": "Kaohsiung", "aliases": ["高雄"], "lat": 22.63, "lng": 120.3 },
+        { "id": "TW-taichung", "name": "Taichung", "aliases": ["台中"], "lat": 24.15, "lng": 120.67 },
+        { "id": "TW-tainan", "name": "Tainan", "aliases": ["台南"], "lat": 23, "lng": 120.2 }
+      ] },
+    { "id": "TJ", "name": "Tajikistan", "aliases": ["塔吉克斯坦"], "lat": 38.9, "lng": 71.3,
+      "cities": [
+        { "id": "TJ-dushanbe", "name": "Dushanbe", "aliases": ["杜尚别"], "lat": 38.56, "lng": 68.79 }
+      ] },
+    { "id": "TZ", "name": "Tanzania", "aliases": ["坦桑尼亚"], "lat": -6.4, "lng": 34.9,
+      "cities": [
+        { "id": "TZ-dodoma", "name": "Dodoma", "aliases": ["多多马"], "lat": -6.16, "lng": 35.75 },
+        { "id": "TZ-arusha", "name": "Arusha", "aliases": ["阿鲁沙"], "lat": -3.39, "lng": 36.68 },
+        { "id": "TZ-dar-es-salaam", "name": "Dar es Salaam", "aliases": ["达累斯萨拉姆"], "lat": -6.79, "lng": 39.21 },
+        { "id": "TZ-zanzibar-city", "name": "Zanzibar City", "aliases": ["桑给巴尔", "Zanzibar"], "lat": -6.16, "lng": 39.2 }
+      ] },
+    { "id": "TH", "name": "Thailand", "aliases": ["泰国"], "lat": 15.9, "lng": 100.99,
+      "cities": [
+        { "id": "TH-bangkok", "name": "Bangkok", "aliases": ["曼谷"], "lat": 13.76, "lng": 100.5 },
+        { "id": "TH-chiang-mai", "name": "Chiang Mai", "aliases": ["清迈"], "lat": 18.79, "lng": 98.98 },
+        { "id": "TH-krabi", "name": "Krabi", "aliases": ["甲米"], "lat": 8.09, "lng": 98.91 },
+        { "id": "TH-pattaya", "name": "Pattaya", "aliases": ["芭堤雅"], "lat": 12.93, "lng": 100.88 },
+        { "id": "TH-phuket", "name": "Phuket", "aliases": ["普吉", "Phuket City"], "lat": 7.88, "lng": 98.39 }
+      ] },
+    { "id": "TL", "name": "Timor-Leste", "aliases": ["东帝汶","East Timor"], "lat": -8.8, "lng": 125.9,
+      "cities": [
+        { "id": "TL-dili", "name": "Dili", "aliases": ["帝力"], "lat": -8.56, "lng": 125.57 }
+      ] },
+    { "id": "TG", "name": "Togo", "aliases": ["多哥"], "lat": 8.6, "lng": 0.8,
+      "cities": [
+        { "id": "TG-lome", "name": "Lomé", "aliases": ["洛美", "Lome"], "lat": 6.13, "lng": 1.22 }
+      ] },
+    { "id": "TO", "name": "Tonga", "aliases": ["汤加"], "lat": -21.18, "lng": -175.2,
+      "cities": [
+        { "id": "TO-nukualofa", "name": "Nuku'alofa", "aliases": ["努库阿洛法"], "lat": -21.14, "lng": -175.2 }
+      ] },
+    { "id": "TT", "name": "Trinidad and Tobago", "aliases": ["特立尼达和多巴哥"], "lat": 10.7, "lng": -61.2,
+      "cities": [
+        { "id": "TT-port-of-spain", "name": "Port of Spain", "aliases": ["西班牙港"], "lat": 10.66, "lng": -61.51 }
+      ] },
+    { "id": "TN", "name": "Tunisia", "aliases": ["突尼斯"], "lat": 33.9, "lng": 9.5,
+      "cities": [
+        { "id": "TN-tunis", "name": "Tunis", "aliases": ["突尼斯市"], "lat": 36.81, "lng": 10.18 },
+        { "id": "TN-djerba", "name": "Djerba", "aliases": ["杰尔巴"], "lat": 33.8, "lng": 10.85 },
+        { "id": "TN-sfax", "name": "Sfax", "aliases": ["斯法克斯"], "lat": 34.74, "lng": 10.76 }
+      ] },
+    { "id": "TR", "name": "Türkiye", "aliases": ["土耳其","Turkey","Turkiye"], "lat": 39, "lng": 35.2,
+      "cities": [
+        { "id": "TR-ankara", "name": "Ankara", "aliases": ["安卡拉"], "lat": 39.93, "lng": 32.86 },
+        { "id": "TR-antalya", "name": "Antalya", "aliases": ["安塔利亚"], "lat": 36.9, "lng": 30.7 },
+        { "id": "TR-bodrum", "name": "Bodrum", "aliases": ["博德鲁姆"], "lat": 37.04, "lng": 27.43 },
+        { "id": "TR-goreme", "name": "Göreme", "aliases": ["格雷梅", "Cappadocia", "卡帕多奇亚", "Goreme"], "lat": 38.64, "lng": 34.83 },
+        { "id": "TR-istanbul", "name": "Istanbul", "aliases": ["伊斯坦布尔", "Constantinople"], "lat": 41.01, "lng": 28.98 },
+        { "id": "TR-izmir", "name": "Izmir", "aliases": ["伊兹密尔", "İzmir"], "lat": 38.42, "lng": 27.14 }
+      ] },
+    { "id": "TM", "name": "Turkmenistan", "aliases": ["土库曼斯坦"], "lat": 39, "lng": 59.6,
+      "cities": [
+        { "id": "TM-ashgabat", "name": "Ashgabat", "aliases": ["阿什哈巴德"], "lat": 37.96, "lng": 58.33 }
+      ] },
+    { "id": "TV", "name": "Tuvalu", "aliases": ["图瓦卢"], "lat": -7.48, "lng": 178.68,
+      "cities": [
+        { "id": "TV-funafuti", "name": "Funafuti", "aliases": ["富纳富提"], "lat": -8.52, "lng": 179.2 }
+      ] },
+    { "id": "UG", "name": "Uganda", "aliases": ["乌干达"], "lat": 1.4, "lng": 32.3,
+      "cities": [
+        { "id": "UG-kampala", "name": "Kampala", "aliases": ["坎帕拉"], "lat": 0.35, "lng": 32.58 },
+        { "id": "UG-entebbe", "name": "Entebbe", "aliases": ["恩德培"], "lat": 0.05, "lng": 32.46 }
+      ] },
+    { "id": "UA", "name": "Ukraine", "aliases": ["乌克兰"], "lat": 49, "lng": 31.4,
+      "cities": [
+        { "id": "UA-kyiv", "name": "Kyiv", "aliases": ["基辅", "Kiev"], "lat": 50.45, "lng": 30.52 },
+        { "id": "UA-kharkiv", "name": "Kharkiv", "aliases": ["哈尔科夫", "Kharkov"], "lat": 49.99, "lng": 36.23 },
+        { "id": "UA-lviv", "name": "Lviv", "aliases": ["利沃夫", "Lvov"], "lat": 49.84, "lng": 24.03 },
+        { "id": "UA-odesa", "name": "Odesa", "aliases": ["敖德萨", "Odessa"], "lat": 46.48, "lng": 30.72 }
+      ] },
+    { "id": "AE", "name": "United Arab Emirates", "aliases": ["阿联酋","阿拉伯联合酋长国","UAE"], "lat": 23.4, "lng": 53.8,
+      "cities": [
+        { "id": "AE-abu-dhabi", "name": "Abu Dhabi", "aliases": ["阿布扎比"], "lat": 24.45, "lng": 54.38 },
+        { "id": "AE-dubai", "name": "Dubai", "aliases": ["迪拜"], "lat": 25.2, "lng": 55.27 },
+        { "id": "AE-sharjah", "name": "Sharjah", "aliases": ["沙迦"], "lat": 25.35, "lng": 55.4 }
+      ] },
+    { "id": "GB", "name": "United Kingdom", "aliases": ["英国","UK","Britain","Great Britain","England","大不列颠"], "lat": 54, "lng": -2.5,
+      "cities": [
+        { "id": "GB-london", "name": "London", "aliases": ["伦敦"], "lat": 51.51, "lng": -0.13 },
+        { "id": "GB-belfast", "name": "Belfast", "aliases": ["贝尔法斯特"], "lat": 54.6, "lng": -5.93 },
+        { "id": "GB-birmingham", "name": "Birmingham", "aliases": ["伯明翰"], "lat": 52.49, "lng": -1.89 },
+        { "id": "GB-cambridge", "name": "Cambridge", "aliases": ["剑桥"], "lat": 52.2, "lng": 0.12 },
+        { "id": "GB-cardiff", "name": "Cardiff", "aliases": ["加的夫"], "lat": 51.48, "lng": -3.18 },
+        { "id": "GB-edinburgh", "name": "Edinburgh", "aliases": ["爱丁堡"], "lat": 55.95, "lng": -3.19 },
+        { "id": "GB-glasgow", "name": "Glasgow", "aliases": ["格拉斯哥"], "lat": 55.86, "lng": -4.25 },
+        { "id": "GB-liverpool", "name": "Liverpool", "aliases": ["利物浦"], "lat": 53.41, "lng": -2.98 },
+        { "id": "GB-manchester", "name": "Manchester", "aliases": ["曼彻斯特"], "lat": 53.48, "lng": -2.24 },
+        { "id": "GB-oxford", "name": "Oxford", "aliases": ["牛津"], "lat": 51.75, "lng": -1.26 }
+      ] },
+    { "id": "US", "name": "United States", "aliases": ["美国","USA","America","US","United States of America","美利坚"], "lat": 39.8, "lng": -98.6,
+      "cities": [
+        { "id": "US-washington-dc", "name": "Washington, D.C.", "aliases": ["华盛顿", "Washington", "Washington DC", "DC"], "lat": 38.9, "lng": -77.04 },
+        { "id": "US-anchorage", "name": "Anchorage", "aliases": ["安克雷奇"], "lat": 61.22, "lng": -149.9 },
+        { "id": "US-boston", "name": "Boston", "aliases": ["波士顿"], "lat": 42.36, "lng": -71.06 },
+        { "id": "US-chicago", "name": "Chicago", "aliases": ["芝加哥"], "lat": 41.88, "lng": -87.63 },
+        { "id": "US-honolulu", "name": "Honolulu", "aliases": ["檀香山", "火奴鲁鲁"], "lat": 21.31, "lng": -157.86 },
+        { "id": "US-houston", "name": "Houston", "aliases": ["休斯顿"], "lat": 29.76, "lng": -95.37 },
+        { "id": "US-las-vegas", "name": "Las Vegas", "aliases": ["拉斯维加斯"], "lat": 36.17, "lng": -115.14 },
+        { "id": "US-los-angeles", "name": "Los Angeles", "aliases": ["洛杉矶", "LA"], "lat": 34.05, "lng": -118.24 },
+        { "id": "US-miami", "name": "Miami", "aliases": ["迈阿密"], "lat": 25.76, "lng": -80.19 },
+        { "id": "US-new-york", "name": "New York", "aliases": ["纽约", "NYC", "New York City"], "lat": 40.71, "lng": -74.01 },
+        { "id": "US-san-francisco", "name": "San Francisco", "aliases": ["旧金山", "三藩市", "SF"], "lat": 37.77, "lng": -122.42 },
+        { "id": "US-seattle", "name": "Seattle", "aliases": ["西雅图"], "lat": 47.61, "lng": -122.33 }
+      ] },
+    { "id": "UY", "name": "Uruguay", "aliases": ["乌拉圭"], "lat": -32.8, "lng": -56,
+      "cities": [
+        { "id": "UY-montevideo", "name": "Montevideo", "aliases": ["蒙得维的亚"], "lat": -34.9, "lng": -56.16 },
+        { "id": "UY-punta-del-este", "name": "Punta del Este", "aliases": ["埃斯特角城"], "lat": -34.96, "lng": -54.95 }
+      ] },
+    { "id": "UZ", "name": "Uzbekistan", "aliases": ["乌兹别克斯坦"], "lat": 41.4, "lng": 64.6,
+      "cities": [
+        { "id": "UZ-tashkent", "name": "Tashkent", "aliases": ["塔什干"], "lat": 41.3, "lng": 69.24 },
+        { "id": "UZ-bukhara", "name": "Bukhara", "aliases": ["布哈拉"], "lat": 39.77, "lng": 64.42 },
+        { "id": "UZ-samarkand", "name": "Samarkand", "aliases": ["撒马尔罕"], "lat": 39.65, "lng": 66.96 }
+      ] },
+    { "id": "VU", "name": "Vanuatu", "aliases": ["瓦努阿图"], "lat": -15.4, "lng": 166.96,
+      "cities": [
+        { "id": "VU-port-vila", "name": "Port Vila", "aliases": ["维拉港"], "lat": -17.73, "lng": 168.32 }
+      ] },
+    { "id": "VA", "name": "Vatican City", "aliases": ["梵蒂冈"], "lat": 41.9, "lng": 12.45,
+      "cities": [
+        { "id": "VA-vatican-city", "name": "Vatican City", "aliases": ["梵蒂冈城"], "lat": 41.9, "lng": 12.45 }
+      ] },
+    { "id": "VE", "name": "Venezuela", "aliases": ["委内瑞拉"], "lat": 7.1, "lng": -66.2,
+      "cities": [
+        { "id": "VE-caracas", "name": "Caracas", "aliases": ["加拉加斯"], "lat": 10.48, "lng": -66.9 },
+        { "id": "VE-maracaibo", "name": "Maracaibo", "aliases": ["马拉开波"], "lat": 10.64, "lng": -71.64 }
+      ] },
+    { "id": "VN", "name": "Vietnam", "aliases": ["越南","Viet Nam"], "lat": 16.3, "lng": 107.8,
+      "cities": [
+        { "id": "VN-hanoi", "name": "Hanoi", "aliases": ["河内"], "lat": 21.03, "lng": 105.85 },
+        { "id": "VN-da-nang", "name": "Da Nang", "aliases": ["岘港"], "lat": 16.05, "lng": 108.2 },
+        { "id": "VN-ha-long", "name": "Ha Long", "aliases": ["下龙", "Hạ Long", "Halong Bay"], "lat": 20.95, "lng": 107.08 },
+        { "id": "VN-ho-chi-minh-city", "name": "Ho Chi Minh City", "aliases": ["胡志明市", "Saigon"], "lat": 10.82, "lng": 106.63 },
+        { "id": "VN-hoi-an", "name": "Hoi An", "aliases": ["会安"], "lat": 15.88, "lng": 108.34 },
+        { "id": "VN-hue", "name": "Hue", "aliases": ["顺化", "Huế"], "lat": 16.46, "lng": 107.59 }
+      ] },
+    { "id": "YE", "name": "Yemen", "aliases": ["也门"], "lat": 15.6, "lng": 47.6,
+      "cities": [
+        { "id": "YE-sanaa", "name": "Sana'a", "aliases": ["萨那", "Sanaa"], "lat": 15.37, "lng": 44.19 },
+        { "id": "YE-aden", "name": "Aden", "aliases": ["亚丁"], "lat": 12.78, "lng": 45.04 }
+      ] },
+    { "id": "ZM", "name": "Zambia", "aliases": ["赞比亚"], "lat": -13.5, "lng": 27.8,
+      "cities": [
+        { "id": "ZM-lusaka", "name": "Lusaka", "aliases": ["卢萨卡"], "lat": -15.39, "lng": 28.32 },
+        { "id": "ZM-livingstone", "name": "Livingstone", "aliases": ["利文斯顿"], "lat": -17.84, "lng": 25.85 }
+      ] },
+    { "id": "ZW", "name": "Zimbabwe", "aliases": ["津巴布韦"], "lat": -19, "lng": 29.8,
+      "cities": [
+        { "id": "ZW-harare", "name": "Harare", "aliases": ["哈拉雷"], "lat": -17.83, "lng": 31.05 },
+        { "id": "ZW-bulawayo", "name": "Bulawayo", "aliases": ["布拉瓦约"], "lat": -20.15, "lng": 28.58 },
+        { "id": "ZW-victoria-falls", "name": "Victoria Falls", "aliases": ["维多利亚瀑布"], "lat": -17.93, "lng": 25.84 }
+      ] }
+  ]
+}

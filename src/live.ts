@@ -1,81 +1,70 @@
 import type { ServerResponse } from "node:http";
-import type { Reply, Trace } from "./db.ts";
-import { renderReply, renderTrace } from "./templates.ts";
+import { eventsSince, newestEventId, type SkyEvent } from "./db.ts";
+import { handleFor, log } from "./log.ts";
+import { publicPlane } from "./planes.ts";
 
-// Every open page holds one server-sent-events stream. One process on one Fly
-// machine (`--ha=false`), so an in-memory set is the whole fan-out: there's no
-// second machine whose visitors would miss a broadcast.
+// Every open page holds one server-sent-events stream of changes to the sky.
+// One process on one Fly machine (`--ha=false`), so an in-memory set is the
+// whole fan-out: there's no second machine whose visitors would miss one.
 interface Listener {
   res: ServerResponse;
   visitorId: string;
-  cursor: Cursor;
-}
-
-// The newest trace and reply a stream has delivered, sent as each event's id
-// ("<trace>.<reply>") so a reconnect can say exactly where it left off.
-export interface Cursor {
-  trace: number;
-  reply: number;
-}
-
-export function parseCursor(raw: string): Cursor | undefined {
-  const m = raw.match(/^(\d+)\.(\d+)$/);
-  return m ? { trace: Number(m[1]), reply: Number(m[2]) } : undefined;
+  cursor: number;
 }
 
 const listeners = new Set<Listener>();
+const KEEPALIVE_MS = 20_000;
+// A page that missed more than this refetches the sky instead of replaying.
+const REPLAY_LIMIT = 500;
 
-// SSE comments keep Fly's proxy (and any idle-timeout in between) from
-// dropping a quiet stream.
-const KEEPALIVE_MS = 25_000;
+export function parseCursor(raw: string): number | undefined {
+  return /^\d+$/.test(raw) ? Number(raw) : undefined;
+}
 
-export function openStream(
-  res: ServerResponse,
-  visitorId: string,
-  cursor: Cursor,
-  missed: { traces: Trace[]; replies: Reply[] },
-): void {
+export function openStream(res: ServerResponse, visitorId: string, since: number | undefined, req: string): void {
   res.writeHead(200, {
     "content-type": "text/event-stream; charset=utf-8",
     "cache-control": "no-cache, no-transform",
     connection: "keep-alive",
     "x-accel-buffering": "no",
   });
-  // ask a dropped stream to come back quickly; the browser does the rest
   res.write("retry: 1000\n\n");
-  const listener = { res, visitorId, cursor: { ...cursor } };
-  // traces before replies, so an answer to a missed trace has somewhere to go
-  for (const t of missed.traces) sendTrace(listener, t);
-  for (const r of missed.replies) sendReply(listener, r);
+  const listener: Listener = { res, visitorId, cursor: since ?? newestEventId() };
+  if (since !== undefined) {
+    const missed = eventsSince(since, REPLAY_LIMIT + 1);
+    if (missed.length > REPLAY_LIMIT) {
+      listener.cursor = newestEventId();
+      write(listener, "reset", {});
+    } else {
+      for (const e of missed) send(listener, e, true);
+    }
+  }
   listeners.add(listener);
+  const actor = handleFor(visitorId);
+  log({ req, action: "stream_open", outcome: "ok", actor, since: since ?? null });
   const keepalive = setInterval(() => res.write(": still here\n\n"), KEEPALIVE_MS);
   res.on("close", () => {
     clearInterval(keepalive);
     listeners.delete(listener);
+    log({ req, action: "stream_close", outcome: "ok", actor });
   });
 }
 
 function write(listener: Listener, event: string, payload: object): void {
-  const { trace, reply } = listener.cursor;
-  listener.res.write(`event: ${event}\nid: ${trace}.${reply}\ndata: ${JSON.stringify(payload)}\n\n`);
+  listener.res.write(`event: ${event}\nid: ${listener.cursor}\ndata: ${JSON.stringify(payload)}\n\n`);
 }
 
-// Each listener gets HTML rendered for its own visitor, so "yours" is marked
-// the same way live as it is on a fresh load.
-function sendTrace(listener: Listener, t: Trace): void {
-  listener.cursor.trace = Math.max(listener.cursor.trace, t.id);
-  write(listener, "trace", { id: t.id, kind: t.kind, html: renderTrace(t, listener.visitorId, []) });
+// Each event carries the plane as it is now, rendered for this listener (so
+// `mine` is right), which makes a replayed event safe to apply twice.
+function send(listener: Listener, e: SkyEvent, replay: boolean): void {
+  listener.cursor = Math.max(listener.cursor, e.id);
+  const plane = publicPlane(e.planeId, listener.visitorId);
+  if (!plane) return;
+  write(listener, "sky", { kind: e.kind, replay, plane });
 }
 
-function sendReply(listener: Listener, r: Reply): void {
-  listener.cursor.reply = Math.max(listener.cursor.reply, r.id);
-  write(listener, "reply", { id: r.id, traceId: r.traceId, html: renderReply(r, listener.visitorId) });
-}
-
-export function broadcastTrace(t: Trace): void {
-  for (const listener of listeners) sendTrace(listener, t);
-}
-
-export function broadcastReply(r: Reply): void {
-  for (const listener of listeners) sendReply(listener, r);
+export function broadcast(): void {
+  for (const listener of listeners) {
+    for (const e of eventsSince(listener.cursor, REPLAY_LIMIT)) send(listener, e, false);
+  }
 }

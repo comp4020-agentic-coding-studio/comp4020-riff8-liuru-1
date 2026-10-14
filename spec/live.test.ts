@@ -1,89 +1,81 @@
-import { expect, inject, it } from "vitest";
-import { listen, post, randomText } from "./sse.ts";
+import { expect, it } from "vitest";
+import { api, catchPlane, listen, newKey, throwPlane, visitor } from "./sse.ts";
 
-// The crit-9 promise: what one visitor leaves reaches every other open page
-// in about a second, over /events, without a reload. Each "visitor" here is
-// its own cookie, so these are separate sessions, not tabs sharing one.
-const baseUrl = inject("baseUrl");
+// Every open page hears about every change to the sky within a second, over
+// /events, and a reconnecting page is sent exactly what it missed.
 
-it("a trace one visitor leaves reaches three other open sessions within a second", async () => {
-  const watchers = await Promise.all(["w1", "w2", "w3"].map((v) => listen(`spec-${v}`)));
-  const text = randomText();
-  await post("spec-poster", { kind: "lightning", text });
+it("a thrown plane reaches three other open sessions within a second, the same everywhere", async () => {
+  const watchers = await Promise.all(["w1", "w2", "w3"].map((w) => listen(visitor(w))));
+  const a = visitor("thrower");
   try {
+    const { data } = await throwPlane(a, { colour: "orange", body: "same\neverywhere 🌏" });
     for (const w of watchers) {
-      const e = await w.waitFor((e) => e.event === "trace" && e.data.includes(text));
-      const { kind, html } = JSON.parse(e.data);
-      expect(kind).toBe("lightning");
-      // someone else's trace, so it isn't marked as theirs
-      expect(html).not.toContain("yours");
+      const e = await w.waitFor((e) => e.event === "sky" && JSON.parse(e.data).plane.id === data.plane.id);
+      const { kind, plane } = JSON.parse(e.data);
+      expect(kind).toBe("created");
+      expect(plane).toMatchObject({ colour: "orange", body: "same\neverywhere 🌏", author: data.plane.author, mine: false });
+      expect(plane.stamps[0].label).toBe(data.plane.stamps[0].label);
     }
   } finally {
     await Promise.all(watchers.map((w) => w.close()));
   }
 });
 
-it("marks a trace as yours on your own stream, and only there", async () => {
-  const mine = await listen("spec-self");
-  const theirs = await listen("spec-other");
-  const text = randomText();
-  await post("spec-self", { kind: "dew", text });
+it("marks a plane as yours on your own stream only", async () => {
+  const me = visitor("self");
+  const mine = await listen(me);
+  const theirs = await listen(visitor("other"));
   try {
-    const own = await mine.waitFor((e) => e.data.includes(text));
-    const other = await theirs.waitFor((e) => e.data.includes(text));
-    expect(JSON.parse(own.data).html).toContain("yours: ");
-    expect(JSON.parse(other.data).html).not.toContain("yours: ");
+    const { data } = await throwPlane(me);
+    const match = (e: { data: string }) => JSON.parse(e.data).plane.id === data.plane.id;
+    expect(JSON.parse((await mine.waitFor(match)).data).plane.mine).toBe(true);
+    expect(JSON.parse((await theirs.waitFor(match)).data).plane.mine).toBe(false);
   } finally {
-    await Promise.all([mine.close(), theirs.close()]);
+    await mine.close();
+    await theirs.close();
   }
 });
 
-it("does not broadcast a trace the server dropped", async () => {
-  const w = await listen("spec-dropwatch");
-  const text = randomText();
-  await post("spec-poster", { kind: "not-a-kind", text });
-  const good = randomText();
-  await post("spec-poster", { kind: "dew", text: good });
+it("a catch, then a stamp, reach other pages in order", async () => {
+  const watcher = await listen(visitor("watch"));
   try {
-    await w.waitFor((e) => e.data.includes(good));
-    expect(w.events.some((e) => e.data.includes(text))).toBe(false);
+    const { data } = await throwPlane(visitor("a"));
+    const b = visitor("b");
+    const caught = await catchPlane(b, data.plane.id);
+    await api(b, `/api/planes/${data.plane.id}/release`, { key: newKey(), lease: caught.data.lease.id, country: "JP", city: "JP-tokyo" });
+    await watcher.waitFor((e) => {
+      const d = JSON.parse(e.data);
+      return d.plane.id === data.plane.id && d.kind === "stamped";
+    });
+    const kinds = watcher.events
+      .map((e) => JSON.parse(e.data))
+      .filter((d) => d.plane.id === data.plane.id)
+      .map((d) => [d.kind, d.plane.flying, d.plane.stamps.length]);
+    expect(kinds).toEqual([
+      ["created", true, 1],
+      ["caught", false, 1],
+      ["stamped", true, 2],
+    ]);
   } finally {
-    await w.close();
+    await watcher.close();
   }
 });
 
-it("replays what a dropped stream missed when it reconnects with Last-Event-ID", async () => {
-  const first = await listen("spec-reconnect");
-  const before = randomText();
-  await post("spec-poster", { kind: "bubble", text: before });
-  const seen = await first.waitFor((e) => e.data.includes(before));
+it("a reconnecting stream gets exactly what it missed, nothing doubled", async () => {
+  const v = visitor("reconnect");
+  const first = await listen(v);
+  const { data: before } = await throwPlane(visitor("x"));
+  const seen = await first.waitFor((e) => JSON.parse(e.data).plane.id === before.plane.id);
   await first.close();
 
-  const missed = randomText();
-  await post("spec-poster", { kind: "shadow", text: missed });
-
-  const again = await listen("spec-reconnect", { "last-event-id": seen.id });
+  const missed = [await throwPlane(visitor("y")), await throwPlane(visitor("z"))].map((r) => r.data.plane.id);
+  const again = await listen(v, { "last-event-id": seen.id });
   try {
-    await again.waitFor((e) => e.data.includes(missed));
-    // nothing from before the drop comes twice
-    expect(again.events.some((e) => e.data.includes(before))).toBe(false);
+    await again.waitFor((e) => JSON.parse(e.data).plane.id === missed[1]);
+    const ids = again.events.map((e) => JSON.parse(e.data).plane.id);
+    expect(ids.filter((id) => missed.includes(id))).toEqual(missed);
+    expect(ids).not.toContain(before.plane.id);
   } finally {
     await again.close();
-  }
-});
-
-it("a page's first stream picks up a trace posted between render and connect", async () => {
-  const page = await (await fetch(new URL("/", baseUrl))).text();
-  const since = page.match(/data-since="([^"]+)"/)?.[1];
-  expect(since).toBeDefined();
-
-  const between = randomText();
-  await post("spec-poster", { kind: "dream", text: between });
-
-  const w = await listen("spec-late", {}, `?since=${since}`);
-  try {
-    await w.waitFor((e) => e.data.includes(between));
-  } finally {
-    await w.close();
   }
 });

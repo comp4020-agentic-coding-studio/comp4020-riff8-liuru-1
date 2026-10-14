@@ -1,6 +1,6 @@
 import { expect, inject } from "vitest";
 
-// Shared by the live specs: a visitor is a cookie, and listen() is one open
+// Shared by the plane specs: a visitor is a cookie, and listen() is one open
 // page's /events stream, read the way EventSource reads it.
 const baseUrl = inject("baseUrl");
 
@@ -8,17 +8,20 @@ export function randomText(): string {
   return `spec-${Math.random().toString(36).slice(2)}`;
 }
 
+export const visitor = (name: string): string => `spec-${name}-${Math.random().toString(36).slice(2, 10)}`;
+export const newKey = (): string => `k${Math.random().toString(36).slice(2)}${Date.now().toString(36)}`;
+
 export interface Event {
   event: string;
   id: string;
   data: string;
 }
 
-// Opens /events as `visitor` and collects parsed events until stopped.
-export async function listen(visitor: string, headers: Record<string, string> = {}, query = "") {
+// Opens /events as `who` and collects parsed events until stopped.
+export async function listen(who: string, headers: Record<string, string> = {}, query = "") {
   const controller = new AbortController();
   const res = await fetch(new URL(`/events${query}`, baseUrl), {
-    headers: { cookie: `visitor=${visitor}`, ...headers },
+    headers: { cookie: `visitor=${who}`, ...headers },
     signal: controller.signal,
   });
   expect(res.headers.get("content-type")).toMatch(/^text\/event-stream/);
@@ -68,12 +71,36 @@ export async function listen(visitor: string, headers: Record<string, string> = 
   };
 }
 
-export async function post(visitor: string, fields: Record<string, string>, path = "/trace") {
-  return fetch(new URL(path, baseUrl), {
-    method: "POST",
-    headers: { cookie: `visitor=${visitor}` },
-    body: new URLSearchParams(fields),
-    redirect: "manual",
+export interface ApiResult {
+  status: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data: any;
+}
+
+// A JSON write as `who`, the way the page's own script sends it.
+export async function api(who: string, path: string, body?: unknown, headers: Record<string, string> = {}): Promise<ApiResult> {
+  const res = await fetch(new URL(path, baseUrl), {
+    method: body === undefined ? "GET" : "POST",
+    headers: { cookie: `visitor=${who}`, ...(body === undefined ? {} : { "content-type": "application/json" }), ...headers },
+    body: body === undefined ? undefined : JSON.stringify(body),
+  });
+  return { status: res.status, data: await res.json().catch(() => ({})) };
+}
+
+export async function throwPlane(
+  who: string,
+  fields: Partial<{ colour: string; body: string; country: string; city: string; key: string }> = {},
+): Promise<ApiResult> {
+  return api(who, "/api/planes", {
+    key: newKey(),
+    colour: "blue",
+    body: randomText(),
+    country: "AU",
+    city: "AU-canberra",
+    ...fields,
   });
 }
 
+export async function catchPlane(who: string, plane?: number): Promise<ApiResult> {
+  return api(who, "/api/catch", plane === undefined ? {} : { plane });
+}
