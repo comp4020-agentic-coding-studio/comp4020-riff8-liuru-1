@@ -1,470 +1,226 @@
-# Next: six ways of passing — who may see it, who may end it, and logs that say who did
-
-## Where this repo stands
-
-Last week's run made the 六如 wall live: traces and answers reach every open
-page within a second over SSE, six filters, one-level answers, optional sound.
-All five items landed. Read `git log riff-start..HEAD` and the README to see
-how and why.
-
-This run aims at the next brief, C10 "Fly by instruments":
-https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio/crits/10-fly-by-instruments/
-
-C10 asks three things of a multi-user app:
-
-1. Two people, each in their own browser (separate Chrome profiles or an
-   incognito window, sharing no cookies), use it from the URL alone, and the
-   app tells them apart.
-2. **What each person may see and change is checked on the server**, and that
-   decision is written down in the repo with why. The brief says what counts
-   as a person, and what each may see and change, is the app's call.
-3. **The server logs who did what**, well enough that someone who never
-   touches the app can tail `flyctl logs` and narrate what two people did. The
-   logging outlives the crit: it's what the next person, or agent, reads when
-   the deployed app misbehaves.
-
-Today the app does (1) quietly: a persistent `visitor` cookie, and your own
-traces are marked yours. It barely does (2): nothing can be changed by anyone,
-so there is no rule to check. It does not do (3) at all: `src/server.ts` logs
-`listening on` and uncaught errors, nothing else. The README already admits
-both gaps.
-
-## The idea: the kind you pick is the rule your words live under
-
-Right now the six similes are a label. Dream, illusion, bubble, shadow, dew
-and lightning all behave identically; the kind only changes a glyph, a filter
-and a sound. The README says the theme "isn't decoration bolted onto a
-generic guestbook", but in the code it is.
-
-C10 hands this app exactly the question it needs: **who may see a thing, and
-who may end it.** Answer it six ways. Each simile becomes a different rule of
-seeing and ending, enforced by the server, so choosing what your thought is
-*like* chooses how it lives among other people:
-
-| Simile | Rule | What it shows about the multi-user decision |
-|---|---|---|
-| 泡 bubble | Anyone **except** its writer may pop it, once. First pop wins. | Someone else may end your words, because you chose a bubble. |
-| 露 dew | Evaporates by itself 12 hours after it is left. Nobody needs to end it. | Time, not a person, decides. |
-| 梦 dream | Anyone may answer a dream, but each answer is seen **only by the dreamer and the person who answered**. | Seeing is per pair, not per wall. |
-| 影 shadow | Visible to others **only while its writer is here** (has the page open). | Seeing depends on the writer's presence. |
-| 幻 illusion | Every viewer sees a **different partial version**; only its writer sees it whole. | Seeing depends on who is looking. |
-| 电 lightning | Seen **only by the pages open at the moment it strikes**, for about 15 seconds. Afterwards only a scorch mark remains: when, not what. | Seeing depends on the viewer's presence. |
-
-On top of the six, two rules hold for every kind:
-
-- **A writer may always let go (放下) of their own trace or answer**, whatever
-  its kind, and nobody else may. It leaves the wall for everyone, live.
-- **The writer of a trace may set aside (移开) an answer someone else left
-  under it.** The README already names this gap: an unkind answer under your
-  thought currently can't be removed by you or anyone.
-
-This is a big change to what the app is, and it's meant to be. It is still
-anonymous, still small, still live, still the six similes, still no names,
-accounts, counts, ranking or notifications. What changes is that "everything
-here is passing" stops being a sentence in the README and becomes six
-behaviours a visitor can feel, and that the server can be shown to enforce.
-
-### Non-negotiable for every rule
-
-- **Withheld means never sent.** If a viewer may not see something, it is not
-  in the HTML, not in an attribute, not in an SSE payload, not in a reconnect
-  replay, not in a script variable. Hiding with CSS or client-side checks does
-  not count. `src/live.ts` already renders each event per listener's visitor;
-  build on that.
-- **Identity comes from the cookie only.** Never trust a visitor id, owner,
-  or handle sent in a form field or query string.
-- **Every refusal is real.** A hand-crafted POST from another cookie must be
-  refused, change nothing, broadcast nothing, and log a `refused` line. "The
-  button isn't shown" is not a permission check. C10's failure is "one of them
-  can change what should be the other's"; make it impossible, not hidden.
-- **Races resolve to one answer for everyone.** Two pops of one bubble: one
-  wins. An answer racing a let-go: the answer is dropped, never attached to
-  something nobody can see. Use SQLite transactions or conditional updates.
-- **Nothing is wiped.** Additive, repeatable migrations only (`ALTER TABLE ...
-  ADD COLUMN` guarded by a schema check, new tables with `IF NOT EXISTS`).
-  Never drop tables, never delete `/data`. Where a rule says text is erased,
-  erase that field on that row deliberately, and say so in the README.
-- **Put the six rules in one pure module** (say `src/rules.ts`) that takes the
-  trace, the viewer and an explicit `now` and decides what that viewer sees.
-  No database import, so a spec can import it directly and test time-based
-  rules without waiting twelve hours. Rendering, the SSE fan-out and replay all
-  ask this module; no rule is re-implemented in a second place.
-
-## How to work: a branch per item, merge only what passes
-
-Last week's branch-per-item rule worked; keep it.
-
-- Build each numbered item (and each simile in item 3) on its own branch. Run
-  `pnpm check` there with the app running locally. Merge to `main` only when
-  it passes, and push `main` straight after each merge. CI deploys every push
-  to `main`, so a broken merge breaks the live app.
-- The run is unattended and can be cut short at any time. Whatever is merged
-  and pushed is what the next pod inherits. Four items landed beats seven
-  half-built. If an item can't be made to work, leave its branch unmerged,
-  note it, and move on.
-- Use the time budget the run has. Build, test with several visitors, then
-  refine. Don't stop at a plan.
-- **Never post test data to the live app** at
-  https://comp4020-riff8-liuru-1.fly.dev/. Test against a local server with a
-  throwaway `DATA_DIR`.
-- Keep `prompt.md` until the end; delete it in your last commit, as the riff
-  block at the top of `CLAUDE.md` says. Leave that block exactly as it is.
-- Don't touch `PROCESS.md`, `reflections/`, `agent/`, `fly.toml`'s machine
-  settings, CI secrets, or any course tag. `pnpm check:evidence` must still
-  pass on the inherited files.
-
-## The items, in priority order
-
-### 1. Logs that say who did what (must land first)
-
-Every meaningful thing a person does, and every thing the server refuses,
-becomes **one line on stdout**. Fly captures stdout; that is the whole
-pipeline. No log service, no log file, no dependency unless it truly earns its
-place.
-
-**Who.** A person in the logs is a short, stable handle derived from their
-visitor id, such as the first 6 hex characters of its SHA-256. Same browser,
-same handle, across requests, reloads and restarts. **Never write the raw
-visitor id to the logs:** the cookie is this app's only credential, so anyone
-who reads a raw id can become that person.
-
-**What.** A small fixed vocabulary, each line starting with the event name so
-a person scanning the tail can read it. Names and fields are yours; cover this
-ground, and extend it as items land:
-
-```
-boot               port=8080 traces=57 replies=12 dew_evaporated_at_boot=3
-visitor.new        v=3fa9c1
-wall.view          v=3fa9c1 view=all shown=48 withheld=6
-trace.left         v=3fa9c1 trace=58 kind=bubble chars=31
-trace.dropped      v=9b20e4 reason=unknown-kind
-reply.left         v=9b20e4 reply=13 trace=58 trace_by=3fa9c1 seen_by=all
-reply.left         v=9b20e4 reply=14 trace=61 trace_by=3fa9c1 seen_by=pair
-bubble.popped      v=9b20e4 trace=58 trace_by=3fa9c1
-let_go             v=3fa9c1 trace=60
-set_aside          v=3fa9c1 reply=13 reply_by=9b20e4 trace=58
-dew.evaporated     trace=40 trace_by=77c2d0 age=12h
-presence.here      v=3fa9c1 shadows_shown=2
-presence.gone      v=3fa9c1 shadows_withheld=2
-lightning.struck   v=9b20e4 trace=62 witnesses=1
-lightning.scorched trace=62
-stream.open        v=9b20e4 replayed=4 open=2
-stream.close       v=9b20e4 after=41s open=1
-refused            v=9b20e4 action=let_go target=trace:60 owner=3fa9c1 reason=not-yours
-refused            v=3fa9c1 action=pop target=trace:58 reason=own-bubble
-refused            v=c4e811 action=pop target=trace:58 reason=already-popped
-refused            v=9b20e4 action=post reason=rate
-error              v=3fa9c1 route="POST /reply" message="..."
-```
-
-What that buys the narrator: `trace_by=`, `owner=` and `reply_by=` show one
-person acting on another person's thing, which is the moment worth pointing
-at. `shown=` / `withheld=` make the per-viewer rules visible from outside.
-`boot` with row counts shows that what people did survived a restart (Fly
-stops the machine when idle, so restarts happen constantly).
-
-Rules for the lines:
-
-- **No visitor-written text in the logs, ever.** It is public (or deliberately
-  withheld) on the wall and can be looked up by id. Logging it invites log
-  injection, copies people's words somewhere they didn't put them, and would
-  leak dream answers, illusions and lightning that the rules withhold. Log ids,
-  kinds, lengths, handles and reasons.
-- Any value that could contain input must be escaped or quoted so one action
-  is always exactly one line.
-- No noise: no line per keepalive, script fetch or asset. A two-person
-  five-minute session should produce a tail a person can read in one screen.
-- Counts of open streams and witnesses are fine **in the logs**. `CLAUDE.md`
-  forbids visible reader counts on the page, and that still stands.
-- The 500 path logs the route and the handle, so a crash says whose request
-  hit it. A malformed cookie (bad percent-encoding currently throws in
-  `parseCookies`) must not crash a request: treat it as a new visitor and log
-  it.
-
-One small module (say `src/log.ts`) formats every line. Unit-test it directly:
-the handle is stable and never equals the raw id, and input containing `\n`
-cannot produce two lines.
-
-### 2. Let go of your own words, and only your own (must land)
-
-A writer may let go (放下) of a trace or answer they wrote. It disappears for
-everyone within a second. Letting go of a trace takes its answers with it.
-
-This deliberately reverses a rule. `CLAUDE.md` says "A trace or an answer is
-permanent once posted: no edit, no delete, no admin override", and that such a
-change "needs a README argument first, not a quiet code change". So: **write
-the README argument first, then change the rule in the lower part of
-`CLAUDE.md`, then build it.** Still no editing and no admin.
-
-This item also lays the plumbing every later item needs, so get it right here:
-
-- **A removal channel that survives reconnects.** The stream cursor is
-  `<trace>.<reply>`, which only moves forward with new rows. A let-go changes
-  an old row, so a page whose stream was down would keep showing it. Consider
-  replacing the cursor with one sequence over a `wall_events` table (left,
-  answered, let go, popped, set aside, evaporated, scorched), so reconnect
-  replays every change after the cursor, each filtered for that viewer by
-  `src/rules.ts`. If exact replay gets complicated, sending a reconnecting page
-  a fresh snapshot of its own view is acceptable: correctness beats
-  cleverness.
-- `addReply` currently inserts whenever the trace row exists; it must also
-  refuse a trace that is let go, popped, evaporated, scorched or withheld from
-  that answerer.
-- Decide whether a let-go row keeps its text with a `released_at` marker or
-  has its text erased, and describe it honestly in the README. Don't call it
-  erased if it isn't.
-- A deliberate act, not an accidental tap: a confirm step, no nagging modal.
-  Works without JavaScript as a plain form POST, like posting does today.
-- Harden the write path now that things can be destroyed: same-origin check on
-  every POST (`Origin` header), `Secure` on the cookie (Fly forces HTTPS), and
-  a size cap on request bodies (`readBody` currently reads without limit).
-  Refusals are logged.
-
-Spec, in a new file, with separate cookies as separate people: A lets go of
-A's trace and three other open streams each see it removed within a second;
-B's attempt on A's trace or answer is refused and changes nothing; an answer to
-a let-go trace is dropped; a stream reconnecting with a `Last-Event-ID` from
-before the let-go doesn't get it back.
-
-### 3. Six similes, six rules (the heart of this run)
-
-One branch per simile, in this order, merging each that passes. Each needs:
-the rule enforced in `src/rules.ts` and on every write route it touches; live
-behaviour on every open page; correct reconnect replay; its log lines; spec
-checks with separate visitors; and a one-line explanation shown **at the
-moment a visitor picks that kind** in the form, so the rule is never a
-surprise. Keep the existing glyphs, filters and sounds.
-
-**3a. 泡 Bubble: anyone but its writer may pop it.**
-A bubble is the one thing on the wall that someone else may end. Any other
-visitor may pop it, once; it disappears for everyone, answers with it, and an
-empty ring stays in its place so the wall shows something passed there. The
-writer cannot pop their own (they can let go instead), which keeps the two
-acts distinct in the logs. Two visitors popping at the same instant: exactly
-one succeeds; the other is told "already popped" and logged as refused. Spec
-the race with simultaneous requests.
-
-**3b. 露 Dew: evaporates after 12 hours.**
-Dew fades as it ages (lighter ink over its life, computed from `createdAt`
-and `now`) and leaves the wall 12 hours after it is left, live on every open
-page, logged as `dew.evaporated`. A periodic sweep handles it while the server
-is up; on boot, reconcile anything that expired while the machine was stopped,
-once, without duplicate broadcasts. Test the timing through `src/rules.ts`
-with an explicit `now`. Note: `spec/trace.test.ts` posts dew and expects it on
-a fresh load at full text; keep that true, since that file must not change.
-
-**3c. 梦 Dream: answers are seen only by the dreamer and the answerer.**
-Anyone may answer a dream. Each answer is visible to exactly two people: the
-person who wrote it and the person who dreamt the trace. The dreamer sees all
-the answers under their dream; each answerer sees only their own; everyone
-else sees the dream and none of its answers, and no count or hint of how many.
-Withheld means never sent: three-visitor spec where C's page and C's stream
-never contain B's answer to A's dream, while A and B both get it live. The
-dreamer may set aside answers like any other trace writer (item 4).
-
-**3d. 影 Shadow: seen by others only while its writer is here.**
-"Here" means the writer has at least one open `/events` stream, with a grace
-period of about 20 seconds after their last stream closes so a reload doesn't
-flicker. When a writer leaves, their shadows are withdrawn from every other
-open page and from fresh loads; when they return, the shadows come back. The
-writer always sees their own, marked as visible only while they're here.
-Presence is in memory (one machine), so after a restart nobody is "here" until
-their page reconnects; say so. A visitor without JavaScript has no stream, so
-their shadows are seen only by themselves: an honest limitation to state, not
-a bug to hide. This reveals that an anonymous someone is present without
-counting anyone, which `CLAUDE.md` asks for ("let the wall moving be the
-signal"); argue that in the README.
-
-**3e. 幻 Illusion: each viewer sees a different version.**
-Only the writer sees an illusion whole. Every other viewer sees a version with
-roughly a third of its words withheld, the selection chosen deterministically
-from that viewer's handle and the trace id, so the same person sees the same
-illusion every time and two people comparing screens see different ones.
-Segment words with `Intl.Segmenter` so Chinese text (no spaces) works as well
-as English. The full text never leaves the server for a non-writer. Withheld
-words render as a quiet mark with a screen-reader label, not as a blur over
-real text. Spec: two visitors get different renderings of a long enough
-illusion, neither contains the full text, the writer's does, and the same
-visitor gets the same rendering twice.
-
-**3f. 电 Lightning: seen only by those present when it strikes.**
-A lightning trace goes out live to every open page and shows for about 15
-seconds, then fades to a scorch mark: a small burnt sign with its time and no
-text. A fresh page load never shows lightning text, even a second after it
-strikes, and that includes its writer. A stream that reconnects inside the
-15-second window gets it; after that, only the scorch. After the window the
-text is erased from the row, so "only the people who were there saw it" is
-literally true; the scorch persists across restarts. Log the strike with the
-number of witnesses (open streams of other visitors), never the text. Gentle
-treatment: no full-screen flash, no strobing, a still change under
-`prefers-reduced-motion`. Note `spec/live.test.ts` already uses lightning for
-its "reaches three other open sessions within a second" check; that should
-keep passing, because those sessions are open when it strikes.
-
-### 4. The writer of a trace may set aside answers under it
-
-A trace's writer may set aside (移开) any answer under their own trace. That
-makes three positions relative to any answer, all checked on the server: the
-answer's writer (may let go), the trace's writer (may set aside), everyone
-else (may do neither). A set-aside answer disappears for everyone, including
-its writer: no shadow-hiding where they still see it and think it's there,
-because that would be the app lying to someone. Log it with both handles.
-Spec all three positions, including the refusal.
-
-### 5. Make the rules legible on the page
-
-A newcomer should understand within 30 seconds that the kind they pick
-decides how their words will live. Rewrite the short explanation above the
-form (it currently says what the six as-ifs *are*) to say what each one
-*does*, in the page's own quiet voice, bilingual where the page already is.
-The right controls appear on the right items only (let go on yours, pop on
-others' bubbles, set aside under your traces), with plain labels beside the
-poetic ones, 44px touch targets and visible focus.
-
-At the very bottom of the page, add one line visible **only to that browser**:
-"this browser appears in the logs as 3fa9c1". At the crit, two classmates use
-the app while someone reads the logs; this line bridges the two. It is not a
-name: nobody else sees it, it never appears next to a trace, it is not the
-cookie. Argue in the README why that doesn't break "no names, no visible
-distinction between visitors".
-
-Check the page at 1440x900 and 390x844 with no horizontal page overflow.
-
-### 6. Rate limiting, refused and logged
-
-The README names rate limiting as a real gap, and with things that can be
-popped and answered privately, a spammer now matters more. Per visitor
-handle, cap traces and answers over a rolling window (for example 6 traces
-and 20 answers per 10 minutes). Over the limit, the post is refused with a
-quiet message on the page and a `refused ... reason=rate` log line. An
-in-memory limiter is fine on one machine; say that it resets on restart, and
-that a person can evade it by clearing cookies.
-
-## Existing specs: what to keep, what to change
-
-- `spec/invariants.test.ts` and `spec/trace.test.ts`: **unchanged and green.**
-  `trace.test.ts` uses dew; design dew so it holds (see 3b).
-- `spec/live.test.ts`, `spec/replies.test.ts`, `spec/wall.test.ts` encode "all
-  six kinds behave the same". Some checks will now be wrong on purpose (a
-  shadow posted by an absent writer doesn't reach others; lightning isn't on a
-  fresh load; filters can't "add up" when some kinds are withheld). Change
-  them deliberately, not by deleting their intent: live delivery, reconnect
-  replay, simultaneous answers, filters and "yours" marking are all still
-  promises, so re-express each using a kind whose rule permits it. List what
-  changed and why in the README's enforced-vs-judged section.
-- Add checks for everything new, **and break each one on purpose to watch it
-  fail before trusting it.**
-
-## The decision to write down
-
-C10 wants "what each person may see and change" decided, checked on the
-server, and written in the repo with why.
-
-**`README.md`** becomes the argument for six ways of passing. Keep the voice,
-the sources (Sloan, the Small Technology Foundation, Pico Park) and the
-"small and quiet" thesis, and rewrite around the change:
-
-- why a label became a rule, and why that is the theme finally doing work;
-- what counts as a person here (one browser's cookie), and what each person
-  may see and do, per kind, to their own words, to answers under their own
-  trace, and to everyone else's;
-- why "permanent once posted" is gone and what replaced it;
-- the honest costs: clear your cookies, or switch browser or device, and you
-  are a stranger to your own past traces (no account means no recovery); two
-  people on one browser are one person, one person on two devices is two; a
-  bubble means a stranger may end your words; dew loses things people liked;
-  lightning is unrecoverable by design; illusions frustrate on purpose;
-  shadows vanish for no-JS writers; moderation is still only by the people
-  involved, with no one to report to;
-- **"Reading the logs"**: what each event name means, and a **real** excerpt
-  from a local session you ran with two or three separate visitors (not
-  invented), so the next reader can narrate from `flyctl logs` without the
-  source;
-- what is enforced in `spec/` and what is judged, updated for this run.
-
-Don't leave a README describing a different app from the one running.
-
-**`docs/decisions/0002-who-may-see-and-change.md`**, an ADR in the shape of
-0001: context, alternatives, the choice, the costs. Compare at least:
-everything permanent and visible to all (the status quo); writers may let go
-of their own words and nothing else; one uniform rule for all kinds versus a
-rule per kind (the choice); and a moderator or admin role (why not, for a
-wall with no accounts). Include why the per-viewer rules (dream, illusion,
-lightning, shadow) are enforced by never sending, and what that costs in
-rendering every event per listener.
-
-**The lower, app-specific part of `CLAUDE.md`** is rewritten to match: the six
-rules and the two universal ones, "withheld means never sent", "identity from
-the cookie only", "never log raw visitor ids or visitor text", one action one
-log line, rules live only in `src/rules.ts`, and the updated enforced list.
-These are standing rules for the next run, so write them as rules.
-
-## What good looks like at the end
-
-- **A real crowd session, run by you, locally.** Two or three independent
-  browser contexts (separate cookie jars, not tabs sharing one) and a terminal
-  showing the server's stdout. One leaves a bubble, another pops it; one
-  answers a dream and a third can't see the answer; a shadow's writer closes
-  their page and the shadow leaves the others'; two viewers see different
-  illusions; a lightning strike reaches the open pages and is a scorch on a
-  fresh load; someone tries to let go of another person's trace and is
-  refused. Reading only the terminal, you can say who did each thing and what
-  was refused. Use that run's output for the README excerpt. If a browser
-  automation tool is available, drive real browsers and take screenshots at
-  1440x900 and 390x844; if not, drive it with `fetch` and separate cookie
-  jars, and say which you did.
-- Nobody can see what a rule withholds from them, or change what is someone
-  else's, by any request, not just through the UI.
-- Nothing in the logs could be used to become someone else; no visitor text
-  appears in them; one action is one line.
-- `pnpm check` is green against the running app; `pnpm check:evidence` passes.
-- If Docker is available, build and run the real image and run the spec
-  against it, as CI does. If it isn't, say so; don't claim it ran.
-- Everything that should persist survives a restart on the same data
-  directory, and timed rules (dew, lightning scorch) reconcile once on boot.
-
-## Still off the table
-
-No accounts, logins, names, colours or avatars on traces. No visible counts
-of readers, answers, pops or witnesses. No ranking, no notifications, no
-"since your last visit", no unread markers. No admin, no moderation queue, no
-report button. No seventh kind. No editing. No full-screen effects or
-autoplaying sound. Don't migrate the stack, add a framework or build step, add
-a second machine or database, or touch `fly.toml`'s machine settings.
-
-## Chinese copy fixes
-
-The Chinese text on the page reads like a machine translation. Fix only the
-clear mistakes. Do not rewrite the tone, and do not change the English.
-
-- "究竟发生了什么" → "心头掠过了什么" (the original means "what on earth
-  happened", not "what passed through")
-- "梦，一个梦想而已" → "一场梦" (梦想 means an ambition, not a dream you have
-  while asleep)
-- "随它去吧/不必再管了" → "随它去吧" (give one translation, never two joined
-  by a slash)
-- Any new Chinese text you add, such as the descriptions of the six rules,
-  must read as natural Chinese, with one translation per line.
-- Put these copy fixes in their own commit, separate from behaviour changes.
-  They don't need a failing test, but `pnpm check` must still pass.
-
-## Final report
-
-When you stop, say briefly: which items landed on `main`, which branches were
-left unmerged and why, which tests and playtests actually ran (and which
-couldn't), and the limitations a visitor would hit. The course harness pushes
-and CI deploys after you finish; don't claim the live site was checked.
-
-## Read first
-
-- `README.md`: the argument this app holds to, and the gaps it already names
-- `CLAUDE.md`: the riff block (leave it alone) and the app's rules below it
-- `src/server.ts`: routes, the visitor cookie, `parseCookies`, `readBody`, the
-  one place errors are logged
-- `src/db.ts`: `Trace`, `Reply`, `addReply`'s exists-check, the `*Since`
-  queries
-- `src/live.ts`: the SSE fan-out, per-listener rendering, the cursor
-- `src/templates.ts` and `src/client.js`: how traces render and how live
-  events are applied to the page
-- `spec/sse.ts` and `spec/live.test.ts`: how specs act as several visitors
-- `docs/decisions/0001-plain-node-and-sqlite.md`: the ADR shape to follow
+# Pod 1: Paper Planes — detailed recreation specification
+
+Build a working, visually faithful recreation of <https://paperplanes.world/> in **`comp4020-agentic-coding-studio/comp4020-riff8-liuru-1`**, with four deliberate changes:
+
+1. Replace the six-theme idea with **six colours of paper plane**.
+2. Make the complete experience usable in a **desktop web browser**, as well as on a phone.
+3. Let people **choose a region label themselves**, rather than requiring their physical location.
+4. Let people **write a message on their plane**. When someone catches it, that same message must be visible on the paper itself and fully readable.
+
+Keep the reference's visual composition and central experience as close as practical: a shared world, folded paper planes, catching, unfolding, region stamps, journey history, and sending planes onward. This is a functioning multiplayer application, not a landing page, animation-only demo, or collection of UI mockups. Complete it in one unattended run; make reasonable decisions where this brief leaves details open.
+
+## Repository and assignment context
+
+This is the **liuru-1** pod repository. Its current product is **六如**, a shared wall of short traces tagged dream, illusion, bubble, shadow, dew, or lightning, with one-level answers, six filters, optional sound, and real-time SSE delivery. This brief deliberately replaces those six themed choices in the new primary experience with six equal paper-plane colours. It supersedes the earlier prompt's proposed six different visibility/expiry rules: do not implement popping, evaporation, hidden words, or disappearing messages as colour behaviours. Work only in this pod repository and its Fly app, `comp4020-riff8-liuru-1`. The original `comp4020-final-liuru` repository and all other pod repositories/deployments are out of scope.
+
+Read the root `CLAUDE.md`, `README.md`, the relevant `PROCESS.md` sections, application source, database code, deployment configuration, and tests first. Keep the top pod-riff block in `CLAUDE.md` intact. Its permission to change tests for a different brief applies: adapt theme/filter expectations deliberately for the new plane experience, preserve meaningful validation, ownership, persistence and live-delivery coverage, explain the changes, and keep `spec/invariants.test.ts` green. Update the README's product argument and any conflicting lower-level product rules together with the redesign, explicitly explaining the move from six similes to six colours. Keep `/readme/` publishing the actual README. Do not let old wall-specific presentation rules prevent the requested experience.
+
+Preserve stored traces, answers, their original kinds, timestamps, and ownership relationships through an additive migration. Keep the old wall and its existing conversations readable through a discreet archive link, outside the new primary flow. Do not invent region stamps or flight histories for legacy traces. Reuse the persistent `visitor` cookie, plain Node/TypeScript server, `better-sqlite3` database on the Fly volume, validation, and SSE infrastructure where suitable. Retain the single-machine deployment assumption unless an actual infrastructure change is separately authorised. A maintained 3D rendering library is appropriate; a wholesale backend rewrite is not required. New plane messages retain this project's **240-character** cap; existing archived answers retain their 140-character cap.
+
+Keep implementation tests and write-based playtests local, using a throwaway `DATA_DIR`; do not post test planes or stamps to the production app. Preserve inherited `PROCESS.md`, `reflections/`, `agent/`, course tags, CI secrets, and `fly.toml` machine settings. Record new product/permission decisions in README and a new decision record under `docs/decisions/`. Keep `pnpm check:evidence` passing on inherited evidence. Use the established CI deployment workflow and report honestly which production checks were read-only and which behaviours were verified locally.
+
+Continue to satisfy the operational purpose of [Crit 10: Fly by instruments](https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio/crits/10-fly-by-instruments/): two independent browsers can act on shared state, the server distinguishes them and enforces their permissions, and someone can narrate their actions from server logs alone. The pod exemption from graded reflections and compulsory process entries still applies. Document the new permission model and implementation decisions in the repo without inventing a grading obligation.
+
+## Reference and visual fidelity
+
+Inspect the live reference and its available screenshots before building. The original's desktop presentation currently displays the globe and asks visitors to join on a phone; **our desktop version must expose all interactions directly**. For the original interaction sequence, consult [Active Theory's project case study](https://medium.com/active-theory/paper-planes-6b0008c56c17) and the [official One Show project record](https://www.oneclub.org/awards/theoneshow/-award/25379/paper-planes/). If the mobile interaction cannot be accessed, use those records and the explicit requirements below; do not stall or claim to have observed unavailable screens.
+
+Match the reference's defining scene: a full-window pastel sky, a prominent slowly rotating low-poly globe, softly lit folded planes moving around it, and sparse interface controls. Preserve its sense of scale, depth, soft colour, gentle movement, and playful catching/throwing. Use locally implemented geometry, animation, and UI; identify this as a student recreation in a small About panel with a reference link, without claiming an official affiliation.
+
+Use lilac, pale blue, blush, and teal for the atmospheric background and faceted globe. Give planes a recognisable pointed nose, central fold, two wings, thin paper edges, and subtle fold shadows. Avoid replacing the scene with a flat map, paper-plane emoji, generic dashboard, large card grid, or conventional hero-and-feature landing page. Keep controls legible over the scene and ensure the globe never blocks a form or readable message.
+
+The six available plane colours are **Coral `#F27D8A`, Orange `#F6A66B`, Yellow `#F2D46B`, Mint `#81C8AB`, Blue `#7CAFE5`, and Lavender `#AE94D8`**. These are six equal paper options, not the old dream/illusion/bubble/shadow/dew/lightning categories. Apply the choice to the actual plane material, including folded and unfolded views. Keep its inner writing surface pale enough for dark, readable ink. Colour never indicates authorship, popularity, or permissions. Pair swatches with names and a selected indicator.
+
+## Detailed reproduction blueprint
+
+The dimensions, durations, camera parameters, and UI placements below are **implementation targets for this adaptation, not measured or claimed original source values**. Match the reference's observed appearance first and use these values to remove ambiguity. Minor adjustments are allowed to prevent clipping and improve readability; do not use that flexibility to change the art direction. The desktop controls, coloured paper, editable message, and manual region selector are our explicit additions. Keep the rest of the visual experience close to the reference.
+
+### A. Full-screen composition and interface chrome
+
+- Use one continuous scene filling `100dvh`, with a safe `100vh` fallback. On a desktop home screen there should be no document scrollbar. Forms and open-paper content can scroll within their own area when needed, particularly with the mobile keyboard open.
+- At a 1440 × 900 viewport, place the globe near `(50% width, 46% height)` and make its apparent diameter about 62–70% of the shorter viewport dimension. Surround it with ample sky and a few closer planes crossing the foreground. At 390 × 844, start around `(50%, 41%)` with a diameter about 86–94% of the viewport width; reserve a clear lower area for primary actions. Reframe when the keyboard appears rather than letting it cover the writing controls.
+- Use a full-bleed gradient with broad, soft colour transitions, not distinct stripes: pale blue `#AFCBE9`, lilac `#BCB4DE`, and a muted blush `#D5BBDB`, with a restrained light centre behind the planet. A slow 25–40 second colour drift is acceptable. Use a fixed gradient when reduced motion is enabled.
+- Keep the identity small at the top left: a folded-plane symbol and **Paper Planes**, approximately 20–24px, with a quiet **Six colours. One shared sky.** subtitle. Top right holds **Your planes**, **Sound off / on**, and **About**. Use 28–36px desktop edge insets and 16–20px phone insets, plus safe areas. On phones, put secondary controls in a compact, labelled menu without hiding Create or Catch.
+- Place **Create a plane** and **Catch a plane** together near the bottom centre, above the safe area, with at least 12px between them. Use 48px minimum control height, rounded ends, a light paper-like surface, dark ink text, and subtle shadows. The surrounding scene remains visually dominant. Keep secondary actions smaller and quieter, but with 44px touch targets.
+- Use a light, friendly sans serif for scene labels and controls, with reliable CJK fallbacks. Controls are generally 14–16px; scene instruction text is 16–20px. Use dark ink `#27364B` on paper and high-contrast text/backplates over the sky. Do not place pale text over a similarly pale patch without a local contrast treatment.
+- When a real launch arrives, a brief location caption such as **A plane just left Canberra, Australia** may fade in near the globe for about 2.5 seconds. Derive it from an actual committed event, coalesce bursts, and never interrupt editing or reading. Never display fake global statistics or invented place announcements to make the scene look busy.
+
+### B. Globe, camera, light, and flying scene
+
+- Build a genuinely three-dimensional, triangulated globe with geographically recognisable continents. Use simplified, locally bundled geographic geometry with its required attribution. A plain sphere with random triangles or noise patches is not an adequate substitute for a world map.
+- Use a planet radius of 1 scene unit as a convenient working scale. Start with a perspective camera around 35–42 degrees vertical field of view, then set camera distance to achieve the framing above. Recompute aspect ratio and framing on resize without recreating all application state.
+- Use flat-shaded facets, pale blue/lilac ocean tones, slightly raised teal/mint land shapes, a broad soft highlight, and a restrained teal rim. Avoid satellite imagery, photorealistic clouds, dark space, neon bloom, harsh outlines, or a wireframe globe. A soft atmospheric halo must not obscure planes or labels.
+- Idle rotation should be slow, roughly 0.6–1 degree per second, with a slightly tilted axis. Dragging empty sky may rotate the globe; distinguish this from a plane throw and disable it while editing, catching with the net, or reading. Do not introduce unlimited zoom that loses the scene. Resume idle rotation gently after pointer release.
+- Flying planes follow curved paths in a shell around the globe, with a mixture of front and rear passes. Use a small number of orbit/flocking bands with slightly different inclinations and speeds. Bank their wings into turns and align the nose with travel direction. Avoid identical evenly spaced circles and synchronised bobbing. Planes behind the globe must be occluded correctly.
+- Use size and depth to create three layers: tiny distant silhouettes, mid-distance planes around the planet, and occasional larger near passes. Near-plane projected sizes should be roughly 18–48px during ordinary flight; do not fill the screen with huge message labels. Keep object identity stable when changing level of detail or frame quality.
+- Every catchable rendered instance must map to one actual available plane ID. Sample a bounded set when the database is large; the **Catch an available plane** button must still query all eligible server records. Aim for approximately 60fps on a typical laptop and a stable 30fps on a phone, adapting detail and instance count before dropping core functionality. Report the actual tested environment rather than promising universal frame rates.
+
+### C. Paper construction and where the writing belongs
+
+- Use the same paper object through writing, folding, throwing, catching, and unfolding. A rectangular sheet should visibly become a recognisable dart-shaped paper plane, not disappear and be replaced with an unrelated icon.
+- The open sheet is approximately portrait A-series proportion, width:height `1:1.414`. Use a pale tint derived from the chosen colour for its inner surface, stronger colour on the outer wings, fine fold creases, and a soft contact shadow. Texture should be subtle; no heavy crumpling, torn edges, glossy plastic, or thick cardboard.
+- Construct foldable panels with pivots on their creases. Animate the upper corners inward, the centre fold, and the two wings outward in sequence. The finished plane needs an actual central ridge and two visible angled wings. Preserve panel continuity through the transition; a whole-object spin, fade, or scale alone does not count as folding.
+- Use a consistent paper-space coordinate system. Reserve the upper 12% for a small origin label, the middle 58–64% for message text, and the lower 20–24% for stamps, with an outer margin around 7%. A longer message can use a scrollable writing window within this middle region. Its full text must remain available at a readable size.
+- In composition, the textarea visually belongs to the paper. In reading mode, render plain text in that same area. The editable layer must use real input semantics, support IME composition, and not fight text selection. Do not mirror a textarea's text underneath it and accidentally make each letter look doubled.
+- On the folded plane, show a short first-line preview on a visible wing and a compact origin mark on the opposite wing. This preview is derived from the original body, not an editable second message. The complete body remains on the open sheet. The preview may omit characters for space but must never mutate the stored body.
+- Use panel UV mappings, a canvas-generated text texture, or a DOM layer transformed with the paper so the ink remains attached during rotation and folding. Clip ink to its panel; give back faces the correct orientation and prevent reversed lettering, z-fighting, or text bleeding across edges. Generate textures after relevant fonts are ready. Dispose obsolete textures when changing messages or colours.
+- A captured plane should occupy about 36–48% of desktop viewport width, capped around 620px, or 78–88% of phone width. Present it at a shallow three-quarter angle so one wing's written preview can be read. Stop bobbing while a visitor inspects it. Upon unfolding, settle the writing face almost parallel to the screen; reading should not require rotating a 3D object into just the right angle.
+
+### D. Composer layout and selection controls
+
+- On desktop, centre the paper and place a narrow 260–300px control rail beside it, with a 24–32px gap. Keep the overall group within approximately 1000px. Fit the sheet to the available height; keep a single coherent paper surface rather than a rectangular modal full of unrelated cards.
+- On phones, the paper uses `calc(100vw - 32px)` width. Stack controls beneath it, with the action row reachable above the keyboard or by normal scrolling. If the portrait sheet cannot fit, crop neither the text nor the controls: let this foreground layer scroll while the background scene remains fixed.
+- Organise the interaction as **Write → Colour & region → Fold → Throw**, with a quiet progress indicator. Desktop may show writing and settings together, but the button labels must make the next step clear. Moving backward preserves every field. Do not require a full-screen onboarding tour.
+- Default to Blue on the first draft. Show all six colour options together: six swatches in one row on desktop and a 3 × 2 grid where needed on phones. Each swatch has a 32px visual colour circle inside at least a 44px target, its name, and an explicit checked state. Selection updates the paper immediately without changing its text.
+- Region search opens a labelled combobox/popover. Search by display name and supported aliases; show a scrollable list, an empty-result state, keyboard navigation, Enter-to-select, and Escape-to-close. A country/region alone is valid; changing it clears any previously selected city that no longer belongs to it. Save canonical IDs, and derive labels and approximate coordinates from server-validated catalogue data.
+- A region stamp preview appears on the paper as soon as a valid choice is made. Use the caption **Choose the place your plane represents — it does not have to be where you are.** Do not request location permission behind this control.
+- The counter sits just outside the writing area as `123 / 240`. Choose Unicode code-point counting consistently, normalise line endings, and treat whitespace-only input as empty without trimming valid submitted leading/trailing whitespace. During CJK IME composition, avoid rejecting intermediate composition text. Show errors next to the relevant field and keep Fold unavailable until the draft validates.
+- Keep draft text, colour, and selected region in tab-scoped session storage where available; clear only after confirmed creation. A close action returns to the world and preserves the draft. Label the create entry **Continue your plane** when a saved draft exists. No browser-storage failure may prevent ordinary form submission.
+
+### E. Motion choreography and desktop gesture rules
+
+Treat this as a timeline, not a set of arbitrary CSS effects. Use smooth acceleration/deceleration, with no elastic bouncing on text-heavy surfaces. Timing targets below exclude network waiting. All successful animations run once per committed event, not again whenever a component rerenders.
+
+| Transition | Target duration | Required visible movement and end state |
+| --- | --- | --- |
+| World → composer | 450–650ms | Slow the globe, ease it backward/aside, and bring the open sheet from the lower foreground into its reading position. Fade in settings after the paper settles. |
+| Sheet → folded preview | 1000–1400ms | Fold the two upper corners, close the centre fold, then set the wings. Ink and the region mark follow their paper panels. End with the nose pointed up/away, ready to throw. |
+| Back to edit | 800–1100ms | Reverse the fold sequence and restore the same text selection/input state where practical; do not clear the draft. |
+| Committed throw | 900–1300ms | Lift the nose, accelerate away from the camera along a curved path toward the globe, bank into the flock, then restore ordinary world controls. |
+| Successful catch | 650–950ms | Remove the caught ID from ordinary circulation and bring that plane along a curved approach into the close-up position; decelerate to a still, readable pose. |
+| Caught plane → readable sheet | 900–1200ms | Open the wings and centre seam into the same paper, rotating its writing face toward the viewer. Reveal complete text and stamp history when settled. |
+| Stamp preview | 220–350ms | A region stamp gently presses into its reserved area with a small shadow/opacity change. Keep it explicitly a preview until the server commits it. |
+| Confirmed onward flight | 1500–2100ms | Fold the caught sheet, then launch the same plane into the sky. Keep original message and colour throughout. |
+| Open journey view | 500–750ms | Move the open paper aside and frame the relevant globe hemisphere; reveal route segments in chronological order without a rapid globe spin. |
+
+For a desktop throw gesture, begin only on the ready plane, capture that pointer, and move the preview a limited distance with the drag. A starting threshold is an upward displacement of at least 80 CSS pixels on desktop or 60 on touch, with upward displacement greater than 1.2 times horizontal displacement. Below threshold or on pointer cancellation, return to the ready pose without submitting. Keep **Throw plane** as an equal, always available action. Disable competing controls while a request is pending and show **Sending…** on the still-visible plane. Do not require pointer speed, a flick sensor, or a precise timing window.
+
+In catching mode, render a fine circular net/target approximately 100–140px across that follows the scene pointer with a light easing. Outline the nearest eligible plane within the target; a click requests that ID rather than silently catching a different object. Increase the effective hit area to at least 44px. On touch, allow direct tapping of planes and the large catch-any button instead of making users drag a cursor. If another visitor wins the catch, briefly show **That plane has already been caught. Try another.** and stay in catching mode. Escape or **Back to sky** cancels catching without creating an event.
+
+For reduced motion, use a short fade of no more than about 150ms or an immediate state change. Retain every control, success/error message, and network action. Do not make users wait through an invisible animation timer.
+
+### F. Stamps, routes, and returning to your planes
+
+- Stamp artwork is typographic and passport-like: a circular or softly rectangular outline, a simple plane/globe mark, the chosen region, optional city, and a compact date. Use muted ink related to the plane's colour while maintaining contrast. Stamps are not flags and do not replace the message.
+- The origin stamp is first and immutable. Subsequent stamps have a stable server-assigned sequence, region, public actor handle, and timestamp. Use the preview date while drafting and the authoritative event time after commit. Releasing without a stamp must not append a blank or hidden stamp.
+- Lay stamps out in a deliberate grid in their own paper region. If there are too many to fit, show a few with **View all N stamps**, opening a scrollable continuation sheet/history. Never shrink the body text or paint stamps over it to fit a long history.
+- Journey view pairs a globe with an ordered list such as `1 Canberra, Australia → 2 Tokyo, Japan`. Use great-circle arcs raised slightly above the globe, small endpoint dots, and a clear distinction for the selected leg. Selecting a stamp highlights its matching point/leg; handle the international date line and duplicate adjacent coordinates without drawing a line through the planet.
+- Derive distance from the same catalogue coordinates used by the displayed route. Display **Approximate virtual distance** near the figure. The authoritative history is the ordered event list, not a client-side animation path.
+- **Your planes** opens a light side drawer on desktop, up to about 360px wide, and a full-width sheet on mobile. Each row has the actual coloured plane thumbnail, a message excerpt, origin label, creation date, stamp count, and **View journey**. Use newest-created-first order with pagination/loading for a large history. Opening it reads the current state; it must not catch or lock a plane.
+- Retain an open inspector while new stamps arrive, updating only the relevant history. Avoid turning this view into an activity feed, notification centre, or leaderboard. Explain that access to **Your planes** is tied to this anonymous browser, without implying account-based synchronisation.
+
+### G. Explicit state transitions and recovery
+
+Maintain one explicit foreground interaction state instead of several independent booleans that can show incompatible screens together. This table defines the product states; adapt names to the framework.
+
+| State | Primary action | Back, close, or failure behaviour |
+| --- | --- | --- |
+| `world` | Create, catch, or inspect your planes | Background reconnects without replacing the screen. |
+| `editing` | Validate and fold | Closing saves the local draft; validation errors remain beside fields. |
+| `folded_ready` | Throw by button or gesture | Back unfolds the same draft; cancelling a small drag stays ready. |
+| `launch_pending` | Await one idempotent create request | Keep the plane visible; on uncertainty reuse the same request key to reconcile. Never discard the draft or issue an unrelated second create. |
+| `launching` | Play the confirmed departure | The plane already exists on the server; interruption goes to the reconciled world, never recreates it. |
+| `catching` | Request a highlighted ID or catch any | Cancel returns to world; no available planes gives a clear empty state. |
+| `catch_pending` | Await atomic acquisition | Failure/conflict returns to catching with a reason, not a fabricated catch animation. |
+| `caught_folded` | Open the paper | Back to sky releases the hold without a stamp; do not strand a plane because a dialog closed. |
+| `reading_held` | Read, preview a region stamp, then send | Release without stamping is always available. Losing the lease keeps the text readable but disables mutation. |
+| `relaunch_pending` | Await atomic stamp/release | Preserve the draft stamp on a retryable failure. Mark it committed only after success. Reconcile uncertain outcomes using the same request key. |
+| `journey_readonly` | Read route/history | Back restores the previous world/drawer context; no catch is acquired. |
+
+Separate `connection` state from the foreground state. Show a restrained **Reconnecting…** indicator when needed. Reading and drafting remain usable while disconnected; actions requiring a confirmed server mutation must give clear unavailable/pending feedback. A timeout must never be reported as success. Do not publish queued content later without the visitor's explicit retry.
+
+## The complete interaction
+
+### 1. Enter the shared world
+
+Open directly into the globe scene with discoverable **Create a plane**, **Catch a plane**, and **Your planes** controls, a small sound toggle, and a short first-use instruction. No account, installation, QR code, second device, or sensor permission is needed. Keep the scene visible through transitions, but dim or slow it when reading or writing needs attention.
+
+Render real circulating planes when data exists. Any ambient decorative planes must be visually secondary, non-catchable, and excluded from activity, messages, and counts. An empty world must give an honest invitation to create the first plane, not fabricated visitors or journeys.
+
+### 2. Write, choose a colour, and add a region
+
+Show a large open sheet of paper in the foreground. Provide a real, accessible textarea aligned with its writing area and a live preview of the ink on the paper. Accept Chinese, English, emoji, spaces, and line breaks. Preserve the existing 240-character limit, use the code-point counting rule specified above on client and server, display a counter, and reject empty or over-limit submissions without silent truncation. Render all messages as plain text, never executable markup.
+
+Show the six colour choices and a searchable **Country / region** selector with an optional city selector where curated city data is available. Do not require a city. Use a local, stable catalogue with canonical IDs and display labels, covering global regions; derive approximate map coordinates from the selected entry. Examples include Australia / Canberra and Japan / Tokyo. The label is freely chosen and is not a verified claim about the visitor's location. Explain this briefly beside the selector. Do not ask for GPS, infer a compulsory region from IP, or make a paid geocoding service necessary.
+
+Preview the chosen region as a stamp printed on the sheet. Require a valid colour, region, and message before launch. Changing any field updates the preview without losing the draft. Allow **Fold** and **Back to edit** before submission. The folded preview must already show some of the written text on a visible wing; its text should move and rotate with the paper.
+
+### 3. Fold and launch
+
+Animate the sheet folding into the selected coloured plane. On desktop, support dragging the plane forward/upward and releasing it, plus a prominent **Throw plane** button. On touch devices, support an upward swipe and the same button. Optional motion controls must never be the only way to launch.
+
+Commit the plane to the server once. Only after confirmed success should it leave the foreground and join the shared sky. Preserve the draft on failure and show an understandable retry state. Repeated clicks, gesture/button overlap, and an uncertain network retry must not create duplicate planes; use a server-backed idempotency mechanism.
+
+Every other connected browser should receive the committed plane within about one second without refreshing. Its ID, colour, message, author handle, and origin stamp must agree across browsers. Do not mistake a local animation for successful publication.
+
+### 4. Catch a real plane
+
+Click **Catch a plane** to enter a catching mode with a clear pointer-controlled net/target. A desktop visitor can click a visible eligible plane; a touch visitor can tap one. Also provide an accessible **Catch an available plane** button so catching does not depend on precision, vision, dragging, or animation.
+
+Select a real persisted plane that is currently available. Prefer someone else's plane when possible. If only the visitor's own plane is available, allow a clearly labelled self-catch; if none is available, show an honest empty state. A successful catch brings that exact plane toward the camera and holds it still for inspection. Never substitute a random canned message or another plane's metadata.
+
+### 5. Read the words on the paper
+
+**The captured plane itself must display the message written by its sender.** This is a central acceptance condition, not an optional tooltip or separate text card.
+
+In the close-up folded view, show real ink on the visible wing. Provide **Open / Unfold** to animate it into a readable sheet containing the complete original message, colour identity, origin stamp, and subsequent region stamps. Text should appear attached to the paper surface through an appropriate texture or correctly transformed DOM layer; a screen-fixed label floating beside the plane is insufficient. Keep an accessible HTML representation of the same full message.
+
+Long messages must wrap within the paper, including CJK and unbroken strings. In the unfolded view use readable type, at least 16px at normal mobile sizing; allow the writing area to scroll if necessary rather than shrinking everything to illegibility. Preserve line breaks. A shortened preview on a distant/folded plane is acceptable only when the full original text is available immediately on opening it. Do not cover the message with stamps or clip it behind folds.
+
+The catcher can read the message but **cannot rewrite the original text, change its colour, replace its origin region, or impersonate its author**.
+
+### 6. Stamp and send onward
+
+While holding a plane, let the catcher choose their own country/region, preview a new stamp, and use **Stamp & send onward**. Append the new stamp and release the same plane in one successful transaction. Retain its original ID, message, colour, author, origin stamp, and all earlier stamps. Offer **Release without stamping** as well. Folding and rethrowing should feel like a continuation of the reference experience.
+
+Show the ordered stamp history with a small globe route connecting the chosen regions. Any distance is an approximate distance between selected region centres, explicitly labelled as a virtual journey; do not imply GPS tracking or verified travel. Adjacent identical locations should not produce a spurious flight segment.
+
+**Your planes** lets the current anonymous browser reopen planes it created and inspect their current stamp history and virtual routes. This is a quiet retrieval view, without public rankings, likes, follower counts, chat, or notifications.
+
+## Real shared state and permissions
+
+Persist each plane's ID, immutable original body, colour, origin-region ID, creator reference, creation time, ordered stamp events, and current availability. Keep secrets separate from public records. Local storage may hold preferences and unfinished drafts, but cannot be the shared database or authority for permissions.
+
+Implement a clear server-owned state model: local draft → available in flight → temporarily caught → available again. Acquire catches atomically. If two visitors try to catch the same plane, exactly one obtains it and the other receives useful feedback. Use a 120-second server-timed catch lease, renewing around every 30 seconds while the holder is actively viewing the held plane. If renewal fails, show a quiet warning during the final 30 seconds. Release abandoned/expired holds so a closed tab cannot strand a plane permanently. Explicit Back to sky/close should attempt a normal release; expiration remains the dependable recovery when a tab disappears. On a refreshed page reconcile ownership before restoring the held view. Expiration affects availability, never the stored message or history.
+
+Only the current lease holder can stamp/release that held plane. Validate the anonymous session together with the specific current lease ID/version, so an old request cannot act on a later catch of the same plane. Treat any lease credential as private. Validate colour enum, region IDs, text length, and request size on the server, including forged direct requests. Make repeat stamp/release requests idempotent and associate each request key with the same actor and operation; reuse with a different payload must be rejected. Keep chronological history stable under concurrency. Do not trust an author ID or owner flag sent by the client. Inspect rather than assume existing request-origin, cookie, and write-limit protections: retain implemented protections, add same-origin write checks and bounded request bodies where absent, handle malformed cookies safely, and document proportionate visitor-based rate limits for the new write operations.
+
+Preserve real-time updates and reconnect recovery. After refresh, reconnect, or server restart, committed messages, colours, and stamps must remain; the UI reconciles with server state without duplicated planes, lost stamps, or animation storms. Incoming activity must not replace an open message, reset an in-progress draft, or steal focus.
+
+## Desktop, mobile, and accessibility
+
+The full loop must work with a mouse and ordinary buttons on a laptop, with keyboard controls alone, and with touch on a phone. Desktop is an interactive client, not merely the original's spectator screen. Use responsive layouts at 390px, 768px, and 1440px with no horizontal overflow. Accommodate the mobile software keyboard and safe-area insets.
+
+Provide visible focus, accessible names, labelled fields, inline validation, modal focus restoration, and Escape-to-close where appropriate. Do not capture typing keystrokes as global shortcuts. Respect reduced motion, avoid flashing, and keep sound off until explicitly enabled. Sound can be a small folding, throwing, or catching cue; it must not be required to understand success.
+
+Use adaptive rendering quality, a bounded number of displayed planes, and efficient rendering for the flying flock. Pause decorative work in background tabs. Avoid allocating full-resolution text textures for every distant plane. If WebGL is unavailable, provide a simple paper-based 2D view with real create/catch/read/stamp/release operations. Retain a server-rendered reading and form-based interaction fallback with JavaScript disabled, following the repo's progressive-enhancement principle.
+
+## Crit 10: identifiable actions and useful logs
+
+Give each anonymous browser a stable, non-secret public handle that can be matched between the page and logs. Derive it from the existing persistent visitor identity using a one-way construction with enough collision-resistant differentiation; do not use one of the six plane colours as identity. Show the visitor's own handle quietly and attribute messages/stamps where appropriate. Explain this product decision in README and the lower app-specific rules. Do not expose a roster of viewers, presence counts, or secret cookie tokens.
+
+Emit structured server-side stdout events for visitor issuance, plane creation, catch, stamp/relaunch, unstamped release, lease expiration, stream open/close, and validation/permission refusals. Include timestamp, request/event ID, action, outcome, public actor handle, plane ID when applicable, and a concise reason for failures. Record committed mutations after success. Never log message bodies, raw tokens, cookies, full IP addresses, or unvalidated request payloads.
+
+Document who may read and change each resource and where the server enforces the rule. Demonstrate two separate browser profiles creating and exchanging planes locally, and verify that the resulting stdout lets an observer distinguish who created, caught, stamped, and released each plane without operating the UI. The same logging must be available in production through `flyctl logs -a comp4020-riff8-liuru-1`; explain how to read it without generating synthetic production activity.
+
+## Acceptance and delivery
+
+Create a small reference/comparison set before declaring the visual work finished. Capture the live reference's available desktop world view, record which interactions were actually observed, and distinguish these from our specified adaptations. Capture the implementation in the following states at matching viewport sizes: world, paper with entered text, six-colour/region selection, folded ready plane, caught close-up with wing text, unfolded readable paper, and multi-stamp journey. At minimum check 1440 × 900 and 390 × 844. Inspect these images for missing folds, incorrect depth, plain-sphere geography, unreadable text, clipping, overlapping stamps, and unrelated dashboard styling. Fix identified defects before delivery; merely producing screenshots is not verification.
+
+Use this concrete two-browser walkthrough against the local build with a throwaway `DATA_DIR` and separate cookies/storage. Use read-only checks for the deployed app:
+
+- Browser A chooses Blue and Canberra, Australia, then types `从堪培拉寄来的一句话。` followed by a newline and `Hope this finds you well ✈️`. Verify the live paper text, fold it, and throw it using the desktop button. Confirm a single persisted plane ID and a matching creation log.
+- Browser B sees that plane without refreshing, enters catch mode, and catches it. A concurrent attempt by another independent session must lose cleanly. Inspect the written wing, then unfold and compare the complete message character-for-character, including the newline and emoji.
+- B selects Tokyo, Japan and sends it onward. A opens Your planes and sees the same plane ID, Blue material, unchanged message, origin stamp, new Japan stamp, and the two-point virtual route. The logs name A as creator and B as catcher/stamper.
+- Refresh both browsers and restart the test server with the same database. Verify that the text, colour, origin, and stamp sequence survive. In a controlled test, close a browser while it holds a plane and verify its eventual availability after lease expiration.
+- Repeat the UI path once on a phone-sized viewport and once using keyboard/buttons without gestures. Exercise a 240-code-point multiline message, an over-limit message, HTML-looking text, CJK composition, a very long unbroken word, and a region change after choosing a city. Ensure text never executes as markup and all valid content remains readable on the paper.
+
+1. Visually compare the result against Paper Planes: the immersive pastel globe, folded geometry, flying scene, close-up paper, and transitions should be recognisably faithful. Do not stop at a generic themed form.
+2. On desktop, create a Blue plane with a multiline Chinese/English/emoji message and an Australia region stamp. In an independent browser, catch that exact plane, read the same text **on its surface**, unfold it, add a Japan stamp, and send it onward. In the first browser, see the added stamp and route with the original text and colour unchanged.
+3. Verify all six colours, manual region selection without location permission, long-message layout, empty/invalid submissions, keyboard operation, mobile sizing, reduced motion, and the rendering fallback.
+4. Test two simultaneous catches, forged author/lease requests, duplicate launch/release requests, abandoned leases, and reconnect/restart persistence. Prove that a catcher cannot modify another person's original message or earlier stamps.
+5. Check logs across independent cookie jars: correct public actors and plane IDs, clear refused actions, and no credentials or message bodies. Use focused automated tests for these shared-state and permission boundaries, plus browser checks for the visual loop.
+6. Run the repository's required checks, including `pnpm check` and `pnpm check:evidence`, retain the general invariant tests, and explain any adaptation of theme-specific tests. Update README with the new behaviour, permissions, setup, rendering fallback, reference attribution, and known limitations.
+7. Deploy only `comp4020-riff8-liuru-1` through the existing CI deployment workflow. Verify local two-browser exchange and logs, and perform available read-only production checks. Report the production URL, confirmed deployment status, and actual verification results; distinguish a queued deployment from a confirmed one. Follow the top pod block's instruction to delete `prompt.md` in the implementation run's final commit.
+
+Prioritise the complete, persistent, multi-user paper-plane loop and visible written messages first; polish the reference's visual fidelity around that working interaction. Finish with a usable application, not an implementation proposal.
