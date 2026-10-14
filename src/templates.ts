@@ -370,12 +370,12 @@ export function renderSky(o: SkyOptions): string {
         </div>
       </nav>
     </header>
-    <p class="you">You are <strong class="handle">${escapeHtml(o.handle)}</strong> <span class="you-note">in this browser</span></p>
-    <p class="connection" role="status" hidden>Reconnecting&hellip;</p>
-    <p class="caption" aria-live="polite"></p>
-    <p class="toast" role="status" aria-live="assertive"></p>
 
     <main id="app" class="app" data-state="world" data-cursor="${o.cursor}">
+      <p class="you">You are <strong class="handle">${escapeHtml(o.handle)}</strong> <span class="you-note">in this browser</span></p>
+      <p class="connection" role="status" hidden>Reconnecting&hellip;</p>
+      <p class="caption" aria-live="polite"></p>
+      <p class="toast" role="status" aria-live="assertive"></p>
       <section class="panel world-panel" aria-label="The sky">
         <p class="hint-first">Write on a sheet, fold it into a plane and throw it into the sky. Catch someone else's, read it, stamp it and send it on.</p>
         <p class="empty-sky" hidden>No planes are flying yet. Make the first one.</p>
@@ -436,7 +436,7 @@ export function renderSky(o: SkyOptions): string {
           <div class="paper-slot" data-slot="held">
             <div class="face">
               <p class="face-origin"></p>
-              <div class="face-body reading" tabindex="0" aria-label="The message on this plane"></div>
+              <div class="face-body reading" tabindex="0" role="region" aria-label="The message on this plane"></div>
               <ol class="face-stamps" aria-label="Stamps"></ol>
               <button type="button" class="all-stamps" data-action="journey" hidden></button>
             </div>

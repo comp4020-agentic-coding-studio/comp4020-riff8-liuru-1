@@ -1,7 +1,7 @@
 /* Paper Planes: one full-window sky, sparse controls, paper in the foreground. */
 :root {
   --ink: #27364b;
-  --ink-soft: #4a5872;
+  --ink-soft: #3a465c;
   --paper-ui: #fbf9f6;
   --edge: max(16px, env(safe-area-inset-left)) ;
   --top: max(16px, env(safe-area-inset-top));
@@ -80,7 +80,7 @@ body[data-state="catching"] #sky { cursor: none; }
 .brand .mark { width: 26px; height: 26px; color: #fff; filter: drop-shadow(0 1px 2px rgb(39 54 75 / 0.35)); }
 .brand-text { display: grid; line-height: 1.15; }
 .brand-name { font-size: 22px; font-weight: 700; letter-spacing: 0.01em; }
-.brand-sub { font-size: 13px; color: var(--ink-soft); }
+.brand-sub { font-size: 13px; color: var(--ink); }
 .secondary { position: relative; }
 .secondary-items { display: flex; gap: 8px; }
 .secondary-items button, .menu-toggle, .quiet {
@@ -101,6 +101,7 @@ body[data-state="catching"] #sky { cursor: none; }
   .brand-name { font-size: 20px; }
 }
 .you {
+  pointer-events: auto;
   position: fixed; z-index: 10; left: var(--edge); bottom: var(--bottom); margin: 0;
   font-size: 13px; color: var(--ink); padding: 6px 12px; border-radius: 16px; background: rgb(251 249 246 / 0.7);
 }
@@ -167,20 +168,20 @@ button[aria-disabled="true"], button:disabled { opacity: 0.55; cursor: not-allow
   background: rgb(200 196 228 / 0.28);
 }
 .composer-grid { display: flex; gap: 28px; align-items: center; justify-content: center; max-width: 1000px; width: 100%; margin: auto; }
-.rail { width: 280px; flex: none; display: grid; gap: 14px; align-content: start; }
+.rail { width: 280px; flex: none; display: grid; gap: 14px; align-content: start; padding: 16px; border-radius: 18px; background: rgb(251 249 246 / 0.82); }
 .rail > *, .rail fieldset { margin: 0; }
 .progress {
   display: flex; gap: 6px; list-style: none; padding: 0; margin: 0 0 12px; font-size: 13px; color: var(--ink-soft);
   counter-reset: step;
 }
-.progress li { counter-increment: step; padding: 4px 10px; border-radius: 14px; background: rgb(251 249 246 / 0.55); }
+.progress li { counter-increment: step; padding: 4px 10px; border-radius: 14px; background: rgb(251 249 246 / 0.8); color: var(--ink); }
 .progress li::before { content: counter(step) ". "; }
 .progress li[aria-current] { background: var(--paper-ui); color: var(--ink); font-weight: 700; }
 .counter { font-size: 14px; font-variant-numeric: tabular-nums; text-align: right; }
 .counter.over { color: #a3203c; font-weight: 700; }
 .error { color: #8f1733; font-size: 14px; min-height: 0; font-weight: 600; }
 .error:empty { display: none; }
-.hint { font-size: 13px; color: var(--ink-soft); margin: 0; line-height: 1.4; }
+.hint { font-size: 13px; color: var(--ink); margin: 0; line-height: 1.4; }
 .swatches { border: 0; padding: 0; }
 .swatches legend, .picker > label { font-size: 14px; font-weight: 700; margin-bottom: 6px; padding: 0; }
 .swatch-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
@@ -217,7 +218,7 @@ button[aria-disabled="true"], button:disabled { opacity: 0.55; cursor: not-allow
 .combo li.none { color: var(--ink-soft); cursor: default; }
 .rail-actions { display: flex; flex-wrap: wrap; gap: 10px; }
 .rail-actions button { flex: 1 1 auto; }
-.gesture-hint { width: 100%; margin: 0; font-size: 13px; color: var(--ink-soft); }
+.gesture-hint { width: 100%; margin: 0; font-size: 13px; color: var(--ink); }
 .ready-actions, .reading-actions { display: none; }
 .app:is([data-state="folded_ready"], [data-state="launch_pending"]) .edit-actions { display: none; }
 .app:is([data-state="folded_ready"], [data-state="launch_pending"]) .ready-actions { display: flex; }
@@ -266,7 +267,7 @@ button[aria-disabled="true"], button:disabled { opacity: 0.55; cursor: not-allow
 .paper3d .b { transform: rotateY(180deg); background: linear-gradient(160deg, color-mix(in srgb, var(--paper) 82%, #fff), var(--paper) 70%); }
 /* a little light and shadow per facet, so the folds read */
 .paper3d .wing.right > .b { background: linear-gradient(200deg, color-mix(in srgb, var(--paper) 70%, #fff), color-mix(in srgb, var(--paper) 92%, #27364b)); }
-.paper3d .tuck > .f, .paper3d .keel > .f { background: linear-gradient(90deg, color-mix(in srgb, var(--paper-tint) 88%, #27364b), var(--paper-tint)); }
+.paper3d[data-flat="false"] .tuck > .f, .paper3d[data-flat="false"] .keel > .f { background: linear-gradient(90deg, color-mix(in srgb, var(--paper-tint) 88%, #27364b), var(--paper-tint)); }
 .paper3d .corner > .b { background: color-mix(in srgb, var(--paper) 90%, #27364b); }
 .contact-shadow {
   position: absolute; left: 6%; right: 6%; bottom: -3%; height: 6%; border-radius: 50%;
@@ -291,15 +292,23 @@ button[aria-disabled="true"], button:disabled { opacity: 0.55; cursor: not-allow
 .paper-slot[data-paper="flat"] .ink { visibility: hidden; }
 .ink-stamps, .face-stamps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 3%; align-items: center; }
 .wing-label {
-  position: absolute; left: 29%; top: 66%; width: 86%; translate: -50% -50%; rotate: -77deg;
+  position: absolute; left: 31%; top: 64%; width: 76%; translate: -50% -50%; rotate: -77deg;
   font-family: var(--hand); font-size: 6cqw; line-height: 1.1; color: var(--ink); text-align: center;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: var(--wing-ink, 0);
 }
-.wing-origin { left: 71%; rotate: 77deg; font-family: var(--font); font-size: 4.4cqw; font-weight: 800; color: var(--stamp-ink); letter-spacing: 0.06em; text-transform: uppercase; }
+.wing-origin { left: 69%; rotate: 77deg; font-family: var(--font); font-size: 4.4cqw; font-weight: 800; color: var(--stamp-ink); letter-spacing: 0.06em; text-transform: uppercase; }
 
 /* the real, accessible layer over the flat sheet */
 .face { z-index: 2; }
+/* the flat sheet's own surface, so the text sits on a known colour */
+.paper-slot[data-paper="flat"] .face {
+  background:
+    linear-gradient(to right, transparent calc(50% - 0.5px), rgb(39 54 75 / 0.07) 50%, transparent calc(50% + 0.5px)),
+    linear-gradient(135deg, rgb(255 255 255 / 0.35), transparent 40%),
+    var(--paper-tint);
+}
 .paper-slot:not([data-paper="flat"]) .face { visibility: hidden; }
+.paper-slot:not([data-paper="flat"]) .face * { visibility: hidden; }
 textarea.face-body {
   resize: none; border: 0; padding: 0; background: transparent; overflow-y: auto; outline-offset: 6px;
   scrollbar-width: thin;
@@ -357,7 +366,7 @@ textarea.face-body::placeholder { color: color-mix(in srgb, var(--ink) 50%, tran
 /* -------- your planes */
 .drawer {
   position: fixed; z-index: 20; top: 0; right: 0; bottom: 0; width: min(360px, 100vw); overflow-y: auto;
-  padding: calc(var(--top)) 20px var(--bottom); background: rgb(251 249 246 / 0.97); box-shadow: -10px 0 40px rgb(39 54 75 / 0.18);
+  padding: calc(var(--top)) 20px var(--bottom); background: var(--paper-ui); box-shadow: -10px 0 40px rgb(39 54 75 / 0.18);
 }
 .drawer[hidden] { display: none; }
 .drawer-head { display: flex; justify-content: space-between; align-items: center; }
@@ -409,3 +418,10 @@ html.no-js .top .secondary, html.no-js .you, html.no-js .app, html.no-js #net { 
 .nojs-body { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 17px; }
 .nojs-meta { font-size: 14px; color: var(--ink-soft); }
 .nojs-note { width: min(560px, 100%); background: #fff; padding: 10px 16px; border-radius: 12px; }
+
+/* phones: a foreground panel takes the whole screen, over the header, so the
+   paper never scrolls under it; Back to sky is always in the panel */
+@media (max-width: 767px) {
+  .app:not([data-state="world"]):not([data-state="catching"]):not([data-state="catch_pending"]) { z-index: 12; }
+  .composer, .held { padding-top: var(--top); background: rgb(205 200 230 / 0.78); backdrop-filter: blur(2px); }
+}

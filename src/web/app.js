@@ -36,7 +36,7 @@ function mix(hex, other, t) {
   return `#${a.map((v, i) => Math.round(v + (b[i] - v) * t).toString(16).padStart(2, "0")).join("")}`;
 }
 const tintOf = (hex) => mix(hex, "#ffffff", 0.84);
-const inkOf = (hex) => mix(hex, "#27364B", 0.62);
+const inkOf = (hex) => mix(hex, "#27364B", 0.7);
 
 const dateFmt = new Intl.DateTimeFormat("en-AU", { day: "numeric", month: "short", year: "numeric" });
 const shortDate = (ms) => dateFmt.format(new Date(ms));
@@ -139,8 +139,9 @@ function setState(next, { focus = true } = {}) {
   if (next !== "catching") $(".lock")?.remove();
   updateEmpty();
   updateProgress();
-  if (focus && FOCUS[next]) requestAnimationFrame(() => $(FOCUS[next])?.focus({ preventScroll: true }));
-  if (focus && next === "world" && opener?.isConnected) opener.focus({ preventScroll: true });
+  // the target may only just have become visible this frame, so wait one
+  if (focus && FOCUS[next]) requestAnimationFrame(() => requestAnimationFrame(() => $(FOCUS[next])?.focus({ preventScroll: true })));
+  if (focus && next === "world") (opener?.isConnected ? opener : $("[data-action=catch]")).focus({ preventScroll: true });
 }
 
 function updateEmpty() {
@@ -257,11 +258,16 @@ class Picker {
     } else if (e.key === "Escape" && !this.list.hidden) {
       e.preventDefault();
       e.stopPropagation();
+      const c = this.value ? regions.find((r) => r.id === this.value.country) : null;
+      if (c) this.input.value = c.name;
       this.close();
     }
   }
 
   close() {
+    // leaving the search shows the chosen place again, not half a query
+    const c = this.value ? regions.find((r) => r.id === this.value.country) : null;
+    if (c && document.activeElement !== this.input) this.input.value = c.name;
     this.list.hidden = true;
     this.input.setAttribute("aria-expanded", "false");
     this.input.removeAttribute("aria-activedescendant");
@@ -397,9 +403,12 @@ function updateCounter() {
   composer.count.classList.toggle("over", n > MAX_BODY);
 }
 
+// Errors show once the draft is over the limit or Fold was pressed, and
+// clear as soon as it's fixed; never mid-IME composition.
 function bodyCheck(show) {
   const problem = bodyProblem(draftBody());
-  if (show || !problem || composer.error.textContent) composer.error.textContent = composer.composing ? "" : (problem ?? "");
+  const over = codePoints(draftBody()) > MAX_BODY;
+  if (show || over || !problem || composer.error.textContent) composer.error.textContent = composer.composing ? "" : (problem ?? "");
   composer.text.setAttribute("aria-invalid", problem && composer.error.textContent ? "true" : "false");
   return problem;
 }
@@ -477,6 +486,7 @@ async function foldDraft() {
   setState("folding", { focus: false });
   await composerPaper.fold();
   setState("folded_ready");
+  $(".ready-actions").scrollIntoView({ block: "nearest", behavior: reduced() ? "auto" : "smooth" });
 }
 
 async function unfoldDraft() {
@@ -747,6 +757,7 @@ async function openHeld() {
   setState("folding", { focus: false });
   await heldPaper.unfold(1050);
   setState("reading_held");
+  held.slot.scrollIntoView({ block: "nearest" });
 }
 
 async function releaseHeld(stamp) {
@@ -1100,6 +1111,8 @@ async function boot() {
   trackNet();
   if (state === "world") setState("world", { focus: false });
   document.body.classList.add("ready");
+  // read-only handles for debugging from a console; nothing here can write
+  globalThis.paperPlanes = { state: () => state, screenOf: (id) => sky.screenOf(id), flying: () => [...flying.keys()] };
 }
 
 // A 2D stand-in when WebGL isn't available: the same real planes, drawn as

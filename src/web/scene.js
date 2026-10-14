@@ -341,9 +341,9 @@ export class Sky {
     this.clearRoute();
     if (!points.length) return;
     const ink = new THREE.Color("#3D4E7A");
-    const dotGeo = new THREE.SphereGeometry(0.018, 10, 8);
+    const dotGeo = new THREE.SphereGeometry(0.022, 12, 10);
     points.forEach((p, i) => {
-      const dot = new THREE.Mesh(dotGeo, new THREE.MeshBasicMaterial({ color: i === selected || i === selected + 1 ? 0xe2557a : ink }));
+      const dot = new THREE.Mesh(dotGeo, new THREE.MeshBasicMaterial({ color: selected >= 0 && (i === selected || i === selected + 1) ? 0xe2557a : ink }));
       dot.position.copy(latLngToVec(p.lat, p.lng, 1 + LAND_LIFT + 0.01));
       this.routes.add(dot);
     });
@@ -354,19 +354,15 @@ export class Sky {
       if (angle < 0.002) continue; // same place twice: no flight
       const pts = [];
       const steps = Math.max(12, Math.ceil(angle * 40));
-      const q = new THREE.Quaternion();
+      // turn a toward b about their common axis: a great circle, never a
+      // chord through the planet (antipodes pick any perpendicular axis)
+      const axis = new THREE.Vector3().crossVectors(a, b);
+      if (axis.lengthSq() < 1e-9) axis.crossVectors(a, Math.abs(a.y) < 0.9 ? new THREE.Vector3(0, 1, 0) : new THREE.Vector3(1, 0, 0));
+      axis.normalize();
       for (let s = 0; s <= steps; s++) {
         const t = s / steps;
-        // slerp, so the arc follows the sphere, not a chord through it
-        const v = new THREE.Vector3().copy(a);
-        if (angle > Math.PI - 0.01) {
-          const axis = new THREE.Vector3(0, 1, 0).cross(a).normalize();
-          q.setFromAxisAngle(axis.lengthSq() ? axis : new THREE.Vector3(1, 0, 0), angle * t);
-        } else {
-          q.setFromUnitVectors(a, b);
-          q.slerpQuaternions(new THREE.Quaternion(), q, t);
-        }
-        v.applyQuaternion(q).setLength(1 + LAND_LIFT + 0.02 + Math.sin(Math.PI * t) * Math.min(0.25, angle * 0.18));
+        const v = a.clone().applyAxisAngle(axis, angle * t);
+        v.setLength(1 + LAND_LIFT + 0.02 + Math.sin(Math.PI * t) * Math.min(0.25, angle * 0.18));
         pts.push(v);
       }
       const geo = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), steps, i === selected ? 0.009 : 0.005, 6, false);
