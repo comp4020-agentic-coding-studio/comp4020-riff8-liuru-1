@@ -432,6 +432,22 @@ report button. No seventh kind. No editing. No full-screen effects or
 autoplaying sound. Don't migrate the stack, add a framework or build step, add
 a second machine or database, or touch `fly.toml`'s machine settings.
 
+## Chinese copy fixes
+
+The Chinese text on the page reads like a machine translation. Fix only the
+clear mistakes. Do not rewrite the tone, and do not change the English.
+
+- "究竟发生了什么" → "心头掠过了什么" (the original means "what on earth
+  happened", not "what passed through")
+- "梦，一个梦想而已" → "一场梦" (梦想 means an ambition, not a dream you have
+  while asleep)
+- "随它去吧/不必再管了" → "随它去吧" (give one translation, never two joined
+  by a slash)
+- Any new Chinese text you add, such as the descriptions of the six rules,
+  must read as natural Chinese, with one translation per line.
+- Put these copy fixes in their own commit, separate from behaviour changes.
+  They don't need a failing test, but `pnpm check` must still pass.
+
 ## Final report
 
 When you stop, say briefly: which items landed on `main`, which branches were
